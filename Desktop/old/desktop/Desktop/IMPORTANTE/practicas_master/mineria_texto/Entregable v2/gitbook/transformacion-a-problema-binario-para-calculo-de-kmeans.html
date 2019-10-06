@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>FARS</title>
+  <meta name="description" content="FARS">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="FARS" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="FARS" />
+  
+  
+  
+
+<meta name="author" content="Grupo A: Carlos Sánchez Vega, Raúl Salazar de Torres, Jorge Fernández Hernández, Mónica Alexa">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="modelos.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="introduccion.html"><a href="introduccion.html"><i class="fa fa-check"></i><b>1</b> Introduccion</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduccion.html"><a href="introduccion.html#conjunto-de-datos"><i class="fa fa-check"></i><b>1.1</b> Conjunto de datos</a></li>
+<li class="chapter" data-level="1.2" data-path="introduccion.html"><a href="introduccion.html#documentacion-consultada"><i class="fa fa-check"></i><b>1.2</b> Documentacion consultada</a></li>
+<li class="chapter" data-level="1.3" data-path="introduccion.html"><a href="introduccion.html#objetivos"><i class="fa fa-check"></i><b>1.3</b> Objetivos</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html"><i class="fa fa-check"></i><b>2</b> Análisis del dataset</a><ul>
+<li class="chapter" data-level="2.1" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#descripcion-y-significado-de-las-variables"><i class="fa fa-check"></i><b>2.1</b> Descripción y significado de las variables:</a></li>
+<li class="chapter" data-level="2.2" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#preparacion-de-las-variables"><i class="fa fa-check"></i><b>2.2</b> Preparación de las variables</a></li>
+<li class="chapter" data-level="2.3" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-individual-de-variables"><i class="fa fa-check"></i><b>2.3</b> Análisis individual de variables</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-case_state"><i class="fa fa-check"></i><b>2.3.1</b> Análisis <code>CASE_STATE</code></a></li>
+<li class="chapter" data-level="2.3.2" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-age"><i class="fa fa-check"></i><b>2.3.2</b> Análisis <code>AGE</code></a></li>
+<li class="chapter" data-level="2.3.3" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-sex"><i class="fa fa-check"></i><b>2.3.3</b> Análisis <code>SEX</code></a></li>
+<li class="chapter" data-level="2.3.4" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-person_type"><i class="fa fa-check"></i><b>2.3.4</b> Análisis <code>PERSON_TYPE</code></a></li>
+<li class="chapter" data-level="2.3.5" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-seating_position"><i class="fa fa-check"></i><b>2.3.5</b> Análisis <code>SEATING_POSITION</code></a></li>
+<li class="chapter" data-level="2.3.6" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-air_bag_availability.deployment"><i class="fa fa-check"></i><b>2.3.6</b> Análisis <code>AIR_BAG_AVAILABILITY.DEPLOYMENT</code></a></li>
+<li class="chapter" data-level="2.3.7" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-restraint_system.use"><i class="fa fa-check"></i><b>2.3.7</b> Análisis <code>RESTRAINT_SYSTEM.USE</code></a></li>
+<li class="chapter" data-level="2.3.8" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-ejection"><i class="fa fa-check"></i><b>2.3.8</b> Análisis <code>EJECTION</code></a></li>
+<li class="chapter" data-level="2.3.9" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-ejection_path"><i class="fa fa-check"></i><b>2.3.9</b> Análisis <code>EJECTION_PATH</code></a></li>
+<li class="chapter" data-level="2.3.10" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-extrication"><i class="fa fa-check"></i><b>2.3.10</b> Análisis <code>EXTRICATION</code></a></li>
+<li class="chapter" data-level="2.3.11" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-non_motorist_location"><i class="fa fa-check"></i><b>2.3.11</b> Análisis <code>NON_MOTORIST_LOCATION</code></a></li>
+<li class="chapter" data-level="2.3.12" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-police_reported_alcohol_involvement"><i class="fa fa-check"></i><b>2.3.12</b> Análisis <code>POLICE_REPORTED_ALCOHOL_INVOLVEMENT</code></a></li>
+<li class="chapter" data-level="2.3.13" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-method_alcohol_determination"><i class="fa fa-check"></i><b>2.3.13</b> Análisis <code>METHOD_ALCOHOL_DETERMINATION</code></a></li>
+<li class="chapter" data-level="2.3.14" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-alcohol_test_type"><i class="fa fa-check"></i><b>2.3.14</b> Análisis <code>ALCOHOL_TEST_TYPE</code></a></li>
+<li class="chapter" data-level="2.3.15" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-alcohol_test_result"><i class="fa fa-check"></i><b>2.3.15</b> Análisis <code>ALCOHOL_TEST_RESULT</code></a></li>
+<li class="chapter" data-level="2.3.16" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-police_reported_drug_involvement"><i class="fa fa-check"></i><b>2.3.16</b> Análisis <code>POLICE_REPORTED_DRUG_INVOLVEMENT</code></a></li>
+<li class="chapter" data-level="2.3.17" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-method_of_drug_determination"><i class="fa fa-check"></i><b>2.3.17</b> Análisis <code>METHOD_OF_DRUG_DETERMINATION</code></a></li>
+<li class="chapter" data-level="2.3.18" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-drug_test_type"><i class="fa fa-check"></i><b>2.3.18</b> Análisis <code>DRUG_TEST_TYPE</code></a></li>
+<li class="chapter" data-level="2.3.19" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-drug_test_results_.1_of_3."><i class="fa fa-check"></i><b>2.3.19</b> Análisis <code>DRUG_TEST_RESULTS_.1_of_3.</code></a></li>
+<li class="chapter" data-level="2.3.20" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-drug_test_type_.2_of_3."><i class="fa fa-check"></i><b>2.3.20</b> Análisis <code>DRUG_TEST_TYPE_.2_of_3.</code></a></li>
+<li class="chapter" data-level="2.3.21" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-drug_test_results_.2_of_3."><i class="fa fa-check"></i><b>2.3.21</b> Análisis <code>DRUG_TEST_RESULTS_.2_of_3.</code></a></li>
+<li class="chapter" data-level="2.3.22" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-drug_test_type_.3_of_3."><i class="fa fa-check"></i><b>2.3.22</b> Análisis <code>DRUG_TEST_TYPE_.3_of_3.</code></a></li>
+<li class="chapter" data-level="2.3.23" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-drug_test_results_.3_of_3."><i class="fa fa-check"></i><b>2.3.23</b> Análisis <code>DRUG_TEST_RESULTS_.3_of_3.</code></a></li>
+<li class="chapter" data-level="2.3.24" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-hispanic_origin"><i class="fa fa-check"></i><b>2.3.24</b> Análisis <code>HISPANIC_ORIGIN</code></a></li>
+<li class="chapter" data-level="2.3.25" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-taken_to_hospital"><i class="fa fa-check"></i><b>2.3.25</b> Análisis <code>TAKEN_TO_HOSPITAL</code></a></li>
+<li class="chapter" data-level="2.3.26" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-related_factor_.1."><i class="fa fa-check"></i><b>2.3.26</b> Análisis <code>RELATED_FACTOR_.1.</code></a></li>
+<li class="chapter" data-level="2.3.27" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-related_factor_.2."><i class="fa fa-check"></i><b>2.3.27</b> Análisis <code>RELATED_FACTOR_.2.</code></a></li>
+<li class="chapter" data-level="2.3.28" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-related_factor_.3."><i class="fa fa-check"></i><b>2.3.28</b> Análisis <code>RELATED_FACTOR_.3.</code></a></li>
+<li class="chapter" data-level="2.3.29" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-race"><i class="fa fa-check"></i><b>2.3.29</b> Análisis <code>RACE</code></a></li>
+<li class="chapter" data-level="2.3.30" data-path="analisis-del-dataset.html"><a href="analisis-del-dataset.html#analisis-injury_severity-variable-respuesta"><i class="fa fa-check"></i><b>2.3.30</b> Análisis <code>INJURY_SEVERITY</code>: variable respuesta</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="estudio-de-valores-faltantes.html"><a href="estudio-de-valores-faltantes.html"><i class="fa fa-check"></i><b>3</b> Estudio de valores faltantes</a></li>
+<li class="chapter" data-level="4" data-path="seleccion-del-dataframe-variables-de-interes.html"><a href="seleccion-del-dataframe-variables-de-interes.html"><i class="fa fa-check"></i><b>4</b> Selección del dataframe - variables de interés</a></li>
+<li class="chapter" data-level="5" data-path="train-y-test.html"><a href="train-y-test.html"><i class="fa fa-check"></i><b>5</b> Train y Test</a></li>
+<li class="chapter" data-level="6" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i><b>6</b> Modelos</a><ul>
+<li class="chapter" data-level="6.1" data-path="modelos.html"><a href="modelos.html#modelo-de-regresion-logistica-con-las-variables-representativas"><i class="fa fa-check"></i><b>6.1</b> Modelo de regresión logistica (con las variables representativas)</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="modelos.html"><a href="modelos.html#curva-roc"><i class="fa fa-check"></i><b>6.1.1</b> Curva ROC</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="modelos.html"><a href="modelos.html#arbol-de-decision"><i class="fa fa-check"></i><b>6.2</b> Arbol de decisión</a></li>
+<li class="chapter" data-level="6.3" data-path="modelos.html"><a href="modelos.html#random-forest"><i class="fa fa-check"></i><b>6.3</b> Random forest</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="modelos.html"><a href="modelos.html#preparacion-de-datos"><i class="fa fa-check"></i><b>6.3.1</b> Preparación de datos</a></li>
+<li class="chapter" data-level="6.3.2" data-path="modelos.html"><a href="modelos.html#ajuste-final"><i class="fa fa-check"></i><b>6.3.2</b> Ajuste final</a></li>
+<li class="chapter" data-level="6.3.3" data-path="modelos.html"><a href="modelos.html#comparativa-de-resultados-con-el-conjunto-de-test"><i class="fa fa-check"></i><b>6.3.3</b> Comparativa de resultados con el conjunto de test</a></li>
+<li class="chapter" data-level="6.3.4" data-path="modelos.html"><a href="modelos.html#mostramos-la-fraccion-de-vivos-con-respecto-a-los-muertos"><i class="fa fa-check"></i><b>6.3.4</b> Mostramos la fracción de vivos con respecto a los muertos</a></li>
+<li class="chapter" data-level="6.3.5" data-path="modelos.html"><a href="modelos.html#identificacion-de-los-predictores-mas-influyentes"><i class="fa fa-check"></i><b>6.3.5</b> Identificación de los predictores más influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="modelos.html"><a href="modelos.html#gradient-boosting-estocastico"><i class="fa fa-check"></i><b>6.4</b> Gradient Boosting estocástico</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="modelos.html"><a href="modelos.html#estimacion-del-parametro-learning-rate-shrinkage"><i class="fa fa-check"></i><b>6.4.1</b> Estimación del parametro learning rate (shrinkage)</a></li>
+<li class="chapter" data-level="6.4.2" data-path="modelos.html"><a href="modelos.html#estimacion-del-parametro-de-profundidad-del-arbol"><i class="fa fa-check"></i><b>6.4.2</b> Estimación del parametro de profundidad del árbol</a></li>
+<li class="chapter" data-level="6.4.3" data-path="modelos.html"><a href="modelos.html#estimacion-del-numero-minimo-de-observaciones-por-nodo"><i class="fa fa-check"></i><b>6.4.3</b> Estimación del número minimo de observaciones por nodo</a></li>
+<li class="chapter" data-level="6.4.4" data-path="modelos.html"><a href="modelos.html#estimacion-del-numero-de-arbol-que-debe-tener-el-conjunto"><i class="fa fa-check"></i><b>6.4.4</b> Estimación del número de árbol que debe tener el conjunto</a></li>
+<li class="chapter" data-level="6.4.5" data-path="modelos.html"><a href="modelos.html#modelo-final-con-los-hiperparametros-optimos"><i class="fa fa-check"></i><b>6.4.5</b> Módelo final con los hiperparámetros optimos</a></li>
+<li class="chapter" data-level="6.4.6" data-path="modelos.html"><a href="modelos.html#comparacion-con-el-conjunto-de-test"><i class="fa fa-check"></i><b>6.4.6</b> Comparación con el conjunto de test</a></li>
+<li class="chapter" data-level="6.4.7" data-path="modelos.html"><a href="modelos.html#busqueda-de-hiperparametros-con-caret"><i class="fa fa-check"></i><b>6.4.7</b> Busqueda de hiperparametros con Caret</a></li>
+<li class="chapter" data-level="6.4.8" data-path="modelos.html"><a href="modelos.html#modelo-final-con-los-hiperparametros-optimos-segun-caret"><i class="fa fa-check"></i><b>6.4.8</b> Módelo final con los hiperparámetros optimos según CARET</a></li>
+<li class="chapter" data-level="6.4.9" data-path="modelos.html"><a href="modelos.html#comparacion-con-el-conjunto-de-test-segun-caret"><i class="fa fa-check"></i><b>6.4.9</b> Comparación con el conjunto de test según CARET</a></li>
+<li class="chapter" data-level="6.4.10" data-path="modelos.html"><a href="modelos.html#obtencion-de-variables-mas-significativas"><i class="fa fa-check"></i><b>6.4.10</b> Obtención de variables más significativas</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="modelos.html"><a href="modelos.html#analisis-cluster"><i class="fa fa-check"></i><b>6.5</b> Análisis cluster</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><i class="fa fa-check"></i><b>7</b> Transformación a problema binario para calculo de kmeans</a><ul>
+<li class="chapter" data-level="7.1" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#naive-bayes"><i class="fa fa-check"></i><b>7.1</b> NAIVE-BAYES</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#ejecucion-del-modelo"><i class="fa fa-check"></i><b>7.1.1</b> Ejecución del modelo</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#analisis-del-modelo-mediante-svm-lineal"><i class="fa fa-check"></i><b>7.2</b> Análisis del modelo mediante SVM Lineal</a></li>
+<li class="chapter" data-level="7.3" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#analisis-del-modelo-mediante-svm-no-lineal"><i class="fa fa-check"></i><b>7.3</b> Análisis del modelo mediante SVM NO Lineal</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#libreria-empleada-caret"><i class="fa fa-check"></i><b>7.3.1</b> Libreria empleada: Caret</a></li>
+<li class="chapter" data-level="7.3.2" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#libreria-empleada-kernlab"><i class="fa fa-check"></i><b>7.3.2</b> Libreria empleada kernlab</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#analisis-del-modelo-mediante-redes-neuronales"><i class="fa fa-check"></i><b>7.4</b> Análisis del modelo mediante REDES NEURONALES</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#preparacion-del-modelo"><i class="fa fa-check"></i><b>7.4.1</b> Preparación del modelo</a></li>
+<li class="chapter" data-level="7.4.2" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#ejecucion-del-modelo-1"><i class="fa fa-check"></i><b>7.4.2</b> Ejecución del modelo</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#aplicando-deep-learning-al-modelo"><i class="fa fa-check"></i><b>7.5</b> Aplicando Deep Learning al modelo</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#preparacion-de-datos-1"><i class="fa fa-check"></i><b>7.5.1</b> Preparación de datos</a></li>
+<li class="chapter" data-level="7.5.2" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#preparacion-de-la-red-profunda"><i class="fa fa-check"></i><b>7.5.2</b> Preparación de la red profunda</a></li>
+<li class="chapter" data-level="7.5.3" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#escalamos-datos"><i class="fa fa-check"></i><b>7.5.3</b> Escalamos datos</a></li>
+<li class="chapter" data-level="7.5.4" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#ajustamos-el-modelo-construidos-a-nuestros-datos"><i class="fa fa-check"></i><b>7.5.4</b> Ajustamos el modelo construidos a nuestros datos</a></li>
+<li class="chapter" data-level="7.5.5" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#evaluacion-del-modelo"><i class="fa fa-check"></i><b>7.5.5</b> Evaluación del modelo</a></li>
+<li class="chapter" data-level="7.5.6" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#calculo-de-curva-ro"><i class="fa fa-check"></i><b>7.5.6</b> Calculo de curva RO</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#evaluacion-curvas-ro"><i class="fa fa-check"></i><b>7.6</b> Evaluacion (Curvas RO)</a></li>
+<li class="chapter" data-level="7.7" data-path="transformacion-a-problema-binario-para-calculo-de-kmeans.html"><a href="transformacion-a-problema-binario-para-calculo-de-kmeans.html#debates-y-anotaciones"><i class="fa fa-check"></i><b>7.7</b> Debates y anotaciones</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">FARS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="transformacion-a-problema-binario-para-calculo-de-kmeans" class="section level1">
+<h1><span class="header-section-number">7</span> Transformación a problema binario para calculo de kmeans</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(train.data.reduced)</code></pre></div>
+<pre><code>##       AGE            SEX        RESTRAINT_SYSTEM.USE
+##  Min.   : 0.00   Male  :45425   No   :28585         
+##  1st Qu.:20.00   Female:23192   Yes  :29992         
+##  Median :32.00                  Other: 4980         
+##  Mean   :35.52                  NA&#39;s : 5060         
+##  3rd Qu.:48.00                                      
+##  Max.   :97.00                                      
+##                                                     
+##  AIR_BAG_AVAILABILITY.DEPLOYMENT              EJECTION    
+##  NAv    :40188                   Not_Ejected      :59480  
+##  D_F    :10564                   Totally_Ejected  : 7215  
+##  Av_nD  : 6510                   Partially_Ejected: 1537  
+##  A_U    : 5190                   NA&#39;s             :  385  
+##  NM     : 4412                                            
+##  (Other):  267                                            
+##  NA&#39;s   : 1486                                            
+##          EXTRICATION    DRUG_TEST_RESULTS TAKEN_TO_HOSPITAL
+##  Not_Extricated:61116   Negd:43308        Yes :36135       
+##  Extricated    : 6907   Posd:20743        No  :31515       
+##  NA&#39;s          :  594   NA&#39;s: 4566        NA&#39;s:  967       
+##                                                            
+##                                                            
+##                                                            
+##                                                            
+##  INJURY_SEVERITY 
+##  Died    :29295  
+##  Survived:39322  
+##                  
+##                  
+##                  
+##                  
+## </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Tratamiento AGE</span>
+train.data.reduced<span class="op">$</span>AGE1 &lt;-<span class="st"> </span>train.data.reduced<span class="op">$</span>AGE
+
+<span class="co"># Tratamiento SEX</span>
+train.data.reduced<span class="op">$</span>MALE[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>SEX <span class="op">==</span><span class="st"> &#39;Male&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>MALE[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>SEX <span class="op">!=</span><span class="st"> &#39;Male&#39;</span>)] &lt;-<span class="dv">0</span>
+
+train.data.reduced<span class="op">$</span>FEMALE[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>SEX <span class="op">!=</span><span class="st"> &#39;Female&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>FEMALE[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>SEX <span class="op">==</span><span class="st"> &#39;Female&#39;</span>)] &lt;-<span class="dv">1</span>
+
+<span class="co"># Tratamiento RESTRAINT_SYSTEM.USE</span>
+train.data.reduced<span class="op">$</span>RESTRAINT_SYSTEM1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>RESTRAINT_SYSTEM.USE <span class="op">==</span><span class="st"> &#39;Yes&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>RESTRAINT_SYSTEM1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>RESTRAINT_SYSTEM.USE <span class="op">!=</span><span class="st"> &#39;Yes&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>RESTRAINT_SYSTEM1[<span class="kw">which</span>(<span class="kw">is.na</span>(train.data.reduced<span class="op">$</span>RESTRAINT_SYSTEM.USE))] &lt;-<span class="ot">NA</span>
+
+
+<span class="co"># Tratamiento AIR_BAG_AVAILABILITY.DEPLOYMENT </span>
+
+train.data.reduced<span class="op">$</span>AIRBAG1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT <span class="op">==</span><span class="st"> &#39;NAv&#39;</span> <span class="op">|</span>
+<span class="st">                                                               </span>train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT <span class="op">==</span><span class="st"> &#39;Av_nD&#39;</span> <span class="op">|</span>
+<span class="st">                                                               </span>train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT <span class="op">==</span><span class="st"> &#39;NM&#39;</span> <span class="op">|</span><span class="st"> </span>
+<span class="st">                                                               </span>train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT <span class="op">==</span><span class="st"> &#39;(Other)&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>AIRBAG1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT <span class="op">==</span><span class="st"> &#39;D_F&#39;</span> <span class="op">|</span>
+<span class="st">                                                               </span>train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT <span class="op">==</span><span class="st"> &#39;A_U&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>AIRBAG1[<span class="kw">which</span>(<span class="kw">is.na</span>(train.data.reduced<span class="op">$</span>AIR_BAG_AVAILABILITY.DEPLOYMENT ))] &lt;-<span class="ot">NA</span>
+
+
+<span class="co"># Tratamiento EJECTION</span>
+train.data.reduced<span class="op">$</span>EJECTION1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>EJECTION <span class="op">!=</span><span class="st"> &#39;Totally_Ejected&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>EJECTION1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>EJECTION <span class="op">==</span><span class="st"> &#39;Totally_Ejected&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>EJECTION1[<span class="kw">which</span>(<span class="kw">is.na</span>(train.data.reduced<span class="op">$</span>EJECTION))] &lt;-<span class="ot">NA</span>
+
+<span class="co"># Tratamiento EXTRINCATION</span>
+train.data.reduced<span class="op">$</span>EXTRINCATION1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>EXTRICATION <span class="op">==</span><span class="st"> &#39;Not_Extricated&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>EXTRINCATION1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>EXTRICATION <span class="op">==</span><span class="st"> &#39;Extricated&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>EXTRINCATION1[<span class="kw">which</span>(<span class="kw">is.na</span>(train.data.reduced<span class="op">$</span>EXTRICATION))] &lt;-<span class="ot">NA</span>
+
+
+<span class="co">#Tratamiento DRUG_TEST_RESULTS</span>
+train.data.reduced<span class="op">$</span>DRUG_TEST_RESULTS1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>DRUG_TEST_RESULTS <span class="op">==</span><span class="st"> &#39;Negd&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>DRUG_TEST_RESULTS1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>DRUG_TEST_RESULTS <span class="op">==</span><span class="st"> &#39;Posd&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>DRUG_TEST_RESULTS1[<span class="kw">which</span>(<span class="kw">is.na</span>(train.data.reduced<span class="op">$</span>DRUG_TEST_RESULTS))] &lt;-<span class="ot">NA</span>
+
+<span class="co">#Tratamiento TAKEN_TO_HOSPITAL</span>
+train.data.reduced<span class="op">$</span>TAKEN_TO_HOSPITAL1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>TAKEN_TO_HOSPITAL <span class="op">==</span><span class="st"> &#39;No&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced<span class="op">$</span>TAKEN_TO_HOSPITAL1[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>TAKEN_TO_HOSPITAL <span class="op">==</span><span class="st"> &#39;Yes&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>TAKEN_TO_HOSPITAL1[<span class="kw">which</span>(<span class="kw">is.na</span>(train.data.reduced<span class="op">$</span>TAKEN_TO_HOSPITAL))] &lt;-<span class="ot">NA</span>
+
+<span class="co">#Tratamiento SURVIVED</span>
+train.data.reduced<span class="op">$</span>SURVIVED[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>INJURY_SEVERITY <span class="op">==</span><span class="st"> &#39;Survived&#39;</span>)] &lt;-<span class="dv">1</span>
+train.data.reduced<span class="op">$</span>SURVIVED[<span class="kw">which</span>(train.data.reduced<span class="op">$</span>INJURY_SEVERITY <span class="op">==</span><span class="st"> &#39;Died&#39;</span>)] &lt;-<span class="dv">0</span>
+train.data.reduced.numeric =<span class="st"> </span>train.data.reduced[,<span class="kw">c</span>(<span class="st">&quot;AGE&quot;</span>,<span class="st">&quot;MALE&quot;</span>,<span class="st">&quot;FEMALE&quot;</span>, <span class="st">&quot;RESTRAINT_SYSTEM1&quot;</span>, <span class="st">&quot;AIRBAG1&quot;</span>, <span class="st">&quot;EJECTION1&quot;</span>, <span class="st">&quot;EXTRINCATION1&quot;</span>,   <span class="st">&quot;DRUG_TEST_RESULTS1&quot;</span>, <span class="st">&quot;TAKEN_TO_HOSPITAL1&quot;</span>, <span class="st">&quot;SURVIVED&quot;</span>)]
+
+<span class="kw">summary</span>(train.data.reduced.numeric)</code></pre></div>
+<pre><code>##       AGE             MALE           FEMALE      RESTRAINT_SYSTEM1
+##  Min.   : 0.00   Min.   :0.000   Min.   :0.000   Min.   :0.000    
+##  1st Qu.:20.00   1st Qu.:0.000   1st Qu.:0.000   1st Qu.:0.000    
+##  Median :32.00   Median :1.000   Median :0.000   Median :0.000    
+##  Mean   :35.52   Mean   :0.662   Mean   :0.338   Mean   :0.472    
+##  3rd Qu.:48.00   3rd Qu.:1.000   3rd Qu.:1.000   3rd Qu.:1.000    
+##  Max.   :97.00   Max.   :1.000   Max.   :1.000   Max.   :1.000    
+##                                                  NA&#39;s   :5060     
+##     AIRBAG1         EJECTION1      EXTRINCATION1    DRUG_TEST_RESULTS1
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.000     
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.000     
+##  Median :0.0000   Median :0.0000   Median :0.0000   Median :0.000     
+##  Mean   :0.2356   Mean   :0.1057   Mean   :0.1015   Mean   :0.324     
+##  3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:1.000     
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.000     
+##  NA&#39;s   :1753     NA&#39;s   :385      NA&#39;s   :594      NA&#39;s   :4566      
+##  TAKEN_TO_HOSPITAL1    SURVIVED     
+##  Min.   :0.0000     Min.   :0.0000  
+##  1st Qu.:0.0000     1st Qu.:0.0000  
+##  Median :1.0000     Median :1.0000  
+##  Mean   :0.5341     Mean   :0.5731  
+##  3rd Qu.:1.0000     3rd Qu.:1.0000  
+##  Max.   :1.0000     Max.   :1.0000  
+##  NA&#39;s   :967</code></pre>
+<p>Ahora vamos a hacer el cáculo de kmeans</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train.data.reduced.numeric.withoutna =<span class="st"> </span><span class="kw">na.omit</span>(train.data.reduced.numeric)
+
+<span class="kw">summary</span>(train.data.reduced.numeric.withoutna)</code></pre></div>
+<pre><code>##       AGE             MALE            FEMALE       RESTRAINT_SYSTEM1
+##  Min.   : 0.00   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   
+##  1st Qu.:20.00   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   
+##  Median :32.00   Median :1.0000   Median :0.0000   Median :0.0000   
+##  Mean   :35.44   Mean   :0.6516   Mean   :0.3484   Mean   :0.4775   
+##  3rd Qu.:48.00   3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:1.0000   
+##  Max.   :97.00   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   
+##     AIRBAG1         EJECTION1      EXTRINCATION1     DRUG_TEST_RESULTS1
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.00000   Min.   :0.0000    
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.00000   1st Qu.:0.0000    
+##  Median :0.0000   Median :0.0000   Median :0.00000   Median :0.0000    
+##  Mean   :0.2288   Mean   :0.1048   Mean   :0.09983   Mean   :0.3182    
+##  3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.00000   3rd Qu.:1.0000    
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.00000   Max.   :1.0000    
+##  TAKEN_TO_HOSPITAL1    SURVIVED     
+##  Min.   :0.0000     Min.   :0.0000  
+##  1st Qu.:0.0000     1st Qu.:0.0000  
+##  Median :1.0000     Median :1.0000  
+##  Mean   :0.5402     Mean   :0.5872  
+##  3rd Qu.:1.0000     3rd Qu.:1.0000  
+##  Max.   :1.0000     Max.   :1.0000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(train.data.reduced.numeric.withoutna)</code></pre></div>
+<pre><code>##       AGE MALE FEMALE RESTRAINT_SYSTEM1 AIRBAG1 EJECTION1 EXTRINCATION1
+## 72930  23    1      0                 0       0         1             0
+## 88607  51    1      0                 1       0         0             0
+## 76925  27    1      0                 0       0         0             1
+## 46210  27    1      0                 1       1         0             0
+## 16945  30    1      0                 1       1         0             1
+## 32917  30    1      0                 0       1         0             0
+##       DRUG_TEST_RESULTS1 TAKEN_TO_HOSPITAL1 SURVIVED
+## 72930                  0                  0        0
+## 88607                  0                  1        1
+## 76925                  1                  0        0
+## 46210                  0                  0        1
+## 16945                  1                  1        0
+## 32917                  0                  1        1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Definir el número de cluster sobre los que debemos de trabajar</span>
+
+mydata &lt;-<span class="st"> </span>train.data.reduced.numeric.withoutna
+wss &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(mydata)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="kw">sum</span>(<span class="kw">apply</span>(mydata,<span class="dv">2</span>,var))
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">15</span>) wss[i] &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">kmeans</span>(mydata,
+                                       <span class="dt">centers=</span>i)<span class="op">$</span>withinss)
+<span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>, wss, <span class="dt">type=</span><span class="st">&quot;b&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Number of Clusters&quot;</span>,
+     <span class="dt">ylab=</span><span class="st">&quot;Within groups sum of squares&quot;</span>,
+     <span class="dt">main=</span><span class="st">&quot;Assessing the Optimal Number of Clusters with the Elbow Method&quot;</span>,
+     <span class="dt">pch=</span><span class="dv">20</span>, <span class="dt">cex=</span><span class="dv">2</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-102-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Seleccionamos 4 clusters</span>
+
+km =<span class="st"> </span><span class="kw">kmeans</span>(train.data.reduced.numeric.withoutna,<span class="dv">4</span>)
+
+<span class="co"># Plot results</span>
+<span class="kw">plot</span>(train.data.reduced.numeric.withoutna, <span class="dt">col =</span>(km<span class="op">$</span>cluster <span class="op">+</span><span class="dv">1</span>) , <span class="dt">main=</span><span class="st">&quot;K-Means result with 4 clusters&quot;</span>, <span class="dt">pch=</span><span class="dv">20</span>, <span class="dt">cex=</span><span class="dv">2</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-103-1.png" width="672" /></p>
+<div id="naive-bayes" class="section level2">
+<h2><span class="header-section-number">7.1</span> NAIVE-BAYES</h2>
+<p>A continuación analizaremos los datos desde la perspectiva del algoritmo de Naive-Bayes.Es decir, mediante Naive-Bayes analizaremos el modelo que mejor clasifique los datos según la variable respuesta en “Died” o “Survived”</p>
+<div id="ejecucion-del-modelo" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Ejecución del modelo</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(e1071)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;e1071&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Hmisc&#39;:
+## 
+##     impute</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#tomamos los predictores significativos para nuestro análisis (fueron obtenidos mediante regresión logística, en pasos previos)</span>
+train.data.reduced =<span class="st"> </span>train.data.reduced[,<span class="kw">c</span>(<span class="st">&quot;AGE&quot;</span>,<span class="st">&quot;SEX&quot;</span>, <span class="st">&quot;RESTRAINT_SYSTEM1&quot;</span>, <span class="st">&quot;AIRBAG1&quot;</span>, <span class="st">&quot;EJECTION1&quot;</span>, <span class="st">&quot;EXTRINCATION1&quot;</span>,   <span class="st">&quot;DRUG_TEST_RESULTS1&quot;</span>, <span class="st">&quot;TAKEN_TO_HOSPITAL1&quot;</span>,<span class="st">&quot;INJURY_SEVERITY&quot;</span>)]
+
+<span class="co"># Para la evaluación del modelo se calcula la probabilidad de INJURY_SEVERITY = True, tanto en train como en test</span>
+nb.fars.train=<span class="kw">naiveBayes</span>(INJURY_SEVERITY <span class="op">~</span>., <span class="dt">data=</span>train.data.reduced)
+nb.predict.train=<span class="kw">predict</span>(nb.fars.train,train.data.reduced)
+
+z&lt;-<span class="kw">table</span>(nb.predict.train,train.data.reduced<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.nb &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.nb</code></pre></div>
+<pre><code>## [1] 0.7907941</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nb.fars.train=<span class="kw">naiveBayes</span>(INJURY_SEVERITY <span class="op">~</span>., <span class="dt">data=</span>train.data.reduced)
+nb.predict.train=<span class="kw">predict</span>(nb.fars.train,train.data.reduced)
+<span class="kw">table</span>(nb.predict.train,train.data.reduced<span class="op">$</span>INJURY_SEVERITY )</code></pre></div>
+<pre><code>##                 
+## nb.predict.train  Died Survived
+##         Died     18178     6336
+##         Survived 11117    32986</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+probs &lt;-<span class="st"> </span><span class="kw">predict</span>(nb.fars.train, train.data.reduced, <span class="dt">type=</span><span class="st">&quot;raw&quot;</span>)
+pred &lt;-<span class="st"> </span><span class="kw">prediction</span>(probs[, <span class="st">&quot;Survived&quot;</span>], train.data.reduced<span class="op">$</span>INJURY_SEVERITY)
+perf_nb &lt;-<span class="st"> </span><span class="kw">performance</span>(pred, <span class="dt">measure=</span><span class="st">&#39;tpr&#39;</span>, <span class="dt">x.measure=</span><span class="st">&#39;fpr&#39;</span>)
+<span class="kw">plot</span>(perf_nb,  <span class="dt">colorize=</span><span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
+<p>Como se puede ver, la precisión es del 72%, que es inferior a los análisis mediante los algoritmos anteriormente mostrados. A continuación, evaluaremos el modelo para el conjunto de test:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Para la evaluación del modelo se calcula la probabilidad de INJURY_SEVERITY = True, tanto en train como en test</span>
+nb.fars.test=<span class="kw">naiveBayes</span>(INJURY_SEVERITY <span class="op">~</span>., <span class="dt">data=</span>test.data)
+nb.predict.test=<span class="kw">predict</span>(nb.fars.test,test.data)
+
+z&lt;-<span class="kw">table</span>(nb.predict.test,test.data<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score</code></pre></div>
+<pre><code>## [1] 0.9423001</code></pre>
+<p>Vamos a analizar qué ocurriría con nuestro modelo en el caso de que eliminásemos filas con datos NA:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train.data.reduced.no.na &lt;-<span class="st"> </span><span class="kw">na.omit</span>(train.data.reduced)</code></pre></div>
+<p>Probamos el algoritmo con los datos de train:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nb.fars.train.no.na=<span class="kw">naiveBayes</span>(INJURY_SEVERITY <span class="op">~</span>., <span class="dt">data=</span>train.data.reduced.no.na)
+nb.predict.train.no.na=<span class="kw">predict</span>(nb.fars.train.no.na,train.data.reduced.no.na)
+
+z&lt;-<span class="st"> </span><span class="kw">table</span>(nb.predict.train.no.na,train.data.reduced.no.na<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score</code></pre></div>
+<pre><code>## [1] 0.8030249</code></pre>
+<p>Si bien se mejora algo la precisión, la mejora no es muy significativa.</p>
+</div>
+</div>
+<div id="analisis-del-modelo-mediante-svm-lineal" class="section level2">
+<h2><span class="header-section-number">7.2</span> Análisis del modelo mediante SVM Lineal</h2>
+<p>Es un método de clasificación que separa datos usando hiperplanos. Si etiquetamos los datos, podemos usar SVM para generar múltiples hiperplanos de forma que cada uno de los espacios delimitados por los hiperplanos, contengan un tipo de dato. En nuestro caso, los hiperplanos separarían los datos de los supervivientes de los de fallecidos.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Vamos a crear un pequeño dataset, para probar el modelo, para la agilizar la ejecución (problemas de memoria)</span>
+<span class="kw">set.seed</span>(<span class="dv">123456</span>)
+data.reduced.svm &lt;-<span class="st"> </span><span class="kw">na.omit</span>(train.data.reduced)
+reduce.svm.index =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data.reduced.svm), <span class="kw">dim</span>(data.reduced.svm)<span class="op">*</span><span class="fl">0.1</span>)
+data.reduced.svm &lt;-<span class="st"> </span>data.reduced.svm[reduce.svm.index, ]</code></pre></div>
+<p>El conjunto que usaremos para nuestras pruebas de SVM constará de las siguientes filas:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(data.reduced.svm)</code></pre></div>
+<pre><code>## [1] 5658    9</code></pre>
+<p>A continuación, sobre ese conjunto anteriormente creado, haremos dos particiones, una para train y otra para test</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train.svm.index =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data.reduced.svm), <span class="kw">dim</span>(data.reduced.svm)<span class="op">*</span><span class="fl">0.7</span>)
+train.svm.data =<span class="st"> </span>data.reduced.svm[train.svm.index, ]
+test.svm.data =<span class="st"> </span>data.reduced.svm[<span class="op">-</span>train.svm.index, ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span> (train.svm.data)</code></pre></div>
+<pre><code>## [1] 3960    9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(test.svm.data)</code></pre></div>
+<pre><code>## [1] 1698    9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(e1071)
+model_svm =<span class="st"> </span><span class="kw">svm</span>(INJURY_SEVERITY <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train.svm.data, <span class="dt">kernel =</span> <span class="st">&quot;linear&quot;</span>,<span class="dt">cost =</span> <span class="dv">10</span>, <span class="dt">type =</span> <span class="st">&quot;C-classification&quot;</span>, <span class="dt">scale =</span> <span class="ot">FALSE</span>, <span class="dt">probability =</span> <span class="ot">TRUE</span>)
+pred.svm &lt;-<span class="st"> </span><span class="kw">predict</span>(model_svm, train.svm.data)
+z&lt;-<span class="st"> </span><span class="kw">table</span>( pred.svm,  train.svm.data<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.svm.lineal &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.svm.lineal</code></pre></div>
+<pre><code>## [1] 0.8060517</code></pre>
+<p>Para poder representar nuestras predicciones con el paquete ROCR, necesitamos que sean continuas. Sin embargo, al ejecutar predict con nuestro model de svm devuelve la clase a la que pertenece cada observación (no es un resultado continuo). Por ello, necesitaremosd crear una función, que contendrá como parámetros el número de aciertos para cada observación, pred, y un vector que contiene la clase a la que pertenece cada observación (“Died”,“Survived”), truth</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rocplot =<span class="cf">function</span> (pred , truth ,color,  ...){
+ predob =<span class="st"> </span><span class="kw">prediction</span> (pred , truth )
+ perf =<span class="st"> </span><span class="kw">performance</span> (predob , <span class="st">&quot;tpr&quot;</span>, <span class="st">&quot;fpr&quot;</span>)
+ <span class="cf">if</span> (<span class="kw">is.na</span>(color)) {
+    <span class="kw">plot</span>(perf , <span class="dt">colorize=</span><span class="ot">TRUE</span> ,   ...)
+ }<span class="cf">else</span>{
+    <span class="kw">plot</span>(perf , <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span>color,...)
+ }
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">svm.pred&lt;-<span class="kw">predict</span>(model_svm, test.svm.data, <span class="dt">decision.values =</span> <span class="ot">TRUE</span>,
+<span class="dt">probability =</span> <span class="ot">TRUE</span>)
+<span class="kw">table</span>(svm.pred, test.svm.data<span class="op">$</span>INJURY_SEVERITY)</code></pre></div>
+<pre><code>##           
+## svm.pred   Died Survived
+##   Died      476      187
+##   Survived  208      827</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitted_svm_lineal =<span class="kw">attributes</span>(<span class="kw">predict</span>(model_svm ,test.svm.data , <span class="dt">decision.values =</span><span class="ot">TRUE</span>))<span class="op">$</span>decision.values
+
+<span class="kw">par</span>(<span class="dt">mfrow =</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">rocplot</span> (fitted_svm_lineal,test.svm.data<span class="op">$</span>INJURY_SEVERITY, <span class="ot">NA</span>,  <span class="dt">main=</span><span class="st">&quot;Training Data&quot;</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-116-1.png" width="672" /></p>
+<p>Precisión del modelo en el conjunto de test:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_svm =<span class="st"> </span><span class="kw">svm</span>(INJURY_SEVERITY <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> test.svm.data, <span class="dt">kernel =</span> <span class="st">&quot;linear&quot;</span>,<span class="dt">cost =</span> <span class="dv">10</span>, <span class="dt">type =</span> <span class="st">&quot;C-classification&quot;</span>, <span class="dt">scale =</span> <span class="ot">FALSE</span>)
+pred &lt;-<span class="st"> </span><span class="kw">predict</span>(model_svm, test.svm.data)
+z&lt;-<span class="st"> </span><span class="kw">table</span>( pred,  test.svm.data<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score</code></pre></div>
+<pre><code>## [1] 0.8144231</code></pre>
+<p>A continuación, analizaremos los datos intentado crear un modelo mediante la función “tune”, que elegirá los mejores parámetros para nuestro modelo</p>
+<p>Para el conjunto de train:</p>
+<p>El siguiente modelo, es muy demandante computacionalmente. Por problemas de memoria, reduciremos aún más el conjunto de datos de train y test.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train.svm.tuned.index =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(train.svm.data), <span class="kw">dim</span>(train.svm.data)<span class="op">*</span><span class="fl">0.1</span>)
+train.svm.data.tuned =<span class="st"> </span>train.svm.data[train.svm.tuned.index, ]
+test.svm.tuned.index =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(test.svm.data), <span class="kw">dim</span>(test.svm.data)<span class="op">*</span><span class="fl">0.2</span>)
+test.svm.data.tuned =<span class="st"> </span>test.svm.data[test.svm.tuned.index, ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(train.svm.data.tuned)</code></pre></div>
+<pre><code>## [1] 396   9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(test.svm.data.tuned)</code></pre></div>
+<pre><code>## [1] 339   9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tuned_train &lt;-<span class="st"> </span><span class="kw">tune.svm</span>(INJURY_SEVERITY <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train.svm.data.tuned, <span class="dt">gamma =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">10</span><span class="op">:</span><span class="dv">2</span>),
+<span class="dt">cost =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">1</span><span class="op">:</span><span class="dv">1</span>),  <span class="dt">probability =</span> <span class="ot">TRUE</span>)
+svm.best.model_train &lt;-tuned_train<span class="op">$</span>best.model</code></pre></div>
+<p>Mostramos la curva ROC</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">svm.pred.tuned&lt;-<span class="kw">predict</span>(svm.best.model_train, test.svm.data.tuned, <span class="dt">decision.values =</span> <span class="ot">TRUE</span>,
+<span class="dt">probability =</span> <span class="ot">TRUE</span>)
+<span class="kw">table</span>(svm.pred.tuned, test.svm.data.tuned<span class="op">$</span>INJURY_SEVERITY)</code></pre></div>
+<pre><code>##               
+## svm.pred.tuned Died Survived
+##       Died       87       18
+##       Survived   52      182</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fitted_svm_tune  =<span class="kw">attributes</span>(<span class="kw">predict</span>(svm.best.model_train ,test.svm.data.tuned , <span class="dt">decision.values =</span><span class="ot">TRUE</span>))<span class="op">$</span>decision.values
+<span class="kw">par</span>(<span class="dt">mfrow =</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">rocplot</span> (fitted_svm_tune,test.svm.data.tuned<span class="op">$</span>INJURY_SEVERITY, <span class="ot">NA</span>, <span class="dt">main=</span><span class="st">&quot;Training Data&quot;</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tuned_train<span class="op">$</span>best.model</code></pre></div>
+<pre><code>## 
+## Call:
+## best.svm(x = INJURY_SEVERITY ~ ., data = train.svm.data.tuned, 
+##     gamma = 10^(-10:2), cost = 10^(-1:1), probability = TRUE)
+## 
+## 
+## Parameters:
+##    SVM-Type:  C-classification 
+##  SVM-Kernel:  radial 
+##        cost:  1 
+##       gamma:  0.1 
+## 
+## Number of Support Vectors:  216</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(train.svm.data)</code></pre></div>
+<pre><code>## [1] 3960    9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z&lt;-<span class="st"> </span><span class="kw">table</span>(<span class="dt">predict =</span> svm.pred.tuned,<span class="dt">truth =</span> test.svm.data.tuned<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.svm.tuned &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.svm.tuned</code></pre></div>
+<pre><code>## [1] 0.8387097</code></pre>
+<p>Para el conjunto de test:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># tomaremos el conjunto de test creado anteriormente como nuestro conjunto de datos padre. A partir de él, creamos dos particiones, una de train y una de test:</span>
+train.svm.tuned.index.test =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(test.svm.data), <span class="kw">dim</span>(test.svm.data)<span class="op">*</span><span class="fl">0.7</span>)
+train.svm.data.tuned.test =<span class="st"> </span>test.svm.data[train.svm.tuned.index.test, ]
+test.svm.data.tuned.test =<span class="st"> </span>test.svm.data[<span class="op">-</span>train.svm.tuned.index.test, ]
+<span class="kw">dim</span>(train.svm.data.tuned.test)</code></pre></div>
+<pre><code>## [1] 1188    9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(test.svm.data.tuned.test)</code></pre></div>
+<pre><code>## [1] 510   9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(e1071)
+
+tuned_test &lt;-<span class="st"> </span><span class="kw">tune.svm</span>(INJURY_SEVERITY <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train.svm.data.tuned.test, <span class="dt">gamma =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">10</span><span class="op">:</span><span class="dv">2</span>),
+<span class="dt">cost =</span> <span class="dv">10</span><span class="op">^</span>(<span class="op">-</span><span class="dv">1</span><span class="op">:</span><span class="dv">1</span>))
+svm.best.model_test &lt;-tuned_test<span class="op">$</span>best.model
+svm.best.model_test &lt;-tuned_test<span class="op">$</span>best.model
+pred_test &lt;-<span class="st"> </span><span class="kw">predict</span>(svm.best.model_test, test.svm.data.tuned.test)
+z&lt;-<span class="st">  </span><span class="kw">table</span>(<span class="dt">predict =</span> pred_test,<span class="dt">truth =</span> test.svm.data.tuned.test<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score</code></pre></div>
+<pre><code>## [1] 0.8497724</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train.svm.no.lineal =train.svm.data.tuned.test
+test.svm.no.lineal =<span class="st"> </span>test.svm.data.tuned.test</code></pre></div>
+</div>
+<div id="analisis-del-modelo-mediante-svm-no-lineal" class="section level2">
+<h2><span class="header-section-number">7.3</span> Análisis del modelo mediante SVM NO Lineal</h2>
+<div id="libreria-empleada-caret" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Libreria empleada: Caret</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(caret)
+<span class="kw">set.seed</span>(<span class="dv">825</span>)
+
+fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,
+                           <span class="dt">number =</span> <span class="dv">10</span>,
+                           <span class="dt">repeats =</span> <span class="dv">10</span>,
+                           <span class="dt">classProbs =</span> <span class="ot">TRUE</span>,
+                           <span class="dt">summaryFunction =</span> twoClassSummary)
+
+svmFit &lt;-<span class="st"> </span><span class="kw">train</span>(INJURY_SEVERITY <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train.svm.data, 
+                 <span class="dt">method =</span> <span class="st">&quot;svmRadial&quot;</span>, 
+                 <span class="dt">trControl =</span> fitControl, 
+                 <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>),
+                 <span class="dt">tuneLength =</span> <span class="dv">8</span>,
+                 <span class="dt">metric =</span> <span class="st">&quot;ROC&quot;</span>)</code></pre></div>
+<pre><code>## line search fails -1.39233 0.005475466 1.078963e-05 -7.637e-06 -2.763048e-08 2.243066e-08 -4.694255e-13line search fails -1.403825 0.06394359 1.113863e-05 -8.742564e-06 -3.097183e-08 2.70522e-08 -5.814894e-13line search fails -1.303205 -0.001314716 1.317324e-05 -9.086164e-06 -3.143832e-08 2.627709e-08 -6.529026e-13line search fails -1.22932 -0.01864636 1.132456e-05 -7.558468e-06 -2.535711e-08 2.135812e-08 -4.485928e-13line search fails -1.304259 0.01342165 1.13828e-05 -8.135649e-06 -2.774187e-08 2.389128e-08 -5.101512e-13line search fails -1.363568 0.0002851444 1.059965e-05 -7.48665e-06 -2.667773e-08 2.175609e-08 -4.45655e-13line search fails -1.354012 -0.028591 1.095059e-05 -7.012461e-06 -2.587419e-08 1.994288e-08 -4.231862e-13line search fails -1.326098 0.01347042 1.235135e-05 -9.018201e-06 -3.090101e-08 2.646395e-08 -6.203264e-13line search fails -1.365108 0.01138894 1.296409e-05 -9.507014e-06 -3.287594e-08 2.795147e-08 -6.919415e-13line search fails -1.402015 0.04650833 1.171968e-05 -8.877884e-06 -3.178993e-08 2.709444e-08 -6.13109e-13line search fails -1.336039 0.003245259 1.129924e-05 -7.884501e-06 -2.796401e-08 2.302368e-08 -4.975024e-13</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">svmFit                 </code></pre></div>
+<pre><code>## Support Vector Machines with Radial Basis Function Kernel 
+## 
+## 3960 samples
+##    8 predictor
+##    2 classes: &#39;Died&#39;, &#39;Survived&#39; 
+## 
+## Pre-processing: centered (8), scaled (8) 
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 3564, 3564, 3564, 3564, 3564, 3564, ... 
+## Resampling results across tuning parameters:
+## 
+##   C      ROC        Sens       Spec     
+##    0.25  0.8500601  0.6455422  0.8949565
+##    0.50  0.8413757  0.6462651  0.8957391
+##    1.00  0.8334247  0.6460843  0.8948261
+##    2.00  0.8293747  0.6428313  0.8938696
+##    4.00  0.8242584  0.6400000  0.8945217
+##    8.00  0.8098770  0.6374984  0.8935903
+##   16.00  0.8042813  0.6391817  0.8913949
+##   32.00  0.8037757  0.6364207  0.8892663
+## 
+## Tuning parameter &#39;sigma&#39; was held constant at a value of 0.1057757
+## ROC was used to select the optimal model using the largest value.
+## The final values used for the model were sigma = 0.1057757 and C = 0.25.</code></pre>
+</div>
+<div id="libreria-empleada-kernlab" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Libreria empleada kernlab</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(kernlab)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;kernlab&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     cross</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     alpha</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">svm_model_ksvm &lt;-<span class="st"> </span><span class="kw">ksvm</span>(INJURY_SEVERITY <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train.svm.no.lineal, <span class="dt">type =</span> <span class="st">&quot;C-svc&quot;</span>,<span class="dt">kernel=</span><span class="st">&#39;rbf&#39;</span>,
+<span class="dt">kpar =</span> <span class="kw">list</span>(<span class="dt">sigma =</span> <span class="dv">1</span>), <span class="dt">C =</span> <span class="dv">1</span>, <span class="dt">probability =</span><span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred_test.svm.non_linear &lt;-<span class="st"> </span><span class="kw">predict</span>(svm_model_ksvm, test.svm.no.lineal)
+z&lt;-<span class="st">   </span><span class="kw">table</span>(<span class="dt">predict =</span> pred_test.svm.non_linear,<span class="dt">truth =</span> test.svm.no.lineal<span class="op">$</span>INJURY_SEVERITY)
+precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.no.lineal &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.no.lineal</code></pre></div>
+<pre><code>## [1] 0.8343949</code></pre>
+<p>El kernel RBF proporciona un error de 0.15, muy cercano al proporcionado por SVM.</p>
+<p>Representación mediante curva RO:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ypredscore =<span class="st"> </span><span class="kw">predict</span>(svm_model_ksvm,test.svm.no.lineal,<span class="dt">type=</span><span class="st">&quot;decision&quot;</span>)
+pred &lt;-<span class="st"> </span><span class="kw">prediction</span>(ypredscore,test.svm.no.lineal<span class="op">$</span>INJURY_SEVERITY)
+perf.svm.non.linear &lt;-<span class="st"> </span><span class="kw">performance</span>(pred, <span class="dt">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="dt">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)
+<span class="kw">plot</span>(perf.svm.non.linear,<span class="dt">colorize=</span><span class="ot">TRUE</span>)
+<span class="kw">abline</span>(<span class="dt">a=</span><span class="dv">0</span>,<span class="dt">b=</span><span class="dv">1</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-130-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">auc &lt;-<span class="st"> </span><span class="kw">performance</span>(pred,<span class="dt">measure=</span><span class="st">&quot;auc&quot;</span>)<span class="op">@</span>y.values
+auc</code></pre></div>
+<pre><code>## [[1]]
+## [1] 0.8312942</code></pre>
+</div>
+</div>
+<div id="analisis-del-modelo-mediante-redes-neuronales" class="section level2">
+<h2><span class="header-section-number">7.4</span> Análisis del modelo mediante REDES NEURONALES</h2>
+<p>A continuación evaluaremos la capacidad de clasificación de un modelo generado mediante redes neuronales.</p>
+<p>Las redes neuronales sólo trabajaran con datos cuantitativos, por lo que usaremos variables dummy.</p>
+<p>Tememos 8 predictores por lo que usaremos dos capas con la siguiente configuración: 10:5:3:1. La capa de entrada tendrá 10 entradas (correspondientes a cada uno de los predictores). Las dos capas ocultas tendrán 5 y 3 neuronas, respectivamente, y optimizarán los pesos de las neuronas de la capa previa para mejorar la calidad predictiva del modelo. Por otro lado, la salida tendrá una única neurona</p>
+<div id="preparacion-del-modelo" class="section level3">
+<h3><span class="header-section-number">7.4.1</span> Preparación del modelo</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Por eficiencia y escasez de memoria, escogeremos una muestra de nuestro conjunto de datos para entrenar el modelo</span>
+<span class="kw">set.seed</span>(<span class="dv">123456</span>)
+data.reduced.numeric.nn.index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(train.data.reduced.numeric.withoutna), <span class="kw">dim</span>(train.data.reduced.numeric.withoutna)<span class="op">*</span><span class="fl">0.025</span>)
+data.reduced.numeric.nn =<span class="st"> </span>train.data.reduced.numeric.withoutna[data.reduced.numeric.nn.index, ]
+
+<span class="kw">dim</span>(data.reduced.numeric.nn)</code></pre></div>
+<pre><code>## [1] 1414   10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#TRAIN</span>
+<span class="kw">set.seed</span>(<span class="dv">123456</span>)
+train.data.reduced.numeric.nn.index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data.reduced.numeric.nn), <span class="kw">dim</span>(data.reduced.numeric.nn)<span class="op">*</span><span class="fl">0.7</span>)
+train.data.reduced.numeric.nn =<span class="st"> </span>data.reduced.numeric.nn[train.data.reduced.numeric.nn.index, ]
+
+<span class="co">#TEST</span>
+test.data.reduced.numeric.nn =<span class="st"> </span>data.reduced.numeric.nn[<span class="op">-</span>train.data.reduced.numeric.nn.index,]
+<span class="kw">dim</span>(train.data.reduced.numeric.nn)</code></pre></div>
+<pre><code>## [1] 989  10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(test.data.reduced.numeric.nn)</code></pre></div>
+<pre><code>## [1] 425  10</code></pre>
+</div>
+<div id="ejecucion-del-modelo-1" class="section level3">
+<h3><span class="header-section-number">7.4.2</span> Ejecución del modelo</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(neuralnet)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;neuralnet&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ROCR&#39;:
+## 
+##     prediction</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     compute</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="kw">names</span>(train.data.reduced.numeric.nn)
+f &lt;-<span class="st"> </span><span class="kw">as.formula</span>(<span class="kw">paste</span>(<span class="st">&quot;SURVIVED ~&quot;</span>, <span class="kw">paste</span>(n[<span class="op">!</span>n <span class="op">%in%</span><span class="st"> &quot;SURVIVED&quot;</span>], <span class="dt">collapse =</span> <span class="st">&quot; + &quot;</span>)))
+<span class="co"># en el argumento &quot;hidden&quot; ponemos el número de neuronas que debe tener cada una de las dos capas intermedias y &quot;linear.output=FALSE&quot; porque queremos analizar la capacidad de clasificación de nuestro modelo</span>
+<span class="co"># el stepmax es grande para que le dé tiempo al modelo a converger</span>
+nn &lt;-<span class="st"> </span><span class="kw">neuralnet</span>(f,<span class="dt">data=</span>train.data.reduced.numeric.nn,<span class="dt">hidden=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">3</span>),<span class="dt">linear.output=</span><span class="ot">FALSE</span>, <span class="dt">stepmax=</span><span class="fl">1e7</span>)
+<span class="kw">plot</span>(nn)</code></pre></div>
+<p>En esta imagen podemos ver la representación del modelo junto con el peso de cada conexión. Las líneas negras representan la conexión entre las capas y las conexiones con las redes neuronales. Se podría decir que una red neuronal es una “caja negra”, por lo que no podríamos evaluar el modelo, únicamente podríamos determinar que el modelo converge</p>
+<p>Ahora evaluaremos la capacidad predictiva del modelo.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nn<span class="op">$</span>result.matrix</code></pre></div>
+<pre><code>##                                                  1
+## error                               63.23596565963
+## reached.threshold                    0.00962465928
+## steps                          2331102.00000000000
+## Intercept.to.1layhid1               -0.07271954607
+## AGE.to.1layhid1                     -0.09145574987
+## MALE.to.1layhid1                    -0.28239660127
+## FEMALE.to.1layhid1                   0.35260783162
+## RESTRAINT_SYSTEM1.to.1layhid1        4.84587264357
+## AIRBAG1.to.1layhid1                 -2.52189756442
+## EJECTION1.to.1layhid1               -0.46068181741
+## EXTRINCATION1.to.1layhid1           -4.01932067811
+## DRUG_TEST_RESULTS1.to.1layhid1      -2.39329923368
+## TAKEN_TO_HOSPITAL1.to.1layhid1       0.50792562329
+## Intercept.to.1layhid2                1.68609986201
+## AGE.to.1layhid2                      0.05684785970
+## MALE.to.1layhid2                    90.81801389315
+## FEMALE.to.1layhid2                  -3.15718150446
+## RESTRAINT_SYSTEM1.to.1layhid2      -85.24464933469
+## AIRBAG1.to.1layhid2                 10.78599307319
+## EJECTION1.to.1layhid2             -110.23328988505
+## EXTRINCATION1.to.1layhid2         -115.94341284296
+## DRUG_TEST_RESULTS1.to.1layhid2      -6.97928003473
+## TAKEN_TO_HOSPITAL1.to.1layhid2     153.18488160200
+## Intercept.to.1layhid3                0.17091182676
+## AGE.to.1layhid3                     -1.93127046654
+## MALE.to.1layhid3                    -1.79390826007
+## FEMALE.to.1layhid3                   1.64385137378
+## RESTRAINT_SYSTEM1.to.1layhid3     -709.65607218422
+## AIRBAG1.to.1layhid3                 27.80939003919
+## EJECTION1.to.1layhid3                1.10671554015
+## EXTRINCATION1.to.1layhid3           -1.13575748188
+## DRUG_TEST_RESULTS1.to.1layhid3      -1.62179594443
+## TAKEN_TO_HOSPITAL1.to.1layhid3       1.14953355235
+## Intercept.to.1layhid4               -0.50893069091
+## AGE.to.1layhid4                     -0.04762909669
+## MALE.to.1layhid4                     0.38914013750
+## FEMALE.to.1layhid4                   1.95569255144
+## RESTRAINT_SYSTEM1.to.1layhid4        2.39973750773
+## AIRBAG1.to.1layhid4                  3.48473844178
+## EJECTION1.to.1layhid4               -4.82805167274
+## EXTRINCATION1.to.1layhid4           -1.77917597359
+## DRUG_TEST_RESULTS1.to.1layhid4      -6.61433216346
+## TAKEN_TO_HOSPITAL1.to.1layhid4      -1.00597531155
+## Intercept.to.1layhid5             -703.32308449047
+## AGE.to.1layhid5                    116.99553763117
+## MALE.to.1layhid5                   -27.68704541554
+## FEMALE.to.1layhid5               -1020.76378756069
+## RESTRAINT_SYSTEM1.to.1layhid5     -582.13160244122
+## AIRBAG1.to.1layhid5                175.56601111304
+## EJECTION1.to.1layhid5              788.20560545042
+## EXTRINCATION1.to.1layhid5          318.41547475171
+## DRUG_TEST_RESULTS1.to.1layhid5      -0.07001159577
+## TAKEN_TO_HOSPITAL1.to.1layhid5     295.53067344608
+## Intercept.to.2layhid1             -552.28744116475
+## 1layhid.1.to.2layhid1            -1577.93815661517
+## 1layhid.2.to.2layhid1              564.73570909387
+## 1layhid.3.to.2layhid1              536.68749496257
+## 1layhid.4.to.2layhid1             1105.56033347769
+## 1layhid.5.to.2layhid1              216.80414587720
+## Intercept.to.2layhid2                2.25020554860
+## 1layhid.1.to.2layhid2             -109.67925948164
+## 1layhid.2.to.2layhid2              -64.65546198310
+## 1layhid.3.to.2layhid2              210.38728129258
+## 1layhid.4.to.2layhid2              -41.22934606704
+## 1layhid.5.to.2layhid2               56.94952499345
+## Intercept.to.2layhid3               -5.97187877729
+## 1layhid.1.to.2layhid3                0.96425989128
+## 1layhid.2.to.2layhid3               -1.03599632039
+## 1layhid.3.to.2layhid3              -10.06722922784
+## 1layhid.4.to.2layhid3               -1.50829883938
+## 1layhid.5.to.2layhid3                2.28580107421
+## Intercept.to.SURVIVED                6.74812258907
+## 2layhid.1.to.SURVIVED               -3.29845720037
+## 2layhid.2.to.SURVIVED             -545.59955306382
+## 2layhid.3.to.SURVIVED             -352.57811383023</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(test.data.reduced.numeric.nn)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    425 obs. of  10 variables:
+##  $ AGE               : int  16 52 12 20 38 69 79 10 14 19 ...
+##  $ MALE              : num  0 1 1 1 0 1 0 1 1 1 ...
+##  $ FEMALE            : num  1 0 0 0 1 0 1 0 0 0 ...
+##  $ RESTRAINT_SYSTEM1 : num  0 0 0 0 1 1 1 1 1 0 ...
+##  $ AIRBAG1           : num  0 0 0 1 1 0 1 0 0 0 ...
+##  $ EJECTION1         : num  0 1 1 1 0 0 0 0 0 0 ...
+##  $ EXTRINCATION1     : num  1 0 0 0 0 0 0 0 0 1 ...
+##  $ DRUG_TEST_RESULTS1: num  1 1 0 1 0 0 1 0 0 0 ...
+##  $ TAKEN_TO_HOSPITAL1: num  0 0 1 0 0 0 0 0 0 1 ...
+##  $ SURVIVED          : num  0 0 1 0 0 1 0 1 1 1 ...
+##  - attr(*, &quot;na.action&quot;)=Class &#39;omit&#39;  Named int [1:12029] 4 11 14 16 20 33 35 36 37 41 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:12029] &quot;89637&quot; &quot;3631&quot; &quot;114&quot; &quot;46814&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># creamos las predicciones de nuestro modelo (eliminamos la última columna, que es la correspondiente a la variable dependiente)</span>
+nn.results &lt;-<span class="st"> </span>neuralnet<span class="op">::</span><span class="kw">compute</span>(nn, test.data.reduced.numeric.nn[,<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>])
+
+<span class="co">#Evaluaremos la precisión de nuestro modelo </span>
+results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">actual =</span> test.data.reduced.numeric.nn<span class="op">$</span>SURVIVED, <span class="dt">prediction =</span> nn.results<span class="op">$</span>net.result)
+results</code></pre></div>
+<pre><code>##        actual       prediction
+## 30641       0 1.720193931e-238
+## 61029       0 1.712595911e-238
+## 93689       1  9.527449381e-01
+## 71744       0 1.713159995e-238
+## 50390       0  7.012838789e-01
+## 90394       1  7.444908688e-01
+## 15595       0 2.979160845e-238
+## 63394       1  9.985357601e-01
+## 56051       1  9.891044230e-01
+## 67323       1  4.481936373e-01
+## 21911       0 1.451219536e-238
+## 36973       1  7.593688217e-01
+## 19037       0 1.723661910e-238
+## 66700       1  8.112802661e-01
+## 9120        0  6.680266916e-01
+## 65568       0  1.239489545e-01
+## 75751       0 1.717994268e-238
+## 75306       1  2.155349972e-01
+## 88033       1  9.351457718e-01
+## 12843       1  9.026837748e-01
+## 51258       0  7.444146741e-01
+## 47850       0  9.094693088e-01
+## 3075        1  7.101552057e-01
+## 10637       1  9.047876537e-01
+## 30816       1  8.991027396e-01
+## 64567       1  6.603824927e-01
+## 80639       1  9.352617250e-01
+## 50145       0  7.607978292e-01
+## 24667       1 3.419531739e-198
+## 41803       0  4.695301537e-01
+## 42045       0 1.500435156e-238
+## 73214       0  8.098488953e-01
+## 47940       0  9.222283816e-01
+## 25412       1 3.801372907e-237
+## 79240       0  3.090408346e-01
+## 27138       1  3.319397716e-01
+## 49229       1  8.112528124e-01
+## 31891       1  5.005907268e-01
+## 75154       0  2.467208021e-01
+## 1103        1  4.966453055e-01
+## 72965       0  8.820315868e-01
+## 57842       1  9.668934533e-01
+## 76452       1  8.774891483e-01
+## 63102       1  5.742856641e-01
+## 12171       0  9.933479517e-01
+## 67213       1  9.294866527e-01
+## 80284       1  4.945345113e-01
+## 80552       0  4.645227138e-01
+## 65488       1  9.859498486e-01
+## 40814       0  3.927388850e-01
+## 16391       0  9.928230964e-01
+## 33535       1  6.844479523e-01
+## 21828       1  6.790022839e-01
+## 18290       1  7.415383655e-01
+## 57704       1  7.291254647e-01
+## 98310       0  3.410551798e-01
+## 98212       0  9.974842879e-01
+## 14056       0 1.615751214e-238
+## 33841       1  5.195695291e-01
+## 9057        1  9.877288375e-01
+## 72191       1  6.080875707e-01
+## 74225       1  6.660287602e-01
+## 89815       0  9.358572005e-01
+## 66328       0 1.656086106e-238
+## 25373       1  5.180301153e-01
+## 54307       0 1.274192604e-238
+## 62652       1  9.901863161e-01
+## 8572        0  8.466142365e-01
+## 79751       1  4.339198429e-01
+## 24502       1  5.509739720e-01
+## 29747       0  1.406017032e-01
+## 87114       1  9.238049501e-01
+## 99390       1  9.230661984e-01
+## 100425      1  9.983231285e-01
+## 46340       0  4.818340125e-01
+## 52100       1  9.568712052e-01
+## 17692       0 1.719873270e-238
+## 23516       1  3.942696464e-01
+## 1817        1  6.086189220e-01
+## 80394       1  6.986067094e-01
+## 80450       0 1.723661910e-238
+## 37564       1  5.885193708e-01
+## 56300       1  9.688715824e-01
+## 96550       0  1.562188198e-01
+## 2235        1  9.464836530e-01
+## 2514        1  7.490533362e-01
+## 15726       1 2.126529996e-238
+## 10860       1  9.985593691e-01
+## 94210       0  3.053148966e-67
+## 100076      0  4.496320802e-01
+## 26598       1  5.846103288e-01
+## 68271       1  9.294866527e-01
+## 30244       1  9.984628153e-01
+## 74235       0  9.231278905e-01
+## 66673       0  3.752438107e-01
+## 18400       0 1.568890278e-238
+## 3477        1  6.143084467e-01
+## 56324       0 1.707522258e-238
+## 17474       0  3.861134677e-01
+## 81826       0 1.701791475e-238
+## 11008       1  9.425232749e-01
+## 12406       1  9.979856168e-01
+## 29353       0 1.717302200e-238
+## 88903       0  7.443150612e-01
+## 81798       0  5.991904472e-01
+## 85472       0  1.091500346e-01
+## 45965       1  1.291472044e-01
+## 89535       1  9.169856468e-01
+## 72478       1  5.885193708e-01
+## 3172        1  9.863237627e-01
+## 72743       0 6.344264276e-239
+## 5210        1  9.358166304e-01
+## 66369       0  3.517890601e-01
+## 30218       0 1.672754855e-238
+## 34402       1  7.632538497e-01
+## 8057        1  5.960064827e-01
+## 89800       1  8.120997513e-01
+## 78577       1  9.985366973e-01
+## 94893       1  6.734050719e-01
+## 3665        1  7.323433994e-01
+## 62830       0  4.790037287e-01
+## 78768       0  3.247088690e-01
+## 92558       1  9.187469043e-01
+## 11860       1  9.311913152e-01
+## 50816       1  6.523565190e-01
+## 71538       0  2.346625658e-01
+## 70967       0  5.201014463e-01
+## 72141       1  5.961553521e-01
+## 12903       0  5.960064827e-01
+## 90756       0  3.720004398e-01
+## 43128       0  5.998777002e-01
+## 67346       1  9.505208921e-01
+## 34737       1  3.101547650e-01
+## 14976       1  9.884359511e-01
+## 57688       0  2.058164574e-01
+## 21101       1  2.164234606e-01
+## 53461       1  9.983528910e-01
+## 77065       0  9.450870852e-01
+## 95717       1  6.310163871e-01
+## 72339       0 4.576630296e-237
+## 52871       1  9.759109107e-01
+## 77886       0  2.259068845e-01
+## 49476       0  3.831436129e-01
+## 38928       1  7.320906505e-01
+## 58605       0  5.398798037e-01
+## 79912       0  8.816363662e-01
+## 21041       0  2.229285405e-01
+## 7409        0  1.346966418e-01
+## 49524       1  9.295288108e-01
+## 28534       0  3.247088690e-01
+## 77897       0 1.603162238e-238
+## 64997       0  4.342733640e-01
+## 98292       0  1.215153205e-01
+## 2283        1 3.558134919e-237
+## 46776       0  4.508013578e-01
+## 29183       1  5.088195161e-01
+## 48925       1  9.873767574e-01
+## 18309       1  5.072212466e-01
+## 91178       1  7.635588750e-01
+## 21054       1  6.844479523e-01
+## 6798        1  9.863884216e-01
+## 68660       1  9.341882085e-01
+## 230         1  5.841861328e-01
+## 99765       1  9.737473791e-01
+## 53194       1  5.955381405e-01
+## 76007       1  2.011331647e-01
+## 89657       1  7.498188677e-01
+## 25662       0  2.245729589e-01
+## 58495       1  9.483933952e-01
+## 7848        1  9.872049711e-01
+## 51185       0  4.102246633e-01
+## 65758       1  5.794440538e-01
+## 83011       1  8.617913095e-01
+## 19589       1  9.166636094e-01
+## 75102       1  9.985535053e-01
+## 10163       0  2.003933891e-01
+## 48572       1  5.960064827e-01
+## 32773       1  7.589325024e-01
+## 13625       1  9.164681959e-01
+## 12808       0  2.800879411e-01
+## 34778       1  8.924196266e-01
+## 15775       1  9.875635491e-01
+## 50808       0  2.190073777e-01
+## 86113       1  9.119132272e-01
+## 68028       1  8.256288354e-01
+## 90103       0  9.684389032e-01
+## 80496       1  5.005907268e-01
+## 71068       0 1.770291860e-238
+## 47830       0 3.526045807e-236
+## 69727       0  3.166025129e-01
+## 16942       1  9.228888075e-01
+## 46449       0  4.650418459e-01
+## 69899       1  5.469094224e-01
+## 55748       1  8.553575136e-01
+## 54594       1  4.801954529e-01
+## 55112       1  8.798356277e-01
+## 20108       0 1.956762825e-238
+## 29580       0 1.719235446e-238
+## 91937       1  9.787238747e-01
+## 16089       0  2.359805355e-01
+## 92633       1  8.207816283e-01
+## 13410       0  9.483058759e-01
+## 24270       1 4.067652713e-238
+## 80784       1  9.984516277e-01
+## 46189       1  6.163074561e-01
+## 10927       0  1.307139579e-01
+## 46313       1  9.700438246e-01
+## 20779       0  2.229285405e-01
+## 65612       0 1.555042761e-238
+## 64324       1  1.299150562e-01
+## 3959        1  9.425767636e-01
+## 69577       0  9.679117923e-01
+## 35730       1  1.242701096e-01
+## 77605       1  9.985655323e-01
+## 48457       1  9.861842076e-01
+## 71751       1  9.988125578e-01
+## 50751       1 1.689546421e-238
+## 68486       0  3.927388850e-01
+## 84043       0  1.347410219e-01
+## 92386       0  9.347242693e-01
+## 94688       1  7.019795389e-01
+## 36003       1  7.498188677e-01
+## 80713       0  1.530496714e-01
+## 91822       1  8.729509824e-01
+## 38460       0  9.860136392e-01
+## 45432       1  4.171494784e-01
+## 23187       1  9.367460522e-01
+## 65272       1  9.458988467e-01
+## 82531       0 1.186533457e-235
+## 7001        1  6.045275241e-01
+## 33834       1  7.415383655e-01
+## 26003       0  7.760808023e-01
+## 11937       0  9.979618284e-01
+## 74288       1 2.972934368e-238
+## 85718       1  9.979954816e-01
+## 752         1  8.991027396e-01
+## 52284       0  9.983528910e-01
+## 97086       1  9.983328516e-01
+## 98838       0 2.370599646e-238
+## 74940       1  7.497445014e-01
+## 15033       0  6.065236855e-01
+## 32326       0  4.342733640e-01
+## 29062       0  2.455176992e-01
+## 15458       0  4.400770653e-01
+## 98350       0  4.274695014e-01
+## 95540       1  9.222964663e-01
+## 13818       1  9.706066053e-01
+## 87183       0  1.279118789e-01
+## 19549       1 3.526045807e-236
+## 54866       0  4.602759146e-01
+## 73670       1  9.351904291e-01
+## 26459       1  8.743280527e-01
+## 57430       0  3.587982797e-01
+## 83253       1  8.928777382e-01
+## 97470       1  9.867535852e-01
+## 795         1  7.323433994e-01
+## 77054       0  2.259068845e-01
+## 25001       1  9.611089188e-01
+## 60179       0  1.374069164e-01
+## 93119       0  4.271793203e-01
+## 15424       0  1.521803808e-01
+## 24381       1  1.297702382e-01
+## 53166       0  7.589325024e-01
+## 87382       1  9.856994256e-01
+## 74121       1  6.806498281e-01
+## 97917       0  4.823605837e-01
+## 100298      1  8.133010772e-01
+## 9262        0  2.850095773e-01
+## 50797       1  6.651079825e-01
+## 71695       1 1.705820665e-238
+## 2884        0  1.269099286e-01
+## 38536       0 1.667173696e-238
+## 57944       0  2.919992643e-01
+## 33067       1  9.244833410e-01
+## 6556        0  9.161110480e-01
+## 31756       1  9.979920997e-01
+## 1967        1  9.983885594e-01
+## 21232       1  9.985247330e-01
+## 31426       1  9.882611446e-01
+## 66137       1  9.301388173e-01
+## 72182       0  7.481520792e-01
+## 99366       1  9.627088448e-01
+## 53809       1  9.195825944e-01
+## 11216       1  7.409955289e-01
+## 48114       1  7.593688217e-01
+## 42799       1  9.069328991e-01
+## 7948        1  9.860314540e-01
+## 52986       1  5.324180219e-01
+## 21272       1  9.645807638e-02
+## 57475       0  6.153139277e-01
+## 82677       1  9.725745319e-01
+## 22161       1  8.119206844e-01
+## 48774       0  5.998777002e-01
+## 24910       1  9.139673261e-01
+## 79832       1  9.976261660e-01
+## 48679       0  4.508013578e-01
+## 83768       0 1.438623409e-238
+## 79485       0  8.531381419e-01
+## 85105       1  9.870377954e-01
+## 29297       1  5.482731010e-01
+## 73152       0  9.244711254e-01
+## 83013       0 1.713159995e-238
+## 78119       0  1.402169282e-01
+## 41201       0 2.936848457e-237
+## 49562       0 1.692897597e-237
+## 73769       0  5.961133798e-01
+## 48621       1  9.985257685e-01
+## 60893       0  1.406017032e-01
+## 63420       1  9.067942783e-01
+## 51771       1  7.633782207e-01
+## 28345       0 1.638245586e-238
+## 72589       1  9.884974720e-01
+## 84704       1  8.284722176e-01
+## 95597       1  9.901863161e-01
+## 2370        1  6.604973827e-01
+## 57638       0 1.370705246e-238
+## 93782       1  9.859498486e-01
+## 5011        1  9.166636094e-01
+## 33181       1  9.259446016e-01
+## 45419       1  9.861004594e-01
+## 87314       0  8.133010772e-01
+## 84030       1  6.771677879e-01
+## 83949       0  9.986525562e-01
+## 23815       1  2.051225059e-01
+## 72986       1  6.248327449e-01
+## 44384       0  6.525846657e-01
+## 1356        0  9.860314540e-01
+## 35855       1  8.587397845e-01
+## 51406       0  7.523250011e-01
+## 61000       1  9.058338173e-01
+## 79041       1  9.417066167e-01
+## 86248       1  9.886082135e-01
+## 73778       1  9.866374746e-01
+## 5692        0  6.146312919e-01
+## 76126       1  9.985357601e-01
+## 76647       1  6.915267052e-01
+## 43017       1  9.725745319e-01
+## 80599       0  9.875517971e-01
+## 93326       0  9.099693293e-01
+## 42968       1  9.985565465e-01
+## 93067       1  6.102468992e-01
+## 92294       1  8.386273540e-01
+## 8845        0  2.994751752e-01
+## 34649       0  6.045275241e-01
+## 95184       0  1.940472193e-01
+## 73245       1  9.867535852e-01
+## 55611       0  1.325016320e-01
+## 97043       1  9.979846571e-01
+## 55684       0  5.371284474e-01
+## 40641       1  6.968949102e-01
+## 86646       1  9.985550537e-01
+## 44096       0 2.269429085e-237
+## 27131       1  5.440962362e-01
+## 65029       1 9.756069191e-240
+## 52745       1  9.713399852e-01
+## 16087       0  1.374095528e-01
+## 6059        1  5.904433519e-01
+## 40209       0 4.121622340e-238
+## 50565       0  9.188774543e-01
+## 81130       1  9.900587611e-01
+## 86583       1  5.794440538e-01
+## 55873       1  9.638568195e-01
+## 70981       0 1.716209829e-238
+## 23550       1  6.536507991e-01
+## 43441       1  9.866271310e-01
+## 19171       0  1.424371733e-01
+## 91559       1  9.987751004e-01
+## 41400       0 1.720475353e-238
+## 100151      1  9.979821889e-01
+## 21139       1  2.173091936e-01
+## 91678       1  9.513204152e-01
+## 14557       1  9.867535852e-01
+## 52283       0  7.546862122e-01
+## 84473       1  9.894957649e-01
+## 65362       1  9.502969378e-01
+## 45901       1  9.330674683e-01
+## 72904       0  6.368343711e-01
+## 59712       0  1.521803808e-01
+## 19420       1  6.153139277e-01
+## 56045       0 1.656086106e-238
+## 86339       1  5.302451133e-01
+## 89326       0  9.279985448e-01
+## 81644       0  8.713236666e-01
+## 50235       0  7.331671646e-02
+## 75724       1  6.020245023e-01
+## 99497       0  6.985077920e-01
+## 95316       0  4.006384432e-01
+## 27709       0 2.224754591e-238
+## 89699       1  7.615558834e-01
+## 78974       1  9.985398111e-01
+## 55614       1  9.979821889e-01
+## 36804       1  9.873767574e-01
+## 60877       0  4.126648003e-01
+## 1758        0  7.295377614e-01
+## 77964       0  1.250361825e-01
+## 699         1 4.202464551e-237
+## 11571       1  9.236402691e-01
+## 40169       0 2.222207806e-238
+## 88053       1  7.443150612e-01
+## 21740       1  9.979837577e-01
+## 72621       1  9.979837577e-01
+## 100085      0  3.247212178e-01
+## 88156       1  9.290378602e-01
+## 9704        1  9.293845569e-01
+## 43121       0  5.960064827e-01
+## 90555       0 4.373367265e-237
+## 9529        1  9.351782386e-01
+## 36826       0  9.347828542e-01
+## 75534       1  9.610770041e-01
+## 63618       1  9.882611446e-01
+## 49881       1  9.713399852e-01
+## 14499       0  1.454796342e-01
+## 99432       0  6.086189220e-01
+## 30880       0 1.716764644e-238
+## 12344       1  9.249447778e-01
+## 22002       0  2.081591708e-01
+## 87720       1  9.979829306e-01
+## 11910       0  5.072212466e-01
+## 25611       0  3.969723469e-01
+## 96560       1  9.269267256e-01
+## 98453       1  7.490533362e-01
+## 100031      1  9.058338173e-01
+## 84340       1  9.979909731e-01
+## 47945       0 1.765448736e-238
+## 34944       1  6.734050719e-01</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">roundedresults&lt;-<span class="kw">sapply</span>(results,round,<span class="dt">digits=</span><span class="dv">0</span>)
+roundedresultsdf=<span class="kw">data.frame</span>(roundedresults)
+<span class="kw">attach</span>(roundedresultsdf)
+prediction.table.nn =<span class="kw">table</span>(actual,prediction)
+prediction.table.nn</code></pre></div>
+<pre><code>##       prediction
+## actual   0   1
+##      0 119  60
+##      1  30 216</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">precision &lt;-<span class="st"> </span>prediction.table.nn[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(prediction.table.nn[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>prediction.table.nn[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>prediction.table.nn[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(prediction.table.nn[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>prediction.table.nn[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.nn &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.nn</code></pre></div>
+<pre><code>## [1] 0.8275862069</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prob.result &lt;-<span class="st"> </span>nn.results<span class="op">$</span>net.result
+<span class="kw">detach</span>(package<span class="op">:</span>neuralnet,<span class="dt">unload =</span> T)
+
+nn.pred =<span class="st"> </span><span class="kw">prediction</span>(prob.result,test.data.reduced.numeric.nn<span class="op">$</span>SURVIVED)
+perf_nn &lt;-<span class="st"> </span><span class="kw">performance</span>(nn.pred, <span class="st">&quot;tpr&quot;</span>, <span class="st">&quot;fpr&quot;</span>)
+<span class="kw">plot</span>(perf_nn, <span class="dt">colorize =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+</div>
+</div>
+<div id="aplicando-deep-learning-al-modelo" class="section level2">
+<h2><span class="header-section-number">7.5</span> Aplicando Deep Learning al modelo</h2>
+<div id="preparacion-de-datos-1" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> Preparación de datos</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Establecemos una muestra del 10% sobre los datos train y test para calcular los cluster por falta de memoria</span>
+<span class="kw">set.seed</span>(<span class="dv">123456</span>)
+train.dl.index =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(train.data.reduced.numeric.withoutna)[<span class="dv">1</span>], <span class="kw">dim</span>(train.data.reduced.numeric.withoutna)[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="fl">0.7</span>)
+train.dl.data =<span class="st"> </span>train.data.reduced.numeric.withoutna[train.dl.index, ]
+test.dl.data =<span class="st"> </span>train.data.reduced.numeric.withoutna[<span class="op">-</span>train.dl.index, ]</code></pre></div>
+</div>
+<div id="preparacion-de-la-red-profunda" class="section level3">
+<h3><span class="header-section-number">7.5.2</span> Preparación de la red profunda</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(keras)
+<span class="kw">library</span>(tensorflow)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;tensorflow&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:caret&#39;:
+## 
+##     train</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(kerasR)</code></pre></div>
+<pre><code>## successfully loaded keras</code></pre>
+<pre><code>## 
+## Attaching package: &#39;kerasR&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:keras&#39;:
+## 
+##     normalize, pad_sequences, text_to_word_sequence,
+##     to_categorical</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reticulate)
+<span class="kw">keras_init</span>()</code></pre></div>
+<pre><code>## successfully loaded keras</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">keras_available</span>()</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod =<span class="st"> </span><span class="kw">Sequential</span>()
+mod<span class="op">$</span><span class="kw">add</span>(<span class="kw">Dense</span>(<span class="dv">4</span>, <span class="dt">input_shape =</span><span class="dv">10</span>, <span class="dt">activation=</span><span class="st">&#39;relu&#39;</span>))
+mod<span class="op">$</span><span class="kw">add</span>(<span class="kw">Dense</span>(<span class="dv">4</span>, <span class="dt">activation=</span><span class="st">&#39;relu&#39;</span>))
+mod<span class="op">$</span><span class="kw">add</span>(<span class="kw">Dense</span>(<span class="dv">1</span>, <span class="dt">activation=</span><span class="st">&#39;sigmoid&#39;</span>))
+
+<span class="kw">keras_compile</span>(mod,  <span class="dt">loss =</span> <span class="st">&#39;binary_crossentropy&#39;</span>, <span class="dt">optimizer=</span><span class="st">&#39;adam&#39;</span>)</code></pre></div>
+</div>
+<div id="escalamos-datos" class="section level3">
+<h3><span class="header-section-number">7.5.3</span> Escalamos datos</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">train.data.reduced.numeric.nn.scaled =<span class="st"> </span><span class="kw">scale</span>(train.dl.data)
+test.data.reduced.numeric.nn.scaled =<span class="st"> </span><span class="kw">scale</span>(test.dl.data)</code></pre></div>
+</div>
+<div id="ajustamos-el-modelo-construidos-a-nuestros-datos" class="section level3">
+<h3><span class="header-section-number">7.5.4</span> Ajustamos el modelo construidos a nuestros datos</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">keras_fit</span>(mod, train.data.reduced.numeric.nn.scaled, train.dl.data<span class="op">$</span>SURVIVED,
+          <span class="dt">batch_size =</span> <span class="dv">32</span>, <span class="dt">epochs =</span> <span class="dv">200</span>,
+          <span class="dt">verbose =</span> <span class="dv">0</span>, <span class="dt">validation_split =</span> <span class="fl">0.1</span>)</code></pre></div>
+</div>
+<div id="evaluacion-del-modelo" class="section level3">
+<h3><span class="header-section-number">7.5.5</span> Evaluación del modelo</h3>
+<p>Sobre train:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred =<span class="st"> </span><span class="kw">keras_predict</span>(mod, <span class="kw">normalize</span>(train.data.reduced.numeric.nn.scaled))
+<span class="kw">sd</span>(<span class="kw">as.numeric</span>(pred) <span class="op">-</span><span class="st">  </span>train.dl.data<span class="op">$</span>SURVIVED) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(train.dl.data<span class="op">$</span>SURVIVED)</code></pre></div>
+<pre><code>## [1] 0.654677317</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z&lt;-<span class="kw">table</span>(<span class="dt">predict =</span> <span class="kw">round</span>(<span class="kw">as.numeric</span>(pred)),<span class="dt">truth =</span> train.dl.data<span class="op">$</span>SURVIVED)
+z</code></pre></div>
+<pre><code>##        truth
+## predict     0     1
+##       0  8121     0
+##       1  8186 23304</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.ddl &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.ddl</code></pre></div>
+<pre><code>## [1] 0.8506040807</code></pre>
+<p>Sobre el conjunto de test:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred =<span class="st"> </span><span class="kw">keras_predict</span>(mod, <span class="kw">normalize</span>(test.data.reduced.numeric.nn.scaled))
+<span class="kw">sd</span>(<span class="kw">as.numeric</span>(pred) <span class="op">-</span><span class="st">  </span>test.dl.data<span class="op">$</span>SURVIVED) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>( test.dl.data<span class="op">$</span>SURVIVED)</code></pre></div>
+<pre><code>## [1] 0.6693132952</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">z&lt;-<span class="kw">table</span>(<span class="dt">predict =</span> <span class="kw">round</span>(<span class="kw">as.numeric</span>(pred)),<span class="dt">truth =</span> test.dl.data<span class="op">$</span>SURVIVED)
+z</code></pre></div>
+<pre><code>##        truth
+## predict    0    1
+##       0 3403    0
+##       1 3652 9922</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">precision &lt;-<span class="st"> </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+recall &lt;-<span class="st">  </span>z[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(z[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">+</span>z[<span class="dv">2</span>,<span class="dv">2</span>])
+f_score.ddl_test &lt;-<span class="st"> </span>(<span class="dv">2</span><span class="op">*</span>precision<span class="op">*</span>recall)<span class="op">/</span>(precision<span class="op">+</span>recall)
+f_score.ddl_test</code></pre></div>
+<pre><code>## [1] 0.8445692884</code></pre>
+</div>
+<div id="calculo-de-curva-ro" class="section level3">
+<h3><span class="header-section-number">7.5.6</span> Calculo de curva RO</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ypredscore =<span class="st"> </span><span class="kw">predict</span>(mod,test.data.reduced.numeric.nn.scaled,<span class="dt">type=</span><span class="st">&quot;decision&quot;</span>)
+pred &lt;-<span class="st"> </span><span class="kw">prediction</span>(ypredscore,test.dl.data<span class="op">$</span>SURVIVED)
+perf.dl &lt;-<span class="st"> </span><span class="kw">performance</span>(pred, <span class="dt">measure =</span> <span class="st">&quot;tpr&quot;</span>, <span class="dt">x.measure =</span> <span class="st">&quot;fpr&quot;</span>)
+<span class="kw">plot</span>(perf.dl,<span class="dt">colorize=</span><span class="ot">TRUE</span>)
+<span class="kw">abline</span>(<span class="dt">a=</span><span class="dv">0</span>,<span class="dt">b=</span><span class="dv">1</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-144-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">auc &lt;-<span class="st"> </span><span class="kw">performance</span>(pred,<span class="dt">measure=</span><span class="st">&quot;auc&quot;</span>)<span class="op">@</span>y.values
+auc</code></pre></div>
+<pre><code>## [[1]]
+## [1] 1</code></pre>
+</div>
+</div>
+<div id="evaluacion-curvas-ro" class="section level2">
+<h2><span class="header-section-number">7.6</span> Evaluacion (Curvas RO)</h2>
+<p>¿Cual metodo parece ser mejor? Segun la curva de ROC, los mejores son Random Forest y Metodos de Poteciacion. seguidos de redes Neuronales y Maquinas de soporte vectorial y ultimo Arboles de decision</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ROCR)
+ROCRpred =<span class="st"> </span><span class="kw">prediction</span>(predicho.modelo.fars.LR, train.data<span class="op">$</span>INJURY_SEVERITY)
+ROCRperf.glm =<span class="st"> </span><span class="kw">performance</span>(ROCRpred, <span class="st">&#39;tpr&#39;</span>, <span class="st">&#39;fpr&#39;</span>)
+
+<span class="co">#GLM</span>
+ROC.comparison =<span class="st"> </span><span class="kw">plot</span>(ROCRperf.glm, <span class="dt">col=</span><span class="dv">2</span>, <span class="dt">main=</span><span class="st">&quot;Curvas ROC comparando los modelos analizados&quot;</span>)
+
+<span class="co"># NAIVE-BAYES</span>
+<span class="kw">plot</span>(perf_nb, <span class="dt">col=</span><span class="dv">3</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)
+
+<span class="co"># SVM KERNEL LINEAL</span>
+<span class="kw">rocplot</span>(fitted_svm_lineal,test.svm.data<span class="op">$</span>INJURY_SEVERITY, <span class="dv">4</span> )
+
+<span class="co"># SVM KERNEL LINEAL CON TUNE</span>
+<span class="kw">rocplot</span> (fitted_svm_tune,test.svm.data.tuned<span class="op">$</span>INJURY_SEVERITY,<span class="dv">5</span>)
+
+<span class="co"># SVM CON KERNEL NO LINEAL</span>
+<span class="kw">plot</span>(perf.svm.non.linear, <span class="dt">col=</span><span class="dv">6</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)
+
+<span class="co"># REDES NEURONALES</span>
+<span class="kw">plot</span>(perf_nn, <span class="dt">col=</span><span class="dv">7</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)
+
+<span class="co"># Deep Learning</span>
+<span class="kw">plot</span>(perf.dl, <span class="dt">col=</span><span class="dv">8</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)
+
+<span class="co"># RANDOM FOREST</span>
+<span class="kw">plot</span>(perf_rf,  <span class="dt">col=</span><span class="dv">9</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)
+
+<span class="co"># GBM</span>
+<span class="kw">plot</span>(perf_gbm,  <span class="dt">col=</span><span class="dv">10</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)
+
+<span class="co"># Draw a legend.</span>
+<span class="kw">legend</span>(<span class="fl">0.7</span>, <span class="fl">0.7</span>, <span class="kw">c</span>(<span class="st">&#39;Glm&#39;</span>, <span class="st">&#39;Naive-Bayes&#39;</span>, <span class="st">&#39;SVM líneal&#39;</span>,<span class="st">&#39;SVM tune&#39;</span>,<span class="st">&#39;SVM no lineal&#39;</span>, <span class="st">&#39;Redes neuronales&#39;</span>,<span class="st">&quot;Deep Learning&quot;</span>, <span class="st">&quot;RF&quot;</span>, <span class="st">&quot;GBM&quot;</span>), <span class="dv">2</span><span class="op">:</span><span class="dv">9</span>)</code></pre></div>
+<p><img src="FARS18052_files/figure-html/unnamed-chunk-145-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ROC.comparison</code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Area &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">metodos =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, <span class="st">&quot;Random Forest&quot;</span>,<span class="st">&quot;SVM Líneal&quot;</span>,<span class="st">&quot;SVM no lineal&quot;</span>,<span class="st">&quot;SVM - Tuned&quot;</span>, <span class="st">&quot;Naive-Bayes&quot;</span>, <span class="st">&quot;Neuronal Network&quot;</span>, <span class="st">&quot;Deep Learning&quot;</span>), 
+              <span class="dt">precision =</span>  <span class="kw">c</span>(f_score.glm,
+                f_score.random.forest,f_score.svm.lineal,
+                f_score.no.lineal,f_score.svm.tuned,f_score.nb,f_score.nn, f_score.ddl))
+<span class="co"># Ordenamos el dataframe por precision</span>
+Area &lt;-<span class="st"> </span>Area[<span class="kw">order</span>(<span class="op">-</span>Area<span class="op">$</span>precision),]
+Area</code></pre></div>
+<pre><code>##            metodos    precision
+## 8    Deep Learning 0.8506040807
+## 1              GLM 0.8446740046
+## 5      SVM - Tuned 0.8387096774
+## 4    SVM no lineal 0.8343949045
+## 7 Neuronal Network 0.8275862069
+## 3       SVM Líneal 0.8060516915
+## 6      Naive-Bayes 0.7907941265
+## 2    Random Forest 0.7880371366</code></pre>
+</div>
+<div id="debates-y-anotaciones" class="section level2">
+<h2><span class="header-section-number">7.7</span> Debates y anotaciones</h2>
+<p>Durante este análisis se han intentado probar diferentes modelos contra los datos. Si que debemos de indicar, que por cuestiones de costes computacionales, algunos modelos se han aplicado sobre una muestra bastante pequeña de los dats, y que por tanto, la comparación entre todos los modelos no es fiel. De todas formas, nos hemos guiado porque el objetivo no era únicamente encontrar cual es el mejor modelo sino aprendez a utilizarlo, conociendo parámetros y ventajas e inconvenientes de cada uno de ellos. ## Conclusiones El modelo que mejor funciona en relación al conjunto de datos que tenemos permitiendo un máximo de 10% falsos positivos es el SVM optimizado.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="modelos.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"search": false
+});
+});
+</script>
+
+</body>
+
+</html>

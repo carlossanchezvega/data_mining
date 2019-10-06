@@ -1,0 +1,3522 @@
+---
+title: "FARS"
+author: "Grupo A: Carlos Sánchez Vega, Raúl Salazar de Torres, Jorge Fernández Hernández, Mónica Alexa"
+date: "Enero - Julio de 2018"
+output: bookdown::gitbook
+mainfont: Roboto Light
+fontsize: 12pt
+---
+
+# Introduccion
+
+Los accidentes de tráfico resultan en la pérdida de miles de vidas cada año, cientos de heridos y millones de euros en daños materiales. Por lo tanto se requiere de datos precisos que sustenten el desarrollo, la implementación y la estimación de programas de seguridad viaria destinados a la reducción del número de fallecidos.
+El conjunto de datos The Fatality Analysis Reporting System (FARS) proporciona información sobre todos los accidentes de tráfico de vehículos a motor en Estados Unidos, en el que una o más personas involucradas fallecieron a raíz de sus heridas en los 30 días (720 horas) desde que se produjo el accidente. FARS es un censo que recoge desde 1975 los accidentes a motor en los 50 estados, el Distrito de Columbia y Puerto Rico. El sistema FARS fue diseñado y desarrollado por la National Highway Traffic Safety Administration (NHTSA) con la intención de proporcionar una visión global sobre la medida de la seguridad de las carreteras, y con el fin de ayudar a la identificación de problemas de tráfico, sugerir soluciones, y ayudar a proporcionar las bases objetivas sobre las que se puedan evaluar iniciativas eficientes. Este censo se usa con el fin de identificar problemas de ciertas áreas de la seguridad de las carreteras y constituye las bases para el análisis de costes y beneficios en las iniciativas de seguridad llevadas en las carreteras.L os datos son usados para responder a preguntas provenientes de la industria, medios de comunicación o la administración pública. 
+
+Para que un accidente sea incorporado en este censo, el accidente tiene que haber involucrado un vehículo a motor que viajara en una vía pública, y que haya resultado en el fallecimiento de un automovilista o un peatón. 
+Los datos contenidos en el censo FARS son obtenidos a partir de una seria de documentos relacionados con un accidente mortal:
+
+1. Certificados de defunción;
+2. Exámenes médicos;
+3. Informes mecánicos;
+4. Diferentes informaciones procedentes de aseguradoras;
+5. Informes policiales.
+
+A partir de estos documentos, se recopilan más de 100 datos. Los únicos datos que no se incluyen son los datos personales, tales como nombres, direcciones o números de la seguridad social.
+
+
+## Conjunto de datos
+
+El conjunto de datos específico utilizado FARS, contiene información sobre todas las personas involucradas en accidentes automovilísticos en los EE.UU. durante 2001, donde la mayoría de sus atributos están representados con valores nominales. El conjunto de datos FARS es accesible mediante la descarga directa de los ficheros en el servidor ftp://ftp.nhtsa.dot.gov/FARS, y también a través de la web https://www-fars.nhtsa.dot.gov/. Esta web proporciona acceso a los datos desde el año 1995 hasta el 2017 vía los sistemas Create-a-Query, Create-a-Map, y Reports. La información proporcionada por el censo FARS del año 2001 está clasificada en tres tipos de ficheros:
+
+* Accidentes: es la información relacionada con las características de los accidentes y las condiciones ambientales en el momento del accidente. 
+* Vehículos:  es la información relacionada con la descripción de los vehículos y conductores involucrados en el accidente. 
+* Persona: es la información relacionada con la descripción de todas las personas involucradas en el accidente, incluidas los automovilistas (conductores y pasajeros) y los peatones y ciclistas. Proporciona información tales como edad, sexo, sistema de seguridad usado, y la severidad de los daños. Existe un registro por persona.
+
+Debido al gran volumen, la gran cantidad de variables del conjunto de datos FARS, el conjunto de datos utilizado en esta práctica se corresponde a una versión reducida de los datos originales. En particular, hemos hecho uso de los datos proporcionados por el portal Knowledge Extraction based on Evolutionary Learning (KEEL), que es un es un conjunto de herramientas de software de aprendizaje automático desarrollado en España. http://www.keel.es/. La gran ventaja de la utilización del conjunto de datos proporcionado por la plataforma KEEL, es el hecho de que todos las dependencias entre las variables contenidas en los  3 ficheros originales están resueltas.
+
+El conjunto de datos proporcionado por KEEL viene representado por un fichero de texto ASCII formado por dos secciones:
+
+1. Cabecera, que proporciona meta-datos que describen las componentes del conjunto de datos.
+2. Datos, que contiene el conjunto de datos propiamente dicho.
+
+La cabecera está compuesta por los siguientes meta-datos:
+
+1. @relation: el nombre del conjunto de datos
+2. @attribute: describe un atributo de los datos (una columna). Es posible definir 3 tipos de atributos:
+    a. integer: @attribute \<name\> integer [min, max]
+    b. real: @attribute \<name\> real [min, max]
+    c. nominal: @attribute \<name\> {Value1,value2,…,valueN}
+
+    El \<name\> es el identificador del atributo. Su longitud máxima de de 12 caracteres. Los valores min y max para los atributos inter y real, y la listas de posibles valore para los atributos nominales, son opcionales. Si no están presentes, los correspondientes valores puede ser extraidos mediante el uso del software proporcionado por la plataforma KEEL.
+3. @inputs: identificadores de los atributos que serán procesados como datos de entrada.
+4. @outputs: identificadores de los atributos que serán procesados como datos de salida. 
+
+Cada una de las filas del fichero que contiene el conjunto de datos está formado por datos separados por comas, donde cada valor se corresponde a un atributo, en el orden definido por la cabecera. Datos faltantes o datos nulos vienen representados como \<null\> o ?.
+En la siguiente tabla resumimos las características generales del conjunto de datos del censo FARS proporcionado por la plataforma KEEL:
+
+| FARS | DATASET INFO |
+| -- | -- |
+| Tipo   | Clasificación   |
+| Origen   | Real world   |
+| Registros   | 100.968   |
+| Variables   | 29   |
+| Clases   | 8   |
+| Valores faltantes   | No   |
+
+
+## Documentacion consultada
+
+1. Traffic Safety Facts 2001 https://crashstats.nhtsa.dot.gov/Api/Public/Publication/809484
+2. Fatality Analysis Reporting System (FARS)
+3. 2001 FARS CODING AND VALIDATION MANUAL https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/01CV
+4. FARS Analytical User's Manual 1975 – 2016  https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/812447
+5. https://es.wikipedia.org/wiki/Control_de_alcoholemia
+6. https://en.wikipedia.org/wiki/Drunk_driving_law_by_country
+
+
+## Objetivos
+
+¿Cual es la pregunta que queremos responder?
+¿Que factores influyen en la supervivencia de una persona implicada en un accidente de tráfico?
+
+La variable resultado describe el nivel de lesión sufrido. 29 variables + variable resultado, 100.968 observaciones.Fuente:http://sci2s.ugr.es/keel/dataset.php?cod=191
+
+
+# Análisis del dataset
+
+Importamos librerias necesarias en el análisis
+```{r results='hide', message=FALSE, warning=FALSE, load_libraries}
+library(knitr)
+library(Hmisc)
+library(ggplot2)
+library (MASS)
+library(plyr)
+library(dplyr)
+library(VIM)
+library(corrgram)
+library(cowplot)
+library(boot)
+library(klaR)
+library(kableExtra)
+library(caret)
+library(ROCR)
+
+options(knitr.table.format = "html")
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+Carga de datos
+```{r setup, , message=FALSE, warning=FALSE}
+fars=read.table(file=".//fars.dat",header = FALSE, sep=",", dec=".", skip = 34, check.names = TRUE, col.names = c("CASE_STATE","AGE","SEX","PERSON_TYPE","SEATING_POSITION","RESTRAINT_SYSTEM-USE","AIR_BAG_AVAILABILITY/DEPLOYMENT","EJECTION","EJECTION_PATH","EXTRICATION","NON_MOTORIST_LOCATION","POLICE_REPORTED_ALCOHOL_INVOLVEMENT","METHOD_ALCOHOL_DETERMINATION","ALCOHOL_TEST_TYPE","ALCOHOL_TEST_RESULT","POLICE-REPORTED_DRUG_INVOLVEMENT","METHOD_OF_DRUG_DETERMINATION","DRUG_TEST_TYPE","DRUG_TEST_RESULTS_(1_of_3)","DRUG_TEST_TYPE_(2_of_3)","DRUG_TEST_RESULTS_(2_of_3)","DRUG_TEST_TYPE_(3_of_3)","DRUG_TEST_RESULTS_(3_of_3)","HISPANIC_ORIGIN","TAKEN_TO_HOSPITAL","RELATED_FACTOR_(1)","RELATED_FACTOR_(2)","RELATED_FACTOR_(3)","RACE","INJURY_SEVERITY"),colClasses = NA)
+```
+
+
+## Descripción y significado de las variables:
+
+| Variable | Significado |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| CASE_STATE   | Estado americano donde se ha producido el accidente automovilístico. Variable cualitativa nominal.   |
+| AGE   | Edad del implicado en el accidente. Variable cuantitativa discreta medida en años.   |
+| SEX   | Sexo del implicado en el accidente. Variable cualitativa nominal.   |
+| PERSON_TYPE   | Tipología del implicado en el accidente: conductor, pasajero, peaton, ciclista, etc. Variable cualitativa nominal.   |
+| SEATING_POSITION   | Posición del implicado en el accidente dentro del vehiculo. Variable cualitativa nominal.   |
+| RESTRAINT_SYSTEM_USE   | Uso de sistema de protección y/o retención del implicado en el accidente. Variable cualitativa nominal.   |
+| AIR_BAG_AVAILABILITY.DEPLOYMENT   | Variable que describe la presencia y si se ha desplegado o no el airbag del vehículo. Variable cualitativa nominal   |
+| EJECTION   | Describe si el implicado en el accidente ha sido expulsado del vehiculo y el grado de la expulsión. Variable cualitativa ordinal.   |
+| EJECTION_PATH   | Variable que describe la trayectoria de la expulsión del vehiculo. Variable cualitativa nominal.   |
+| EXTRICATION   | Variable que indica la excarcelación de dentro del vehiculo. Variable cualitativa nominal.   |
+| NON_MOTORIST_LOCATION   | La localización de un viandante en el momento del impacto   |
+| POLICE_REPORTED_ALCOHOL_INVOLV.   | Declaración de la policia sobre el consumo de alcohol por parte del implicado en el accidente. Variable cualitativa nominal   |
+| METHOD_ALCOHOL_DETERMINATION   | Método de identificación de consumo previo de alcohol por parte de la policia. Variable cualitativa nominal.   |
+| ALCOHOL_TEST_TYPE   | Tipo de test realizado (incluidos forense) para identificar el consumo de alcohol. Variable cualitativa nominal.  |
+| ALCOHOL_TEST_RESULT   | Resutados del test de alcohol en sangre medido en "Milimoles de alcohol por un litro de sangre". Variable cuantitativa discreta.   |
+| POLICE-REPORTED_DRUG_INVOLVEMENT | Declaración de la policia sobre el consumo de drogas por parte del implicado en el accidente. Variable cualitativa nominal |
+| METHOD_OF_DRUG_DETERMINATION | Método de identificación de consumo previo de drogas por parte de la policia. Variable cualitativa nominal. |
+| DRUG_TEST_TYPE | Tipo de test realizado, mencionado si se conoce. Variable cualitativa nominal. |
+| DRUG_TEST_RESULTS_(1_of_3) | Resutados del test de drogas medido en "nanogramos por mililitro". Variable cuantitativa discreta. |
+| DRUG_TEST_TYPE_(2_of_3) | 2º tipo de test realizado, mencionado si se conoce. Variable cualitativa nominal. |
+| DRUG_TEST_RESULTS_(2_of_3) | Resutados del test de drogas medido en "nanogramos por mililitro". Variable cuantitativa discreta. |
+| DRUG_TEST_TYPE_(3_of_3) | 3º tipo de test realizado, mencionado si se conoce. Variable cualitativa nominal. |
+| DRUG_TEST_RESULTS_(3_of_3) | Resutados del test de drogas medido en "nanogramos por mililitro". Variable cuantitativa discreta. |
+| HISPANIC_ORIGIN | El origen hispano del implicado en el accidente. Variable cualitativa nominal. |
+| TAKEN_TO_HOSPITAL | ¿Ha sido llevado o no el implicado en el accidente al hospital? |
+| RELATED_FACTOR_(1) | Otros diversos factores relacionados con el accidente. Varaiable cualitativa nominal.  |
+| RELATED_FACTOR_(2) | Segunda descripción de factores relacionados con el accidente.Varaiable cualitativa nominal.  |
+| RELATED_FACTOR_(3) | Tercera descripción de factores relacionados con el accidente.Varaiable cualitativa nominal.  |
+| RACE | Raza del implicado en el accidente. Variable cualitativa nominal |
+| INJURY_SEVERITY | Situación medica del implicado en el accidente. Varaiable cualitativa nominal. |
+
+
+Análisis genérico del dataset
+```{r }
+#la dimensión de los datos
+dim(fars)
+```
+
+Realizamos un resumen de la tipología de las variables: factor, integer, etc.
+```{r }
+#un resumen de la estructura de los objetos
+str(fars)
+```
+
+Una descripción general de las variables
+```{r }
+describe(fars)
+```
+
+Para un mejor entendimiento de las variables las podemos visualizar en una tabla aparte.
+```{r include=FALSE, echo = FALSE}
+#View(fars)
+```
+
+<!-- Copiamos el dataframe original. Trabajaremos con este dataframe de ahora en adelante--> 
+```{r include=FALSE, echo = FALSE}
+df=data.frame(fars)
+```
+
+## Preparación de las variables
+
+En esta sección analizaremos cada una de las variables que forman el dataset por separado, con el fin de darles el formato requerido para ser usadas en el modelo final de regresión.
+
+Preparación de la variable `INJURY_SEVERITY` - la variable respuesta
+```{r preparacion INJURY_SEVERITY}
+df$INJURY_SEVERITY = mapvalues(df$INJURY_SEVERITY, from = c("Died_Prior_to_Accident", "Fatal_Injury", "Nonincapaciting_Evident_Injury","Possible_Injury","Incapaciting_Injury","No_Injury","Unknown","Injured_Severity_Unknown"), to = c("Died", "Died","Survived","Survived","Survived","Survived",NA,NA),warn_missing=F)
+summary(df$INJURY_SEVERITY)
+```
+
+Preparación de otras variables
+```{r preparacion_varias_variables}
+
+# Preparation PERSON_TYPE (var 4)
+df$PERSON_TYPE = mapvalues(df$PERSON_TYPE, from = c("Bicyclist", "Driver", "Occupant_of_a_Non-Motor_Vehicle_Transport_Device","Passenger_of_a_Motor_Vehicle_in_Transport","Other_Cyclist","Pedestrian","Occupant_of_a_Motor_Vehicle_Not_in_Transport","Other_Pedestrian","Unknown_Occupant_Type_in_a_Motor_Vehicle_in_Transport","Unknown_Type_of_Non-Motorist"), to = c("Bicyclist", "Driver","ONMotT","OMotT","Other_Cyclist","Pedestrian","OMotNT","Other_Pedestrian","UOT","UNM"),warn_missing=F)
+
+# Preparation SEATING_POSITION (var 5)
+df$SEATING_POSITION = mapvalues(df$SEATING_POSITION, from = c("Fourth_Seat_-_Left_Side", "Fourth_Seat_-_Right_Side" ,"Front_Seat_-_Right_Side","Non-Motorist","Riding_on_Vehicle_Exterior","Second_Seat_-_Middle","Sleeper_Section_of_Cab_(Truck)","Third_Seat_-_Middle","Third_Seat_-_Right_Side","Trailing_Unit","Fourth_Seat_-_Middle","Front_Seat_-_Left_Side_(Drivers_Side)","Front_Seat_-_Other","Front_Seat_-_Unknown","Other_Passenger_in_enclosed_passenger_or_cargo_area","Other_Passenger_in_unenclosed_passenger_or_cargo_area","Second_Seat_-_Left_Side","Second_Seat_-_Other","Second_Seat_-_Unknown","Third_Seat_-_Left_Side_(Drivers_Side)","Third_Seat_-_Other","Third_Seat_-_Unknown","Unknown","Front_Seat_-_Middle","Other_Passenger_in_passenger_or_cargo_area_(unknown_whether_or_not_enclosed)","Second_Seat_-_Right_Side"), to = c("FoL", "FoR","FrR","NMot","VE","SM","SlepCa","TM","TR","TU","FoM","FL", "FO","FU","OEC", "OUC","SL","SO","SU", "TL","TO","TU",NA,"FM","OPC","SR"),warn_missing=F)
+
+# Preparation RESTRAINT_SYSTEM.USE (var 6)
+df$RESTRAINT_SYSTEM.USE = mapvalues(df$RESTRAINT_SYSTEM.USE, from = c("None_Used/Not_Applicable", "Lap_and_Shoulder_Belt", "Motorcycle_Helmet","Child_Safety_Seat","Lap_Belt","Unknown","Helmets_Used_Improperly","Restraint_Used_-_Type_Unknown","Shoulder_Belt","Bicycle_Helmet","Child_Safety_Seat_Used_Improperly","Safety_Belt_Used_Improperly"), to = c("NA", "LSB","MH","CHS","LB",NA,"HUI","RUTU","SB","BH","CSSUI","SBUI"),warn_missing=F)
+
+
+
+# Preparation AIR_BAG_AVAILABILITY.DEPLOYMENT (var 7)
+df$AIR_BAG_AVAILABILITY.DEPLOYMENT = mapvalues(df$AIR_BAG_AVAILABILITY.DEPLOYMENT, from = c("Air_Bag_Available_but_Not_Deployed_for_this_Seat", "Deployed_Air_Bag_from_Front", "Air_Bag_Not_Available_for_this_Seat","Non-Motorist","Air_Bad_Available-Deployment_Not_Known_for_this_Seat","Air_Bag_Available_and_Switched_Off","Air_Bag_Previously_Deployed_and_not_Replaced","Deployed_Air_Bag_Direction_Unknown","Deployed_Air_Bag_Multiple_Directions","Deployed_Air_Bag_from_Side","Air_Bag_Disabled_or_Removed","Deployed_Air_Bag_Other_Direction","Unknown_(If_Airbag_Available)"), to = c("Av_nD", "D_F","NAv","NM","A_U","A_SO","A_PNR","D_DU","DA_MD","DA_fs","ADoR","D_OD",NA),warn_missing=F)
+
+
+# Preparation EJECTION_PATH (var 9)
+df$EJECTION_PATH = mapvalues(df$EJECTION_PATH, from = c("Unknown", "Not_Ejected/Not_Applicable", "Through_Windshield", "Other_Path_(e.g._back_of_pickup)", "Through_Roof_Opening", "Through_Side_Door_Opening", "Through_Side_Window", "Through_Back_Window", "Through_Roof_(convertible_top_up)", "Through_Back_Door/Tailgate" ), to = c(NA, "NoAp", "Wind","Other","Roof", "SideD", "SideW","BackW", "RoofC", "BackD"),warn_missing=F)
+
+# Preparation NON_MOTORIST_LOCATION (var 11)
+df$NON_MOTORIST_LOCATION = mapvalues(df$NON_MOTORIST_LOCATION, from = c("Not_Applicable_-_Vehicle_Occupant", "Non-Intersection_-_On_Roadway_Crosswalk_not_Available", "Non-Intersection_-_On_Roadway_Crosswalk_Availability_Unknown", "Non-Intersection_-_On_Roadway_Not_in_Crosswalk","Non-Intersection_-_On_Road_Shoulder","Intersection_-_In_Crosswalk","Intersection_-_On_Roadway_Crosswalk_Availability_Unknown", "Intersection_-_On_Roadway_Not_in_Crosswalk","Non-Intersection_-_Other_Not_a_Roadway", "Intersection_-_On_Roadway_Crosswalk_not_Available","Non-Intersection_-_Outside_Trafficway", "Intersection_-_Not_on_Roadway","Unknown", "Non-Intersection_-_In_Crosswalk", "Intersection_-_Unknown", "Non-Intersection_-_Unknown","Non-Intersection_-_In_Parking_Lane", "Non-Intersection_-_Bike_Path"), to = c("NoAp","NIRCNA","NIRCAU","NIRNC","NIRS", "IIC","IRCAU","IRNC","NIONR", "IRCNA", "NIOT", "INR", NA,"NIC","IU" ,"NIU","NIPL", "NIBP"),warn_missing=F)
+
+# Preparation POLICE_REPORTED_ALCOHOL_INVOLVEMENT (var 12)
+df$POLICE_REPORTED_ALCOHOL_INVOLVEMENT = mapvalues(df$POLICE_REPORTED_ALCOHOL_INVOLVEMENT, from = c("No_(Alcohol_Not_Involved)", "Yes_(Alcohol_Involved)", "Not_reported Unknown_(Police_Reported)"), to = c("NO","YES", NA),warn_missing=F)
+
+# Preparation METHOD_ALCOHOL_DETERMINATION (var 13)
+df$METHOD_ALCOHOL_DETERMINATION = mapvalues(df$METHOD_ALCOHOL_DETERMINATION, from = c("Behavioral", "Evidential_Test_(Breath_Blood_Urine)", "Not_Reported", "Observed","Other_(e.g._Saliva_test)", "Passive_Alcohol_Sensor_(PAS)", "Preliminary_Breath_Test_(PBT)"), to = c("BV","ET","NOAp", "OBS", "OTHER", "PAS", "PBT"),warn_missing=F)
+
+# Preparation ALCOHOL_TEST_TYPE (var 14)
+df$ALCOHOL_TEST_TYPE = mapvalues(df$ALCOHOL_TEST_TYPE, from = c("Blood_Clot", "Blood_Plasma/Serum", "Breath_BAC", "Liver", "Not_Tested_for_Alcohol", "Other_Test_Type", "Unknown(Not_Reported_Since_2001)", "Urine", "Vitreous", "Whole_Blood"), to = c("BC","BPS","BB", "L", "NoT", "OTHER", NA, "U", "V", "WB"),warn_missing=F)
+
+# Preparation POLICE.REPORTED_DRUG_INVOLVEMENT (var 16)
+df$POLICE.REPORTED_DRUG_INVOLVEMENT = mapvalues(df$POLICE.REPORTED_DRUG_INVOLVEMENT, from = c("Drugs_Involved", "No_Drugs", "Not_Reported", "Reported_Unknown"), to = c("Yes", "No","NoRep",NA),warn_missing=F)
+
+# Preparation METHOD_OF_DRUG_DETERMINATION (var 17)
+df$METHOD_OF_DRUG_DETERMINATION = mapvalues(df$METHOD_OF_DRUG_DETERMINATION, from = c("Behavioral", "Drug_Recognition_Technician_(DRT)", "Evidential_Test_(Blood_Urine)", "Not_Reported", "Other"), to = c("B", "DRT", "ET", "NoRep","Other"),warn_missing=F)
+
+# Preparation DRUG_TEST_TYPE (var 18)
+df$DRUG_TEST_TYPE = mapvalues(df$DRUG_TEST_TYPE, from = c("Blood_Test", "Both:_Blood_and_Urine_(Since_1993)", "Not_Tested_for_Drugs", "Other_Type_Test", "Unknown_if_Tested_for_Drugs", "Unknown_Test_Type", "Urine_Test"), to = c("Btest", "BUtest", "no_test", "Xtest",NA,"Xtest","Utest"),warn_missing=F)
+
+# Preparation DRUG_TEST_TYPE_.2_of_3. (var 20)
+df$DRUG_TEST_TYPE_.2_of_3. = mapvalues(df$DRUG_TEST_TYPE_.2_of_3., from = c("Blood_Test", "Both:_Blood_and_Urine_(Since_1993)", "Not_Tested_for_Drugs","Other_Type_Test","Unknown_if_Tested_for_Drugs","Unknown_Test_Type","Urine_Test"), to = c("Btest", "BUtest","no_test","Xtest",NA,"Xtest","Utest"),warn_missing=F)
+
+# Preparation DRUG_TEST_TYPE_.3_of_3. (var 22)
+
+df$DRUG_TEST_TYPE_.3_of_3. = mapvalues(df$DRUG_TEST_TYPE_.3_of_3., from = c("Blood_Test", "Both:_Blood_and_Urine_(Since_1993)", "Not_Tested_for_Drugs","Other_Type_Test","Unknown_if_Tested_for_Drugs","Unknown_Test_Type","Urine_Test"), to = c("Btest", "BUtest","no_test","Xtest",NA,"Xtest","Utest"),warn_missing=F)
+
+# Preparation HISPANIC_ORIGIN (var 24)
+df$HISPANIC_ORIGIN = mapvalues(df$HISPANIC_ORIGIN, from = c("Central_or_South_American", "Hispanic_-_Origin_Not_Specified_or_Other_Origin", "Not_a_Fatality_(Not_Applicable)","Cuban","Mexican","Puerto_Rican","European_Spanish","Non-Hispanic","Unknown"), to = c("CeSouAme", "Hisp - Unknown",NA,"Cuban","Mexican","Puerto_Rican","European_Spanish","Non-Hispanic",NA),warn_missing=F)
+
+# Preparation RELATED_FACTOR_.1. (var 26)
+df$RELATED_FACTOR_.1. = mapvalues(df$RELATED_FACTOR_.1., from = c("Not_Applicable_-_Driver/None_-_All_Other_Persons", "Walking/Riding_with_or_Against_Traffic_Playing_Working_Sitting_Lying_Standing_etc._in_Roadway", "Improper_Crossing_or_Roadway_or_Intersection", "Unknown", "Darting_Stumbling_or_Running_into_Road","Other_Physical_Impairment", "Non-Motorist_Pushing_a_Vehicle", "Opening_Vehicle_Closure_into_Moving_Traffic_or_While_Vehicle_is_in_Motion", "Failure_to_Yield_Right_of_Way", "Locked_Wheel", "Not_Visible", "Traveling_on_Prohibited_Trafficway", "Failure_to_Obey_Traffic_Signs_Traffic_Control_Devices_or_Traffic_Officers_Failure_to_Observe_Safety_Zone_Traffic_Laws","Impaired_Due_to_Previous_Injury","Emotional_(e.g._Depression_Angry_Disputed)", "Inattentive_(talking_Eating_etc)", "Failure_to_Keep_in_Proper_Lane", "Improper_or_Erratic_Lane_Changing","Blind", "Restricted_to_Wheelchair", "Mother_of_Dead_Fetus", "Interfering_with_Driver", "Driving_on_Wrong_Side_of_Road","Making_Improper_Turn", "Getting_Off/Out_of_or_On/In_to_Moving_Transport_Vehicle", "Operating_without_Required_Equipment", "Walking_With_Cane_or_Crutches", "Passing_with_Insufficient_Distance_or_Inadequate_Visibility_or_Failing_to_Yield_to_Overtaking_Vehicle","Getting_Off/Out_of_or_On/In_to_Non-Moving_Transport_Vehicle", "Failing_to_Dim_Lights_or_Have_Lights_on_When_Required", "Construction/Maintenance/Utility_Worker", "Operating_the_Vehicle_in_Other_Erratic_Reckless_Careless_or_Negligent_Manner_[or_Operating_at_Erratic_or_Suddenly_Changing_Speeds", "Motorized_Wheelchair_Rider", "Passed_OutBlackout", "Illegal_Driving_on_Road_Shoulder_in_Ditch_on_Sidewalk_on_Median", "Mentally_Challenged", "Pedestrian_NON-MOTOR_VEHICLE_OPERATOR_RELATED_FACTORS:", "Vision_obscured_by_overcorrecting", "Operator_Inexperience", "Making_Improper_Entry_to_or_Exit_from_Trafficway", "Motor_Vehicle_(including_load)", "Following_Improperly", "Passing_on_Wrong_Side","Head_Restraints_AVOIDING_SWERVING_OR_SLIDING_DUE_TO", "Slippery_or_Loose_Surface"), 
+                                  to = c("NoAp","F01", "F02", "F03",NA,"F04","F05", "F06","F07","F08", "F09", "F10", "F11", "F12", "F13","F14","F15","F16","F17","F18","F19","F20","F21", "F22", "F23","F24","F25", "F26","F27","F28","F29","F30","F31", "F32", "F33","F34","F35","F36","F37","F38","F39","F40","F41","F42", "F43"),warn_missing=F)
+
+# Preparation RELATED_FACTOR_.2. (var 27)
+df$RELATED_FACTOR_.2. = mapvalues(df$RELATED_FACTOR_.2., from = c("Not_Applicable_-_Driver/None_-_All_Other_Persons", "Walking/Riding_with_or_Against_Traffic_Playing_Working_Sitting_Lying_Standing_etc._in_Roadway", "Improper_Crossing_or_Roadway_or_Intersection", "Unknown", "Darting_Stumbling_or_Running_into_Road","Other_Physical_Impairment", "Non-Motorist_Pushing_a_Vehicle", "Opening_Vehicle_Closure_into_Moving_Traffic_or_While_Vehicle_is_in_Motion", "Failure_to_Yield_Right_of_Way", "Not_Visible", "Traveling_on_Prohibited_Trafficway", "Failure_to_Obey_Traffic_Signs_Traffic_Control_Devices_or_Traffic_Officers_Failure_to_Observe_Safety_Zone_Traffic_Laws","Impaired_Due_to_Previous_Injury","Emotional_(e.g._Depression_Angry_Disputed)", "Inattentive_(talking_Eating_etc)", "Failure_to_Keep_in_Proper_Lane", "Improper_or_Erratic_Lane_Changing","Blind", "Restricted_to_Wheelchair", "Mother_of_Dead_Fetus", "Interfering_with_Driver", "Driving_on_Wrong_Side_of_Road","Making_Improper_Turn", "Getting_Off/Out_of_or_On/In_to_Moving_Transport_Vehicle", "Operating_without_Required_Equipment", "Walking_With_Cane_or_Crutches", "Getting_Off/Out_of_or_On/In_to_Non-Moving_Transport_Vehicle", "Failing_to_Dim_Lights_or_Have_Lights_on_When_Required", "Construction/Maintenance/Utility_Worker", "Operating_the_Vehicle_in_Other_Erratic_Reckless_Careless_or_Negligent_Manner_[or_Operating_at_Erratic_or_Suddenly_Changing_Speeds", "Motorized_Wheelchair_Rider", "Passed_OutBlackout", "Mentally_Challenged", "Pedestrian_NON-MOTOR_VEHICLE_OPERATOR_RELATED_FACTORS:", "Making_Improper_Entry_to_or_Exit_from_Trafficway", "Motor_Vehicle_(including_load)", "Following_Improperly","Head_Restraints_AVOIDING_SWERVING_OR_SLIDING_DUE_TO",  "Reflected_Glare_Bright_Sunlight_Headlights","Failure_to_Observe_Warnings_or_Instructions_on_Vehicles_Displaying_Them", "Driving_too_Fast_for_Conditions_or_in_Excess_of_Posted_Speed_Limit", "Parked_Vehicle", "Trees_Crops_Vegetation", "Vehicle_in_Road", "Rain_Snow_Fog_Smoke_Sand_Dust", "Curve_Hill_Or_Other_Design_Features_(including_Traffic_signs_Embankment)", "Animals_in_Road", "Ruts_Holes_Bumps_in_Road"), 
+                                  to = c("NoAp2","E01", "E02",NA, "E03","E04","E05","E06","E07","E09","E10","E11", "E12", "E13","E14","E15","E16","E17","E18","E19","E20","E21", "E22", "E23","E24","E25","E27","E28","E29","E30","E31", "E32", "E34","E35","E38","E39","E40","E42", "E44","E45", "E46","E47","E48","E49","E50","E51","E52","E53"),warn_missing=F)
+
+# Preparation RELATED_FACTOR_.3. (var 28)
+df$RELATED_FACTOR_.3. = mapvalues(df$RELATED_FACTOR_.3., from = c("Not_Applicable_-_Driver/None_-_All_Other_Persons", "Walking/Riding_with_or_Against_Traffic_Playing_Working_Sitting_Lying_Standing_etc._in_Roadway", "Improper_Crossing_or_Roadway_or_Intersection", "Unknown", "Darting_Stumbling_or_Running_into_Road","Other_Physical_Impairment", "Non-Motorist_Pushing_a_Vehicle",  "Failure_to_Yield_Right_of_Way", "Not_Visible", "Traveling_on_Prohibited_Trafficway", "Failure_to_Obey_Traffic_Signs_Traffic_Control_Devices_or_Traffic_Officers_Failure_to_Observe_Safety_Zone_Traffic_Laws","Impaired_Due_to_Previous_Injury","Emotional_(e.g._Depression_Angry_Disputed)", "Inattentive_(talking_Eating_etc)", "Failure_to_Keep_in_Proper_Lane", "Improper_or_Erratic_Lane_Changing","Blind", "Restricted_to_Wheelchair", "Driving_on_Wrong_Side_of_Road","Making_Improper_Turn", "Getting_Off/Out_of_or_On/In_to_Moving_Transport_Vehicle", "Operating_without_Required_Equipment", "Walking_With_Cane_or_Crutches", "Getting_Off/Out_of_or_On/In_to_Non-Moving_Transport_Vehicle",  "Passed_OutBlackout", "Mentally_Challenged", "Pedestrian_NON-MOTOR_VEHICLE_OPERATOR_RELATED_FACTORS:", "Motor_Vehicle_(including_load)",  "Reflected_Glare_Bright_Sunlight_Headlights","Driving_too_Fast_for_Conditions_or_in_Excess_of_Posted_Speed_Limit", "Parked_Vehicle",  "Rain_Snow_Fog_Smoke_Sand_Dust", "Building_Billboard_or_Other_Structures"), 
+                                  to = c("NoAp3","G01", "G02",NA, "G03","G04","G05","G07","G09","G10","G11", "G12", "G13","G14","G15","G16","G17","G18","G21", "G22", "G23","G24","G25","G27","G32", "G34","G35","G39", "G44", "G46","G47","G50","G54"),warn_missing=F)
+
+# Preparation RACE (var 29)
+df$RACE = mapvalues(df$RACE, from = c("White", "Black", "Not_a_Fatality_(Not_Applicable)", "Unknown", "American_Indian_(_Includes_Aleuts_and_Eskimos)", "Filipino", "Other_Asian_or_Pacific_Islander", "All_Other_Races", "Asian_or_Pacific_Islander_No_Specific_(Individual)_Race", "Chinese", "Asian_Indian", "Vietnamese", "Korean", "Other_Indian_(Includes_South_and_Central_America)", "Multiple_Races_(Individual_races_not_specified;_ex._mixed)", "Japanese", "Hawaiian_(Includes_part-Hawaiian)", "Samoan"), to = c("W", "B","NoAp", NA,"AmI", "Fil", "OAsian",NA,"AsianPac", "Chi", "AsianInd", "Viet", "Kor", "OInd", "MRace", "Jap", "Haw", "Samoa"),warn_missing=F)
+
+```
+
+
+
+***************************************************************************************************************************************************
+
+## Análisis individual de variables
+
+### Análisis `CASE_STATE`
+
+```{r 1case_state_analisis}
+
+# Obtenemos la información resumen
+summary(df$CASE_STATE)
+unique(df$CASE_STATE)
+```
+
+
+```{r include=TRUE, echo = FALSE, fig.width=15, fig.height=7, fig.align='center'}
+# Gráfica que muestra el número de accidentes por estado reportados
+ggplot(data=df, aes(x=CASE_STATE, fill=INJURY_SEVERITY)) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=6,angle = 90, hjust = 1))
+```
+
+
+```{r }
+# Estados con mayor y menor número de supervivientes
+result1 = df %>% 
+  dplyr::select(CASE_STATE,INJURY_SEVERITY) %>%
+  filter(INJURY_SEVERITY=="Died") %>%
+  group_by(CASE_STATE) %>%
+  dplyr::summarise(n= n()) %>% arrange(desc(n))
+summary(result1)
+
+cat("\n*****************************************\n")
+
+
+# Estado con mayor y menor número de supervivientes
+result2=df %>% 
+  dplyr::select(CASE_STATE,INJURY_SEVERITY) %>%
+  filter(INJURY_SEVERITY=="Survived") %>%
+  group_by(CASE_STATE) %>%
+  dplyr::summarise(n= n()) %>% arrange(desc(n))
+summary(result2)
+
+```
+
+
+
+Estados con mayor tasa de mortalidad: California, Texas y Florida y con menor: Distrito de Colombia, Rhode_Island y Alaska
+Estados con mayor accidentes de que produce baja injury: California, Texas y New York y con menor: Vermont, North_Dakota, Wyoming
+
+```{r case_state_analisis_}
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$CASE_STATE)
+z=table(df$CASE_STATE,df$INJURY_SEVERITY)
+porcentajes=z[,2]/apply(z,1,sum)
+sort(porcentajes)
+hist(porcentajes)
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `AGE`
+
+Esta variable identifica la edad de la persona en el momento del accidente en años. En particular puede tomar los siguientes valores enteros:
+
+```{r echo = FALSE}
+sort(unique(df$AGE))
+```
+
+```{r 2analisis_age, message=FALSE, warning=FALSE}
+
+# Obteniendo medidas resumen de variable en cuestión
+summary(df$AGE)
+
+
+ggplot(df, aes(INJURY_SEVERITY,AGE) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+ggplot(df, aes(x=AGE, colour=SEX)) +
+    geom_density() +
+    ggtitle("Relation age with injury")
+
+
+# Comparación con otras variables
+
+ggplot(df, aes(x=AGE, colour=ALCOHOL_TEST_RESULT)) +
+    geom_density() +
+    ggtitle("Comparative AGE with ALCOHOL TEST RESULT")
+
+
+
+# Todos los usuarios con sexo desconocido tienen edad 99 años, lo cual implica que seguramente sean valores faltantes
+quantile(df[df$SEX=='Unknown',]$AGE , c(.01)) 
+describe(df[df$SEX=='Unknown',]$AGE)
+
+describe(df[fars$INJURY_SEVERITY=='Unknown',]$AGE)
+
+# El 84% de las filas con edad 99 tienen la variable INJURI_SEVERITY a Unknown
+quantile(df[fars$INJURY_SEVERITY=='Unknown',]$AGE , 0.16) 
+
+# Posibles filas con valores desconocidos (comentado)
+#df[df$SEX=='Unknown' & df$AGE==99 & df$INJURY_SEVERITY==NA,]
+
+# Consideramos que todos los que tienen edad 99 son NA
+df$AGE[which(df$AGE == 99)] <-NA
+
+describe(df$AGE)
+# VALORES FALTANTES: 2,5%
+
+p1 <- ggplot(df, aes( PERSON_TYPE, AGE)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+    
+
+p2 <- ggplot(df, aes( SEX, AGE)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+
+
+p3 <- ggplot(df, aes(RESTRAINT_SYSTEM.USE , AGE)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))
+
+p4 <- ggplot(df, aes(SEATING_POSITION, AGE)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+
+p5 <- ggplot(df, aes(HISPANIC_ORIGIN,AGE) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+p6 <- ggplot(df, aes(EJECTION,AGE) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+
+theme_set(theme_cowplot(font_size=12))
+plot_grid(p3,p1,p2,p4,p5,p6,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 2)
+
+plot_grid(p5,p6,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 1)
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$AGE)
+
+```
+
+Como se puede observar existe un gran número de valores con edad 99 y como describimos anteriormente, se corresponden con el valor _Unknown_. También se puede comprobar que no existen accidentes para la edad igual a 98, como indica la información consultada, y que el número de accidentados con edades superiores o iguales a 97 es muy bajo.
+El número máximo de accidentes se da para conductores en el rango entre los 17 y los 21 años, lo que se corresponde a conductores noveles. También se observa un repunte en el número de accidentes para conductores más expertos entre los 35 y lo 42 años.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `SEX`
+
+Esta variable identifica el sexo de la persona involucrada en el accidente. Esta variable puede tomar los valores
+```{r 3analisis_sex}
+summary(df$SEX)
+
+# Limpieza de datos
+
+df$SEX = factor(df$SEX, levels = (c("Male","Female")))
+
+p1 <- ggplot(df, aes(PERSON_TYPE,fill=SEX) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+p3 <- ggplot(df, aes(SEATING_POSITION,fill=SEX) ) + geom_bar(stat="count") + theme(legend.position="none", axis.text.x = element_text(size=6, angle = 90, hjust = 1))
+p4 <- ggplot(df, aes(HISPANIC_ORIGIN,fill=SEX) ) + geom_bar(stat="count") + theme(legend.position="none", axis.text.x = element_text(angle = 90, hjust = 1))
+
+legend <- get_legend(p1)
+
+
+prow <- plot_grid(p1 + theme(legend.position="none"),p3+theme(legend.position="none"),p4+theme(legend.position="none"),p5+theme(legend.position="none"),
+          rel_widths=c(35,45),rel_heights=c(80,80),  label_size = 10,
+          ncol = 2, nrow = 2)
+
+plot_grid( prow, legend, rel_widths = c(3, .3))
+
+
+# Comparación con otras variables
+
+ggplot(df, aes(ALCOHOL_TEST_RESULT,fill=SEX) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(RESTRAINT_SYSTEM.USE,fill=SEX) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(EJECTION,fill=SEX) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+Como se puede observar la mayor proporción de accidentes se producen en hombres (65740) que duplican al número de los femeninos (33573). También existe un pequeño número de valores indeterminados (1655).Además los hombres son los que tienen mayor rango de accidentes con muerte
+
+
+También analizamos la relación entre el número de accidentes y la edad y sexo del accidentado.
+```{r echo = FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df %>% 
+  filter(!is.na(SEX))  %>%
+  filter(!is.na(AGE))  %>%
+  ggplot(aes(x=AGE, fill=SEX)) + geom_bar(colour="black", width=0.9, stat="count", position=position_dodge()) + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=16, angle = 0, hjust = 1, vjust = 0.5))  + ggtitle("Relation age vs. sex") +  scale_x_continuous(breaks = round(seq(min(fars$AGE), max(fars$AGE), by = 2),1))
+```
+Esta gráfica muestra que a partir de la edad en la que una persona puede conducir, los 16 años, el número de accidentes es siempre mayor en el caso de los hombres.
+
+En la siguiente gráfica mostramos una gráfica de densidades, lo que nos permite comparar directamente los accidentes por edades y sexo. Como se puede observar en la siguiente gráfica la siniestralidad de las mujeres es menor para las mujeres menores de 37 años. En el rango entre 38 y 60 años la comparación entre hombres y mujeres es similar. Para edades superiores a los 60 años, las mujeres superan a los hombres en el número de accidentes.
+
+```{r echo = FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df %>% 
+  filter(!is.na(AGE) & AGE >= 15 & !is.na(SEX) )  %>% 
+ggplot( aes(AGE, ..density.. , colour=SEX)) + geom_freqpoly(binwidth = 1, size=2) + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=16, angle = 0, hjust = 1, vjust = 0.5))  + ggtitle("Density age vs. sex") +  scale_x_continuous(breaks = round(seq(min(fars$AGE), max(fars$AGE), by = 2),1))
+```
+
+Podemos calcular la edad media de los afectados por una accidente de tráfico en función de su sexo:
+```{r echo = FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df %>% 
+  filter(!is.na(AGE) & !is.na(SEX))  %>%
+ggplot( aes(SEX, AGE)) +
+    geom_boxplot(aes(colour = SEX), outlier.colour = "red", outlier.shape = 1, outlier.alpha = 0.1)  + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=16, angle = -0, hjust = 0.5, vjust = 0))
+```
+Como se puede observar la edad media de los hombres y mujeres que se vieron involucrados en un accidente es muy similar.
+
+```{r }
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$SEX)
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `PERSON_TYPE`
+
+Esta variable describe el papel de la persona involucrada en el accidente. Esta variable puede tomar los siguiente valores
+
+```{r 4tipo_persona_analisis}
+# Valores existentes
+describe(df$PERSON_TYPE)
+
+```
+
+```{r }
+
+# Reordenación de variables
+df$PERSON_TYPE = factor(df$PERSON_TYPE, levels = (c("Driver",
+"OMotT", "Pedestrian","Bicyclist","UOT","OMotNT","ONMotT","Other_Cyclist","Other_Pedestrian","UNM")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit4 = glm(INJURY_SEVERITY~PERSON_TYPE , data = df, family = "binomial")
+summary(mylogit4)
+
+# En función a los valores resultantes de la regresión y el número de valores de cada variable hacemos la siguiente reorganización.
+
+df$PERSON_TYPE = plyr::mapvalues(df$PERSON_TYPE, from = c("Bicyclist", "Driver","OMotT","ONMotT","Other_Cyclist","Pedestrian","OMotNT","Other_Pedestrian","UOT","UNM"), to = c("Other","Driver", "Other","Other","Other","Other","Other","Other","Other",NA))
+
+# Resultado final
+summary(df$PERSON_TYPE)
+
+# Volvemos a hacer la regresión
+mylogit41 = glm(INJURY_SEVERITY~PERSON_TYPE , data = df, family = "binomial")
+summary(mylogit41)
+
+
+p1 <- ggplot(df, aes(INJURY_SEVERITY,fill=PERSON_TYPE) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=6, angle = 90, hjust = 1))
+p2 <- ggplot(df, aes(SEATING_POSITION,fill=PERSON_TYPE) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=6, angle = 90, hjust = 1))
+p3 <- ggplot(df, aes(RESTRAINT_SYSTEM.USE,fill=PERSON_TYPE) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=4, angle = 90, hjust = 1))
+p4 <- ggplot(df, aes(EJECTION,fill=PERSON_TYPE) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=6, angle = 90, hjust = 1))
+
+legend <- get_legend(p1)
+
+prow <- plot_grid(p1 + theme(legend.position="none"),p2+theme(legend.position="none"),p3+theme(legend.position="none"),p4+theme(legend.position="none"),
+          rel_widths=c(35,45),rel_heights=c(80,80),  label_size = 10,
+          ncol = 2, nrow = 2)
+
+plot_grid( prow, legend, rel_widths = c(3, 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$PERSON_TYPE)
+
+``` 
+Como se puede observar la mayor cantidad de personas con lesiones graves son para conductores, seguido de pasajeros de vehiculos a motor y por último peatones. Estos son los tres tipos predominantes
+
+
+***************************************************************************************************************************************************
+
+### Análisis `SEATING_POSITION`
+
+Esta variable identifica la localización de la persona dentro o fuera el vehículo. Esta variable puede tomar los siguiente valores. Hay que señalar que esta variable no se aplica a ciclistas y peatones, en cuyo caso el valor es Non-Motorist".
+
+```{r 5seating_position}
+# Valores existentes
+describe(df$SEATING_POSITION)
+
+# Limpieza de datos
+df$SEATING_POSITION[which(df$SEATING_POSITION == "U")] <-NA
+
+# Reordenación de variables
+df$SEATING_POSITION = factor(df$SEATING_POSITION, levels = (c("FL",
+"FrR", "NMot","SR","SL","SM","OEC","FM","OUC","SU","TL","TR","SlepCa","TM","TU","VE","SO","OPC","FU","FO","TO","FoL","FoR","FoM")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit5 = glm(INJURY_SEVERITY~SEATING_POSITION , data = df, family = "binomial")
+summary(mylogit5)
+
+# Reordenamos en torno a los valores resultantes
+df$SEATING_POSITION = plyr::mapvalues(df$SEATING_POSITION, 
+                                      from = c("FL",
+"FrR", "NMot","SR","SL","SM","OEC","FM","OUC","SU","TL","TR","SlepCa","TM","TU","VE","SO","OPC","FU","FO","TO","FoL","FoR","FoM"), 
+to = c("FL",
+"FR", "NMot","S_T","S_T","S_T","CA","FM","CA","S_T","S_T","S_T","Other","S_T","S_T","Other","S_T","CA","Other","Other","Other","Other","Other","Other"))
+
+summary(df$SEATING_POSITION)
+
+# Volvemos a aplicar la regresión logistica
+mylogit = glm(INJURY_SEVERITY~SEATING_POSITION , data = df, family = "binomial")
+
+summary(mylogit)
+# Resultado Ok. Todos los factores son representativos.
+```
+
+
+```{r }
+ggplot(df, aes(SEATING_POSITION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(SEATING_POSITION,fill=SEX) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(SEATING_POSITION,fill=EJECTION) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(SEATING_POSITION,fill=AIR_BAG_AVAILABILITY.DEPLOYMENT) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$SEATING_POSITION)
+
+``` 
+Como se puede observar los asientos frontales son los que llevan más daño y sobre los que actuan los accidentes
+
+
+***************************************************************************************************************************************************
+
+### Análisis `AIR_BAG_AVAILABILITY.DEPLOYMENT`
+
+La variable _AIR\_BAG\_AVAILABILITY\_DEPLOYMENT_ recoge la disponibilidad y empleo del air bag de la persona. Recoge tanto la disponibilidad como el despliegue para cada asiento ocupado.
+
+```{r 6AIR_BAG_AVAILABILITY.DEPLOYMENT}
+# Valores existentes
+describe(df$AIR_BAG_AVAILABILITY.DEPLOYMENT)
+
+# Limpieza de datos
+df$AIR_BAG_AVAILABILITY.DEPLOYMENT[which(df$AIR_BAG_AVAILABILITY.DEPLOYMENT == "U")] <-NA
+
+# Reordenación de variables
+df$AIR_BAG_AVAILABILITY.DEPLOYMENT = factor(df$AIR_BAG_AVAILABILITY.DEPLOYMENT, levels = (c("NAv","D_F","Av_nD","A_U","NM","DA_MD","DA_fs", "D_DU","A_SO","ADoR","A_PNR","D_OD")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit6 = glm(INJURY_SEVERITY~AIR_BAG_AVAILABILITY.DEPLOYMENT , data = df, family = "binomial")
+summary(mylogit6)
+
+df$AIR_BAG_AVAILABILITY.DEPLOYMENT = plyr::mapvalues(df$AIR_BAG_AVAILABILITY.DEPLOYMENT, 
+                                      from = c("NA", "D_F","Av_nD","A_U","NM","DA_MD","DA_fs", "D_DU","A_SO","ADoR","A_PNR","D_OD"), 
+to = c("NA", "D_F","Av_nD","A_U","NM","DA_MD","Others", "Others","Others","Others","Others","Others"))
+
+ggplot(df, aes(AIR_BAG_AVAILABILITY.DEPLOYMENT,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(AIR_BAG_AVAILABILITY.DEPLOYMENT,fill=EJECTION) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+```
+
+
+```{r }
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$AIR_BAG_AVAILABILITY.DEPLOYMENT)
+```
+
+El mayor número de altos lesionados se encuentra en vehiculo que no tienen airbag, seguido por aquellos vehiculos que si lo tienen pero muy por debajo
+
+En los casos en los que no se tiene air bag disponible, se distribuye principalmente entre personas que ocupaban el asiento del conductor, el copiloto y los asientos traseros. El número de accidentados que ocupaban el asiento del copiloto (10000 accidentes) es similar al caso en el que la persona ocupaba cualquiera de los asientos traseros. Además el número de personas en la posición del piloto involucradas en un accidente y que no usaron airbag es 3/2 más alto que al número de personas que ocuparon cualquier otra posición en el vehículo. Esto confirma el cociente conductor/pasajero que observamos en el estudio de la variable *PERSON_TYPE*.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `RESTRAINT_SYSTEM.USE`
+
+La variable _RESTRAINT\_SYSTEM\_USE_ registra el equipo de retención en uso por el ocupante, o el casco en uso de un motociclista, en el momento del accidente.
+
+```{r 7RESTRAINT_SYSTEM.USE}
+
+# Valores existentes
+describe(df$RESTRAINT_SYSTEM.USE)
+
+# Limpieza de datos
+df$RESTRAINT_SYSTEM.USE[which(df$RESTRAINT_SYSTEM.USE == "U")] <-NA
+
+summary(df$RESTRAINT_SYSTEM.USE)
+
+
+
+# Reordenación de variables
+df$RESTRAINT_SYSTEM.USE = factor(df$RESTRAINT_SYSTEM.USE, levels = (c("NA","LSB","RUTU","LB","MH","CHS","SB","SBUI", "CSSUI","BH","HUI")))
+
+
+# Regresión logistica con respecto a grado de afecto
+mylogit7 = glm(INJURY_SEVERITY~RESTRAINT_SYSTEM.USE , data = df, family = "binomial")
+summary(mylogit7)
+
+# Para conseguir un modelo más robusto...
+summary(df$RESTRAINT_SYSTEM.USE)
+df$RESTRAINT_SYSTEM.USE = plyr::mapvalues(df$RESTRAINT_SYSTEM.USE, 
+                                      from = c("NA","LSB","RUTU","LB","MH","CHS","SB","SBUI", "CSSUI","BH","HUI"), 
+to = c("No","Yes","Other","Yes","Other","Other","Other","Other", "Other","Other","Other"))
+
+
+ggplot(df, aes(RESTRAINT_SYSTEM.USE,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(RESTRAINT_SYSTEM.USE,fill=EJECTION) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(RESTRAINT_SYSTEM.USE,fill=EJECTION_PATH) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+```
+
+Como se puede observar, para aquellas personas que usaron el cinturón de seguridad del tipo "lap"" o "lap & shoulder"" el numero de fallecidos es menor que el de heridos o ilesos, al contrario que para el caso de la utilización de un cinturón tipo "shoulder". Los motociclistas presentan un mayor número de fallecidos para aquellos que llevaban casco. Para aquellos personas que viajaban en un vehículo y que no utilizaron cinturón, el número de fallecidos duplica al de heridos. Hay que señalar que estos datos también incluyen a los peatones.
+
+```{r }
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$RESTRAINT_SYSTEM.USE)
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `EJECTION`
+
+La variable _EJECTION_ se refiere a aquellos ocupantes que fueron total o parcialmente lanzados fuera del vehículo como resultado del impacto o vuelco. Esta variable no se aplica a personas que estaban situadas en el exterior del vehículo, ocupantes de motocicletas o a no-motoristas (peatones).
+
+```{r 8EJECTION}
+# Valores existentes
+describe(df$EJECTION)
+
+# Limpieza de datos
+df$EJECTION[which(df$EJECTION == "Unknown")] <-NA
+
+# Reordenación de variables
+df$EJECTION = factor(df$EJECTION, levels = (c("Not_Ejected","Totally_Ejected","Partially_Ejected")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit8 = glm(INJURY_SEVERITY~EJECTION , data = df, family = "binomial")
+summary(mylogit8)
+
+ggplot(df, aes(EJECTION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(EJECTION_PATH,fill=EJECTION) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+# Un gran porcentaje de los totalmente ejectados murieron
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$EJECTION)
+```
+
+
+El siguiente histograma muestra la distribución de los accidentes en función de la posición que ocupaba la persona involucrada en el accidente por el cada tipo de "ejection".
+```{r echo=FALSE, fig.width=15, fig.height=6, fig.align='center'}
+ggplot(df, aes(SEATING_POSITION,fill=EJECTION) ) + geom_bar(colour="black", stat="count", position=position_dodge()) + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=10, angle = -30, hjust = 0, vjust = 1))
+``` 
+
+
+Podemos estudiar la dependencia del número de accidentes en función de si usa algún tipo de retención para cada tipo de eyección. Como se observa la eyección del vehículo es un proceso minoritario para todos los casos, pero es más evidente para el caso en el que la persona involucrada en el accidente no tenía o no usó ningún tipo de retención.
+```{r echo=FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df %>%
+filter(!is.na(RESTRAINT_SYSTEM.USE))  %>%
+  filter(!is.na(EJECTION))  %>%
+ggplot( aes(RESTRAINT_SYSTEM.USE,fill=EJECTION) ) + geom_bar(colour="black", stat="count", position=position_dodge()) + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=10, angle = -30, hjust = 0, vjust = 1))
+```
+
+Similarmente el número de accidentes en accidentes en función de la disponibilidad del air bag para cada tipo de eyección, muestra que el número de expulsados del coche, tanto total como parcialmente, es mayor para el caso en el que no se utilizó el air bag.
+```{r  echo=FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df %>%
+filter(!is.na(AIR_BAG_AVAILABILITY.DEPLOYMENT))  %>%
+  filter(!is.na(EJECTION))  %>%
+ggplot(aes(AIR_BAG_AVAILABILITY.DEPLOYMENT, fill=EJECTION) ) +  geom_bar(colour="black", stat="count", position=position_dodge())  + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=10, angle = -30, hjust = 0, vjust = 1))
+```
+
+***************************************************************************************************************************************************
+
+### Análisis `EJECTION_PATH`
+
+La variable _EJECTION_PATH_ identifica la trayectoria por el cual la persona fue expulsada del vehículo.
+
+```{r 9EJECTION_PATH}
+# Valores existentes
+describe(df$EJECTION_PATH)
+
+# Reordenación de variables
+
+df$EJECTION_PATH = factor(df$EJECTION_PATH, levels = (c("NoAp","SideW","SideD","Other","BackW", "Wind", "Roof", "BackD", "RoofC")))
+
+
+mylogit9 = glm(INJURY_SEVERITY~EJECTION_PATH , data = df, family = "binomial")
+summary(mylogit9)
+
+# Son valores diferentes dificil de agrupar por tanto mejor dejarlos así
+
+ggplot(df, aes(EJECTION_PATH,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+# RELACIÓN ENTRE EJECTION Y EJECTION_PATH
+
+# Hay dos casos que se consideran que no han eyectado pero en la otra variable aparecen como eyectados.
+df[which(df$EJECTION != "Not_Ejected" & df$EJECTION_PATH == "NE"),]
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$EJECTION_PATH)
+```
+Casi la totalidad de los usuarios que fueron eyectados murieron, aunque la gran mayoría no lo fueron
+
+***************************************************************************************************************************************************
+
+### Análisis `EXTRICATION`
+
+La variable _EXTRICATION_ se refiere al empleo de equipamiento o de la fuerza para extraer a las personas de los vehículos, es decir, más que sólo subir o transportar a una persona de los restos del vehículo. El valor “Unknown” identifica el caso en el que el oficial señala que el ocupante ha sido aplastado y sugiere que el ocupante pudo ser extraído con fuerza, pero no está claro si se utilizó equipo o no. Este valor no es aplicable a motociclistas y no-motoristas (peatones y ciclistas)
+
+```{r, 10extric}
+# Valores existentes
+describe(df$EXTRICATION)
+
+# Limpieza de datos
+df$EXTRICATION[which(df$EXTRICATION == "Unknown")] <-NA
+
+# Reordenación de variables
+df$EXTRICATION = factor(df$EXTRICATION, levels = (c("Not_Extricated","Extricated")))
+
+mylogit = glm(INJURY_SEVERITY~EXTRICATION , data = df, family = "binomial")
+summary(mylogit)
+
+# Valores representativos, por tanto no se cambia nada
+
+ggplot(df, aes(EXTRICATION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+# La mayoría de los extrincated murieron
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$EXTRICATION)
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `NON_MOTORIST_LOCATION`
+
+Esta variable sólo es aplicable a los no-motoristas, es decir, peatones y ciclistas, y se refiere a la localización del no-motorista en el momento del accidente. 
+
+```{r 11NON_MOTORIST_LOCATION}
+# Valores existentes
+describe(df$NON_MOTORIST_LOCATION)
+
+# Reordenación de variables
+df$NON_MOTORIST_LOCATION = factor(df$NON_MOTORIST_LOCATION, levels = (c("NoAp","NIRCNA","NIRCAU","NIRNC","NIRS", "IIC","IRCAU","IRNC","NIONR", "IRCNA", "NIOT", "INR","NIC","IU","NIU","NIPL")))
+
+mylogit11 = glm(INJURY_SEVERITY~NON_MOTORIST_LOCATION , data = fars, family = "binomial")
+summary(mylogit11)
+
+ggplot(df, aes(NON_MOTORIST_LOCATION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(NON_MOTORIST_LOCATION,fill=POLICE_REPORTED_ALCOHOL_INVOLVEMENT) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$NON_MOTORIST_LOCATION)
+
+```
+
+
+Se reagruparán las categorías en "Intersection" y "Non_Intersection" 
+```{r NON_MOTORIST_LOCATION_}
+#se vuelven  a reagrupar los valores
+df$NON_MOTORIST_LOCATION = mapvalues(df$NON_MOTORIST_LOCATION, from = c("NoAp","NIRCNA","NIRCAU","NIRNC","NIRS", "IIC","IRCAU","IRNC","NIONR", "IRCNA", "NIOT", "INR", NA,"NIC","IU" ,"NIU","NIPL", "NIBP"), to = c("NoAp","NI","NI","NI","NI", "I","I","I","NI", "I", "NI", "I", NA,"NI","I" ,"NI","NI", "NI"),warn_missing=F)
+
+# Reordenación de variables
+df$NON_MOTORIST_LOCATION = factor(df$NON_MOTORIST_LOCATION, levels = (c("NoAp","NI","I", NA)))
+
+mylogit11_2 = glm(INJURY_SEVERITY~NON_MOTORIST_LOCATION , data = fars, family = "binomial")
+summary(mylogit11_2)
+
+ggplot(df, aes(NON_MOTORIST_LOCATION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(NON_MOTORIST_LOCATION,fill=POLICE_REPORTED_ALCOHOL_INVOLVEMENT) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$NON_MOTORIST_LOCATION)
+
+```
+Por un lado, en lo que respecta los accidentes sufridos por motoristas, se registran muchas más muertes en carreteras que no son intersecciones ("Non_Intersection") en comparación con los accidentes que se producen en los cruces ("intersection"). Además, en ambos casos, los accidentes producen muchas más muertes que supervivientes.
+Por otro lado, en el caso de que los accidentados sean no motoristas, los casos registrados de personas que sobreviven es mucho mayor respecto a los que tienen como consecuencia la muerte. Un factor muy notable, es que la proporción de supervivientes en los accidentados no motoristas es enorme en comparación con la de motoristas, lo que nos haría pensar que la peligrosidad de los accidentes en moto es mucho mayor y habría que tenerlo en cuenta.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `POLICE_REPORTED_ALCOHOL_INVOLVEMENT`
+
+Esta variable recoge evidencias sobre la involucración del alcohol en las personas que formaron parte del accidente. Esta variable puede tomar los siguientes valores.
+
+```{r 12POLICE_REPORTED_ALCOHOL_INVOLVEMENT}
+# Valores existentes
+describe(df$POLICE_REPORTED_ALCOHOL_INVOLVEMENT)
+
+# Reordenación de variables
+df$POLICE_REPORTED_ALCOHOL_INVOLVEMENT = factor(df$POLICE_REPORTED_ALCOHOL_INVOLVEMENT, levels = (c("NO","YES")))
+
+mylogit12 = glm(INJURY_SEVERITY~POLICE_REPORTED_ALCOHOL_INVOLVEMENT , data = df, family = "binomial")
+summary(mylogit12)
+
+ggplot(df, aes(POLICE_REPORTED_ALCOHOL_INVOLVEMENT,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+ggplot(df, aes(POLICE_REPORTED_ALCOHOL_INVOLVEMENT,fill=SEX) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$POLICE_REPORTED_ALCOHOL_INVOLVEMENT)
+```
+Se podría deducir, de este gráfico de barras, que la ingesta de alcohol aumenta notablemente la probabilidad de muerte en caso de accidente. Por consiguiente, los hombres tienen muchos más accidentes que las mujeres. En resumen, la ingesta de alcohol es determinante.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `METHOD_ALCOHOL_DETERMINATION`
+
+Esta variable recoge el método por el cual la policía determinó si el alcohol intervino o no en el accidente. Esta variable puede tomar los siguiente valores
+
+```{r 13METHOD_ALCOHOL_DETERMINATION}
+# Valores existentes
+unique(df$METHOD_ALCOHOL_DETERMINATION)
+
+
+# Reordenación de variables
+df$METHOD_ALCOHOL_DETERMINATION = factor(df$METHOD_ALCOHOL_DETERMINATION, levels = c("NoAp","ET", "OBS", "OTHER", "PBT", "BV","PAS"))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit13 = glm(INJURY_SEVERITY~METHOD_ALCOHOL_DETERMINATION , data = df, family = "binomial")
+summary(mylogit13)
+
+
+ggplot(df, aes(METHOD_ALCOHOL_DETERMINATION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$METHOD_ALCOHOL_DETERMINATION)
+
+```
+
+***************************************************************************************************************************************************
+
+### Análisis `ALCOHOL_TEST_TYPE`
+
+```{r 14ALCOHOL_TEST_TYPE}
+# Valores existentes
+describe(df$ALCOHOL_TEST_TYPE)
+```
+
+```{r}
+sort(summary (df$ALCOHOL_TEST_TYPE), decreasing = TRUE)
+```
+
+```{r}
+# Reordenación de variables
+df$ALCOHOL_TEST_TYPE = factor(df$ALCOHOL_TEST_TYPE, levels = c("NoT","WB",NA, "BB","OTHER", "U", "V","BPS", "L", "BC"))
+
+# Regresión logistica
+mylogit14 = glm(INJURY_SEVERITY~ALCOHOL_TEST_TYPE , data = df, family = "binomial")
+summary(mylogit14)
+
+
+ggplot(df, aes(ALCOHOL_TEST_TYPE,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$ALCOHOL_TEST_TYPE)
+
+```
+
+```{r}
+# Reordenación de variables
+df$ALCOHOL_TEST_TYPE = factor(df$ALCOHOL_TEST_TYPE, levels = c("NoT","WB",NA, "BB", "U", "V","BPS"))
+
+# Regresión logistica
+mylogit14 = glm(INJURY_SEVERITY~ALCOHOL_TEST_TYPE , data = df, family = "binomial")
+summary(mylogit14)
+
+
+ggplot(df, aes(ALCOHOL_TEST_TYPE,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$ALCOHOL_TEST_TYPE)
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `ALCOHOL_TEST_RESULT`
+
+Esta variable identifica el resultados del test que se llevo a la persona involucrada en el accidente. Los tests se basan en la tasa de alcohol en sangre (blood alcohol concentration (BAC)), que viene expresado en gramos de alcohol por decilitro (g/dL).
+
+```{r ALCOHOL_TEST_RESULT}
+#Valores existentes
+describe(df$ALCOHOL_TEST_RESULT)
+summary(df$ALCOHOL_TEST_RESULT)
+```
+
+Podemos representar gráficamente el número de accidentes por la edad de la persona involucrada en el accidente:
+```{r include=TRUE, echo=FALSE, echo = FALSE, fig.width=15, fig.height=6, fig.align='center'}
+ggplot(df, aes(ALCOHOL_TEST_RESULT) ) + geom_bar(stat="count") + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=12, angle = 0, hjust = 0.5, vjust = 0)) +  scale_x_continuous(breaks = round(seq(min(fars$AGE), max(fars$AGE), by = 2),1))
+```
+
+Como se puede observar, esta variable toma valores enteros entre 0 y 99. En la siguiente tabla resumimos el significado de estos valores
+
+| Resultado test alcohol | Explicación |
+|---- | ---------------------|
+00-93 |  Valor real del test BAC|
+94  | .94 or valores superiores |
+95  | Test rechazado |
+96  | Test no ofrecido | 
+97  | AC Test realizado, Resultado desconocidos |
+99  | Desconocido si el conductor paso el test |
+
+Podemos estudiar en detalle el nivel de alcoholismo de las personas involucradas en el accidente eliminado los valores extremos, 0 y >94
+
+```{r include=TRUE, echo=FALSE, echo = FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df  %>%
+  filter(inrange(ALCOHOL_TEST_RESULT, 1, 94) )  %>%
+ggplot(aes(ALCOHOL_TEST_RESULT) ) + geom_bar(stat="count") + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=12, angle = 0, hjust = 0.5, vjust = 0)) +  scale_x_continuous(breaks = round(seq(min(fars$AGE), max(fars$AGE), by = 2),1))
+```
+
+
+```{r }
+
+df$ALCOHOL_TEST_RESULT[which(df$ALCOHOL_TEST_RESULT >95)] <-NA
+
+# Regresión logistica
+mylogit15 = glm(INJURY_SEVERITY~ALCOHOL_TEST_RESULT , data = df, family = "binomial")
+summary(mylogit15)
+
+
+ggplot(df, aes(ALCOHOL_TEST_RESULT,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$ALCOHOL_TEST_RESULT)
+```
+
+Los valores máximos de alcoholemia se centran en tordo a 16-18 g/dL, el triple de lo permitido por la ley en EE.UU (0.5-0.8 g/dL).
+
+En este caso empezamos por cambiar los posibles valores de la variable. Para ello tendremos en consideración la siguiente información: "State laws in 21 states make it a criminal offense to operate a motor vehicle at a blood alcohol concentration (BAC) of 0.10 g/dl. Twenty-nine states and the District of Columbia have adopted 0.08 g/dl. One state and Puerto Rico do not have illegal per se BAC levels." Teniendo en cuenta la anterior información cambiamos los valores de la variable *ALCOHOL_TEST_RESULT* pero simplicando la clasificación y considrando un resultado mayor que 0 como positivo.
+
+| BAC (g/dl)  | Valor |
+|---- | ---------------------|
+00 |  Negative_alcohol |
+01 - 94  | Positive_alcohol |
+95 --  | NA |
+
+
+```{r}
+#conversión a binomial de la variable ALCOHOL_TEST_RESULT1  
+summary(df$ALCOHOL_TEST_RESULT)
+df$ALCOHOL_TEST_RESULT[which(df$ALCOHOL_TEST_RESULT > 0)] <-'Positive_alcohol' 
+df$ALCOHOL_TEST_RESULT[which(df$ALCOHOL_TEST_RESULT == 0)] <-'Negative_alcohol'
+df$ALCOHOL_TEST_RESULT1 <- as.factor(df$ALCOHOL_TEST_RESULT)
+
+str(df$ALCOHOL_TEST_RESULT1)
+summary(df$ALCOHOL_TEST_RESULT1)
+
+# VERIFICACIONES CON LA VARIABLE TRANSFORMADA
+# Regresión logistica
+mylogit151 = glm(INJURY_SEVERITY~ALCOHOL_TEST_RESULT1 , data = df, family = "binomial")
+summary(mylogit151)
+
+
+ggplot(df, aes(ALCOHOL_TEST_RESULT1,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$ALCOHOL_TEST_RESULT1)
+```
+
+
+```{r alcoh2,results="hide"}
+df[which(df$ALCOHOL_TEST_RESULT1=='Negative_alcohol'),]
+
+```
+El número de fallecidos es siempre mayor independiente del grado de embriaguez de la persona involucrada en el accidente. De hecho el número de fallecidos sobrios supera levemente al número de personas involucradas ebrias, teniendo en cuenta el número relativo entre ambos.
+
+Podemos estudiar la distribución de la embriaguez de la persona involucrada en el accidente en función de su edad
+```{r  echo=FALSE, fig.width=15, fig.height=6, fig.align='center'}
+df %>% 
+  filter(!is.na(AGE))  %>%
+  filter(!is.na(ALCOHOL_TEST_RESULT))  %>%
+ggplot(aes(x=AGE, fill=ALCOHOL_TEST_RESULT)) + geom_bar(colour="black", width=0.9, stat="count", position=position_dodge()) + theme_bw() + theme(text = element_text(size=16), axis.text.y = element_text(size=16), axis.text.x = element_text(size=16, angle = 0, hjust = 1, vjust = 0.5)) + ggtitle("Comparative AGE vs. ALCOHOL TEST RESULT") +  scale_x_continuous(breaks = round(seq(min(fars$AGE), max(fars$AGE), by = 2),1))
+``` 
+En este caso se observa que el pico en el consumo de alcohol se desplaza hasta los 21, edad en la que es legal el consumo de alcohol. Sorprende que se hicieran test de alcoholemia a personas comprendidas entre los 0 y los 14 años.
+
+***************************************************************************************************************************************************
+
+### Análisis `POLICE_REPORTED_DRUG_INVOLVEMENT`
+
+Esta variable recoge evidencias sobre la involucración de drogas en las personas que formaron parte del accidente. No incluye nicotina, aspirina, alcohol o drogas suministradas después del accidente. Esta variable puede tomar los siguientes valores.
+
+```{r 16POLICE.REPORTED_DRUG_INVOLVEMENT}
+#Valores existentes
+describe(df$POLICE.REPORTED_DRUG_INVOLVEMENT)
+
+
+# Reordenación de variables
+df$POLICE.REPORTED_DRUG_INVOLVEMENT = factor(df$POLICE.REPORTED_DRUG_INVOLVEMENT, levels = c("NoRep", "No", "Yes"))
+
+
+# Regresión logistica
+mylogit16 = glm(INJURY_SEVERITY~POLICE.REPORTED_DRUG_INVOLVEMENT , data = df, family = "binomial")
+summary(mylogit16)
+
+
+ggplot(df, aes(POLICE.REPORTED_DRUG_INVOLVEMENT,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$POLICE.REPORTED_DRUG_INVOLVEMENT)
+```
+
+**De este  gráfico se podría deducir que el hecho de que la policía notifique que se han tomado drogas, no relevancia respecto a la variable respuesta**
+
+
+***************************************************************************************************************************************************
+
+### Análisis `METHOD_OF_DRUG_DETERMINATION`
+
+Esta variable recoge evidencias sobre la involucración de drogas en las personas que formaron parte del accidente. No incluye nicotina, aspirina, alcohol o drogas suministradas después del accidente. Esta variable puede tomar los siguientes valores.
+
+```{r 17METHOD_OF_DRUG_DETERMINATION}
+#Valores existentes
+describe(df$METHOD_OF_DRUG_DETERMINATION)
+
+# Reordenación de variables
+df$METHOD_OF_DRUG_DETERMINATION = factor(df$METHOD_OF_DRUG_DETERMINATION, levels = c("NoRep", "Other", "ET", "B", "DRT"))
+
+# Regresión logistica
+mylogit17 = glm(INJURY_SEVERITY~METHOD_OF_DRUG_DETERMINATION , data = df, family = "binomial")
+summary(mylogit17)
+
+
+ggplot(df, aes(METHOD_OF_DRUG_DETERMINATION,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$METHOD_OF_DRUG_DETERMINATION)
+```
+El test de orina puede ser muy efectivo, porque el número de personas a las que se les ha hecho el test de orina que han sobrevivido, es muy alto.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `DRUG_TEST_TYPE`
+
+Esta variable hace referencia al tipo de test que se llevó a cabo en un laboratorio para obtener información sobre la presencia de droga. Esta variable puede tomar los siguientes valores.
+
+```{r 18DRUG_TEST_TYPE}
+# Valores existentes
+describe(df$DRUG_TEST_TYPE)
+
+# Reordenación de variables
+df$DRUG_TEST_TYPE = factor(df$DRUG_TEST_TYPE, levels = (c("notest","Btest","Utest","Xtest", "BUtest")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit18 = glm(INJURY_SEVERITY~DRUG_TEST_TYPE, data = df, family = "binomial")
+summary(mylogit18)
+
+
+ggplot(df, aes(DRUG_TEST_TYPE,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+
+```
+Según los p-valores, las categorías más relevantes respecto de la variable respuesta son:"Utest" y "Xtest"
+
+
+```{r}
+#realizamos un Chi sq test para ver si la variable es representativa respecto a la variable respuesta, en principio no lo es
+table(df$INJURY_SEVERITY,df$DRUG_TEST_TYPE)
+chisq.test(df$INJURY_SEVERITY,df$DRUG_TEST_TYPE)
+
+```
+
+***************************************************************************************************************************************************
+
+### Análisis `DRUG_TEST_RESULTS_.1_of_3.`
+
+Esta variable hace referencia al resultado del test de drogas que se llevo sobre la persona involucrada en el accidente.
+
+```{r 19DRUG_TEST_RESULTS_.1_of_3.}
+# Valores existentes
+describe(df$DRUG_TEST_RESULTS_.1_of_3.)
+unique(df$DRUG_TEST_RESULTS_1_of_3)
+```
+Como se puede observar, esta variable toma valores enteros entre 0 y 999. Los valores que pueden tomar estas variables vienen resumidos en la siguiente tabla:
+
+| Valor | Descripción | Valor reducido |
+|-------|----------------------|---------------------------------------------------|
+000 | Not Tested For Drugs | Unknown |
+001 | No Drugs Reported  | No_Drug |
+100-295 | Narcotic Drug | Narcotic |
+300-395 | Depressant Drug | Depressant |
+400-495 | Stimulant Drug | Stimulant |
+500-595 | Hallucinogen Drug | Hallucinogen |
+600-695 | Cannabinoid Drug | Cannabinoid |
+700-795 | Phencyclidine (PCP) | Phencyclidine| 
+800-895 | Anabolic Steroid |  Anabolic_Steroid |
+900-995 | Inhalant Drug | Inhalant |
+997 | Tested For Drugs, Results Unknown  | Unknown |
+998 |Tested For Drugs, Drugs Found, Type Unknown |  Other_Drug |
+999 |Unknown If Tested for Drug | Unknown |
+
+
+```{r }
+
+ggplot(df, aes(INJURY_SEVERITY,DRUG_TEST_RESULTS_.1_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=DRUG_TEST_RESULTS_.1_of_3., colour=INJURY_SEVERITY)) +
+    geom_density() +
+    ggtitle("1º drug test results vs injury")
+
+
+# Comparación con otras variables
+
+p1e <- ggplot(df, aes( PERSON_TYPE, DRUG_TEST_RESULTS_.1_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+  
+p2e <- ggplot(df, aes( SEX, DRUG_TEST_RESULTS_.1_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+
+p3e <- ggplot(df, aes(RESTRAINT_SYSTEM.USE , DRUG_TEST_RESULTS_.1_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))
+
+p4e <- ggplot(df, aes(HISPANIC_ORIGIN,DRUG_TEST_RESULTS_.1_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+p5e <- ggplot(df, aes(RACE,DRUG_TEST_RESULTS_.1_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+
+theme_set(theme_cowplot(font_size=12))
+plot_grid(p1e,p2e,p3e,p4e,p5e,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 2)
+
+plot_grid(p4e,p5e,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 1)
+
+# Histograma para ver el número de valores faltantes
+
+hist(df$DRUG_TEST_RESULTS_.1_of_3.)
+length(which(df$DRUG_TEST_RESULTS_.1_of_3.==0))
+
+```
+
+
+```{r}
+#DRUG_TEST_RESULTS_.1_of_3.
+#En el histograma inicial vemos que tenemos gran cantidad de resultados superiores a 900
+#Agrupamos los valores para una clasificación negativo en resultado de droga, positivo y 999 - NA (como nos indica la tabla de codificación de los datos)
+z = cut(df$DRUG_TEST_RESULTS_.1_of_3., c(min(df$DRUG_TEST_RESULTS_.1_of_3.) - 1, 0.1, 998.9, max(df$DRUG_TEST_RESULTS_.1_of_3.)))
+table(z)
+#comparamos los resulatdos con el método de detección de la droga en el caso del valor 999 y observamos que 15804 de #los valores no tienen identificado ningún tipo de metodo. Consideramos como NA los valores identificados
+dr1 = df %>% 
+  dplyr::select(DRUG_TEST_RESULTS_.1_of_3.,DRUG_TEST_TYPE) %>%
+  filter(DRUG_TEST_RESULTS_.1_of_3.==999) %>%
+  group_by(DRUG_TEST_TYPE) %>%
+  dplyr::summarise(n= n()) %>% arrange(desc(n))
+table(dr1)
+
+#Consideramos el valor 999 como un NA
+df$DRUG_TEST_RESULTS_.1_of_3.[which(df$DRUG_TEST_RESULTS_.1_of_3. == 999)] <-NA 
+summary(df$DRUG_TEST_RESULTS_.1_of_3.)
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `DRUG_TEST_TYPE_.2_of_3.`
+
+Esta variable hace referencia al tipo de test que se llevó a cabo para obtener información sobre la presencia de droga.
+
+```{r 20DRUG_TEST_TYPE_.2_of_3.}
+# Valores existentes
+describe(df$DRUG_TEST_TYPE_.2_of_3.)
+
+# Reordenación de variables
+df$DRUG_TEST_TYPE_.2_of_3. = factor(df$DRUG_TEST_TYPE_.2_of_3., levels = (c("notest","Btest", "Utest", "BUtest", "Xtest")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit20 = glm(INJURY_SEVERITY~DRUG_TEST_TYPE_.2_of_3., data = df, family = "binomial")
+summary(mylogit20)
+
+
+ggplot(df, aes(DRUG_TEST_TYPE_.2_of_3.,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+table(df$INJURY_SEVERITY, df$DRUG_TEST_TYPE_.2_of_3.)
+
+```
+Si el 88,4% de los implicados en los accidentes no han pasado ningún segundo test de drogas por lo tanto se desconoce si estaba bajo la influencia de las drogas y será considerado NA, se propone la eliminación de la variable del estudio por no representativa para nuestra pregunta.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `DRUG_TEST_RESULTS_.2_of_3.`
+
+Esta variable hace referencia al resultado del test de drogas que se llevo sobre la persona involucrada en el accidente.
+
+```{r 21DRUG_TEST_RESULTS_.2_of_3.}
+# Valores existentes
+describe(df$DRUG_TEST_RESULTS_.2_of_3.)
+
+
+ggplot(df, aes(INJURY_SEVERITY,DRUG_TEST_RESULTS_.2_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=DRUG_TEST_RESULTS_.2_of_3., colour=INJURY_SEVERITY)) +
+    geom_density() +
+    ggtitle("2º drug test results vs injury")
+
+
+# Comparación con otras variables
+
+
+p1d <- ggplot(df, aes( PERSON_TYPE, DRUG_TEST_RESULTS_.2_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+    
+
+p2d <- ggplot(df, aes( SEX, DRUG_TEST_RESULTS_.2_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+
+
+p3d <- ggplot(df, aes(RESTRAINT_SYSTEM.USE , DRUG_TEST_RESULTS_.2_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))
+
+
+p4d <- ggplot(df, aes(HISPANIC_ORIGIN,DRUG_TEST_RESULTS_.2_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+p5d <- ggplot(df, aes(RACE,DRUG_TEST_RESULTS_.2_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+
+theme_set(theme_cowplot(font_size=12))
+plot_grid(p1d,p2d,p3d,p4d,p5d,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 2)
+
+plot_grid(p4d,p5d,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 1)
+
+# Histograma para ver el número de valores faltantes
+
+hist(df$DRUG_TEST_RESULTS_.2_of_3.)
+length(which(df$DRUG_TEST_RESULTS_.2_of_3.==0))
+
+#Relación entre el 2º test y los resultados del test
+
+ggplot(df, aes(DRUG_TEST_TYPE_.2_of_3. ,fill=DRUG_TEST_RESULTS_.2_of_3.) ) + 
+  geom_bar(stat="count") + 
+  theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1), legend.position = "bottom")
+
+```
+La variable muestra los resultados de los segundos test de drogas, que en este caso, como hemos visto anteriormente no se han realizado en un 88.4%. Siendo un 9,15% NA's. Además 89.270 de los resultados tienen un valor igual a cero, mientras que los no testados son exactamente 89.270. Por lo tanto los datos serían relevantes sólo para el resto 2,7% de implicados en accidentes.
+
+```{r}
+#DRUG_TEST_RESULTS_.2_of_3.
+#En el histograma inicial vemos que tenemos gran cantidad de resultados superiores a 900
+#Agrupamos los valores para una clasificación negativo en resultado de droga, positivo y 999 -  NA
+zz = cut(df$DRUG_TEST_RESULTS_.2_of_3., c(min(df$DRUG_TEST_RESULTS_.1_of_3.) - 1, 0.1, 998.9, max(df$DRUG_TEST_RESULTS_.2_of_3.)))
+table(zz)
+
+#comparamos los resulatdos con el método de detección de la droga en el caso del valor 999 y observamos que 9116 de #los valores no tienen identificado ningún tipo de metodo. No obstante hay varios valores con metodo identificado
+dr2 = df %>% 
+  dplyr::select(DRUG_TEST_RESULTS_.2_of_3.,DRUG_TEST_TYPE) %>%
+  filter(DRUG_TEST_RESULTS_.2_of_3.==999) %>%
+  group_by(DRUG_TEST_TYPE) %>%
+  dplyr::summarise(n= n()) %>% arrange(desc(n))
+table(dr2)
+
+#consideramos los valores iguales a 999 como NA
+df$DRUG_TEST_RESULTS_.2_of_3.[which(df$DRUG_TEST_RESULTS_.1_of_3. == 999)] <-NA 
+summary(df$DRUG_TEST_RESULTS_.2_of_3.)
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `DRUG_TEST_TYPE_.3_of_3.`
+
+Esta variable hace referencia al tipo de test que se llevó a cabo para obtener información sobre la presencia de droga.
+
+```{r 22drug test type 2}
+# Valores existentes
+describe(df$DRUG_TEST_TYPE_.3_of_3.)
+
+# Reordenación de variables
+df$DRUG_TEST_TYPE_.3_of_3. = factor(df$DRUG_TEST_TYPE_.3_of_3., levels = (c("notest","Btest","Utest","BUtest","Xtest")))
+
+# Regresión logistica con respecto a grado de afecto
+mylogit22 = glm(INJURY_SEVERITY~DRUG_TEST_TYPE_.3_of_3. , data = df, family = "binomial")
+summary(mylogit22)
+
+ggplot(df, aes(DRUG_TEST_TYPE_.3_of_3.,fill=INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `DRUG_TEST_RESULTS_.3_of_3.`
+
+Esta variable hace referencia al resultado del test de drogas que se llevo sobre la persona involucrada en el accidente.
+
+```{r 23DRUG_TEST_RESULTS_.3_of_3.}
+# Valores existentes
+describe(df$DRUG_TEST_RESULTS_.3_of_3.)
+
+
+ggplot(df, aes(INJURY_SEVERITY,DRUG_TEST_RESULTS_.3_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=DRUG_TEST_RESULTS_.2_of_3., colour=INJURY_SEVERITY)) +
+    geom_density() +
+    ggtitle("3º drug test results vs injury")
+
+
+# Comparación con otras variables
+
+p1d <- ggplot(df, aes( PERSON_TYPE, DRUG_TEST_RESULTS_.3_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+    
+
+p2d <- ggplot(df, aes( SEX, DRUG_TEST_RESULTS_.3_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6)) 
+
+
+p3d <- ggplot(df, aes(RESTRAINT_SYSTEM.USE , DRUG_TEST_RESULTS_.3_of_3.)) +
+    geom_point() + geom_boxplot()  +  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=6))
+
+
+p4d <- ggplot(df, aes(HISPANIC_ORIGIN,DRUG_TEST_RESULTS_.3_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+p5d <- ggplot(df, aes(RACE,DRUG_TEST_RESULTS_.3_of_3.) ) + geom_point() + geom_boxplot()  + theme(axis.text.x = element_text(size=5,angle = 90, hjust = 1))
+
+
+theme_set(theme_cowplot(font_size=12))
+plot_grid(p1d,p2d,p3d,p4d,p5d,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 2)
+
+plot_grid(p4d,p5d,
+          rel_widths=c(25,25),rel_heights=c(80,50),  label_size = 10,
+          ncol = 2, nrow = 1)
+
+# Histograma para ver el número de valores faltantes
+
+hist(df$DRUG_TEST_RESULTS_.3_of_3.)
+length(which(df$DRUG_TEST_RESULTS_.3_of_3.==0))
+
+#Relación entre el 3º test y los resultados del test
+
+ggplot(df, aes(DRUG_TEST_TYPE_.3_of_3. ,fill=DRUG_TEST_RESULTS_.3_of_3.) ) + 
+  geom_bar(stat="count") + 
+  theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1), legend.position = "bottom")
+
+```
+
+
+```{r}
+#DRUG_TEST_RESULTS_.3_of_3.
+#En el histograma inicial vemos que tenemos gran cantidad de resultados superiores a 900
+#Agrupamos los valores para una clasificación negativo en resultado de droga, positivo y 999 - NA
+zzz = cut(df$DRUG_TEST_RESULTS_.3_of_3., c(min(df$DRUG_TEST_RESULTS_.1_of_3.) - 1, 0.1, 998.9, max(df$DRUG_TEST_RESULTS_.3_of_3.)))
+table(zzz)
+
+#comparamos los resulatdos con el método de detección de la droga en el caso del valor 999 y observamos que 9115 de los valores no tienen identificado ningún tipo de metodo. No obstante hay varios valores con metodo identificado
+dr3 = df %>% 
+  dplyr::select(DRUG_TEST_RESULTS_.3_of_3.,DRUG_TEST_TYPE) %>%
+  filter(DRUG_TEST_RESULTS_.3_of_3.==999) %>%
+  group_by(DRUG_TEST_TYPE) %>%
+  dplyr::summarise(n= n()) %>% arrange(desc(n))
+table(dr3)
+
+#consideramos los valores iguales a 999 como NA
+df$DRUG_TEST_RESULTS_.3_of_3.[which(df$DRUG_TEST_RESULTS_.1_of_3. == 999)] <-NA 
+table(df$INJURY_SEVERITY,df$DRUG_TEST_RESULTS_.3_of_3.)
+```
+
+
+```{r}
+#renombrar y unificar las variables DRUG_TEST_RESULTS 1, 2 y 3 en una única variable positivo vs negativo en drogas
+
+df$DRUG_TEST_RESULTS_.1_of_3.[which((df$DRUG_TEST_RESULTS_.1_of_3. > 0) | (df$DRUG_TEST_RESULTS_.2_of_3. > 0) | (df$DRUG_TEST_RESULTS_.3_of_3. > 0))] <-"Posd" 
+df$DRUG_TEST_RESULTS_.1_of_3.[which((df$DRUG_TEST_RESULTS_.1_of_3. == 0) & (df$DRUG_TEST_RESULTS_.2_of_3. == 0) & (df$DRUG_TEST_RESULTS_.3_of_3. == 0))] <-"Negd"
+df$DRUG_TEST_RESULTS <- as.factor(df$DRUG_TEST_RESULTS_.1_of_3.)
+
+str(df$DRUG_TEST_RESULTS)
+table(df$INJURY_SEVERITY,df$DRUG_TEST_RESULTS)
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$DRUG_TEST_RESULTS)
+chisq.test(df$ALCOHOL_TEST_RESULT1, df$DRUG_TEST_RESULTS)
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `HISPANIC_ORIGIN`
+
+Esta variable recoge la raza de la persona a partir de su certificado de defunción. 
+
+```{r 24HISPANIC_ORIGIN }
+# Valores existentes
+describe(df$HISPANIC_ORIGIN)
+summary(df$HISPANIC_ORIGIN)
+
+# Reordenación de variables
+df$HISPANIC_ORIGIN = factor(df$HISPANIC_ORIGIN, levels = (c("Non-Hispanic", "Mexican", "Hisp - Unknown", "Puerto_Rican", "CeSouAme", "Cuban", "European_Spanish")))
+
+mylogit23 = glm(INJURY_SEVERITY~HISPANIC_ORIGIN , data = df, family = "binomial")
+summary(mylogit23)
+
+```
+
+Ninguna de las caracteristicas de la variable son representativas para nuestra variable resultado.
+
+
+```{r}
+#redimensionamiento de los componentes de la variable
+df$HISPANIC_ORIGIN = mapvalues(df$HISPANIC_ORIGIN, from = c("CeSouAme", "Hisp - Unknown", "Cuban", "Mexican", "Puerto_Rican", "European_Spanish", "Non-Hispanic"), to = c("Hisp", "Hisp","Hisp","Hisp","Hisp","Hisp","Non-Hispanic"),warn_missing=F)
+
+describe(df$HISPANIC_ORIGIN)
+
+mylogit232 = glm(INJURY_SEVERITY~HISPANIC_ORIGIN , data = df, family = "binomial")
+summary(mylogit232)
+
+# Atención la regresión entre estas dos variables no convergen -> Correlación
+
+summary(df[which(!is.na(df$HISPANIC_ORIGIN)),]$INJURY_SEVERITY)
+
+# IMPORTANTE: Todas las entradas en Hispanic_Origin son para gente que murieron. -> 23811 filas 
+numNotNA <- nrow(df[which(!is.na(df$HISPANIC_ORIGIN)),]) / nrow(df) # ünicamente tiene el 23,58 % de datos diferente a NA
+
+summary(df[which(!is.na(df$HISPANIC_ORIGIN)),])
+# Por tanto, está variable no nos aporta información con respecto a ninguna otra.
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `TAKEN_TO_HOSPITAL`
+
+Esta variable identifica el modo de transporte al hospital o similares proporcionado a la persona involucrada en el accidente.
+
+0 No (Use this code for victims who are dead on the scene and for those who are not taken (or do not go) to a treatment facility or hospital.)
+1 Yes (Use this code for victims who are taken to treatment by EMS, who go to a treatment facility on their own, or who die en route.)
+9 Unknown (Use this code when it is unknown whether or not this victim was taken (or went) to a hospital/treatment facility.)
+
+```{r 25TAKEN_TO_HOSPITAL}
+describe(df$TAKEN_TO_HOSPITAL)
+
+df$TAKEN_TO_HOSPITAL[which(df$TAKEN_TO_HOSPITAL == "Unknown")] <-NA
+df$TAKEN_TO_HOSPITAL = factor(df$TAKEN_TO_HOSPITAL, levels = (c("Yes","No")))
+
+mylogit25 = glm(INJURY_SEVERITY~TAKEN_TO_HOSPITAL , data = df, family = "binomial")
+summary(mylogit25)
+
+
+# Gráfica que muestra el número de accidentes que han sido transportados al hospital
+ggplot(data=df, aes(x=TAKEN_TO_HOSPITAL, fill=INJURY_SEVERITY)) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=6,angle = 90, hjust = 1))
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY,df$TAKEN_TO_HOSPITAL)
+
+```
+
+Los datos muestran que ha habido un mayor número de implicados en accidentes que han sido llevados al hospital, de los cuales han sobrevivido un mayor número que los que no han sido llevados al hospital. Además, la regresión logistica nos indica que la variable es representativa para nuestra pregunta.
+
+
+### Análisis `RELATED_FACTOR_.1.`
+
+Estas variables recogen factores relacionados con los ocupantes de un vehículo a motor diferentes conductores y las personas no situadas en vehículos a motor como recogió el investigador del accidente.
+
+```{r 26RELATED_FACTOR_.1.}
+# Obtenemos la información resumen
+summary(df$RELATED_FACTOR_.1.)
+
+#Número de registros que no aplican
+length(which(df$RELATED_FACTOR_.1.=="NoAp"))
+
+# Histograma para obtener visualizar la distribución de los datos
+plot(df$RELATED_FACTOR_.1., las=2, main="Distribución de los factores tipo 1")
+
+
+#Histograma con la distribución de los factores sin "NOAp"
+df1 = df %>% 
+   dplyr::select(RELATED_FACTOR_.1.) %>%
+  filter(RELATED_FACTOR_.1.!="NoAp")
+plot(df1$RELATED_FACTOR_.1., las=2, main="Distribución de los factores tipo 1 sin 'NoAp'")
+
+#Histograma con la distribución de los factores sin "NOAp"
+df1 = df %>% 
+  dplyr::select(RELATED_FACTOR_.1.,INJURY_SEVERITY) %>%
+  filter(RELATED_FACTOR_.1.!="NoAp")
+plot(df1$RELATED_FACTOR_.1., las=2, main="Distribución de los factores tipo 1 sin 'NoAp'")
+
+#Grafica del número de accidentes por tipo de factor 1 sin "NoAp"
+
+ggplot(data=df1, aes(x=RELATED_FACTOR_.1., fill=INJURY_SEVERITY)) + 
+  geom_bar(stat="count") + 
+  theme(axis.text.x = element_text(size=6,angle = 90, hjust = 1)) + 
+          ggtitle("Número de accidentes \n por tipo de factor 1 sin 'NoAp'")
+```
+
+Al analizar los datos vemos que  los principales factores mencionados y que además tienen una incidencia de fallecimiento muy alta es F02 y F01 que hacen referencia a cruzar la calle por sitios indebidos `Improper_Crossing_or_Roadway_or_Intersection` o andar/cabalgar/jugar/trabajar en la calzada `Walking/Riding_with_or_Against_Traffic_Playing_Working_Sitting_Lying_Standing_etc._in_Roadway`.
+
+
+
+```{r}
+
+# Regresión logistica con respecto al factor relacionado
+mylogit26 = glm(INJURY_SEVERITY~RELATED_FACTOR_.1., data = df, family = "binomial")
+summary(mylogit26)
+```
+En vista de la gran dispersión vamos a reclasificar los componentes de las siguientes tres variables por criterios cualitativos con objetivo reducir la heterogeneidad.
+
+| VAR | DESCRIPCIÓN | CATEGORÍA |
+| 01 | Walking/Riding_with_or_Against_Traffic_Playing... | Break Traffic Laws |
+| 02 | Improper_Crossing_or_Roadway_or_Intersection | Break Traffic Laws |
+| 03 | Darting_Stumbling_or_Running_into_Road  | Distractions |
+| 04 | Other_Physical_Impairment | Physical Issues |
+| 05 | Non-Motorist_Pushing_a_Vehicle | Others |
+| 06 | Opening_Vehicle_Closure_into_Moving_Traffic_or... | Mechanical Issues |
+| 07 | Failure_to_Yield_Right_of_Way | Break Traffic Laws |
+| 08 | Locked_Wheel | Mechanical Issues |
+| 09 | Not_Visible | Physical Issues |
+| 10 | Traveling_on_Prohibited_Trafficway | Break Traffic Laws |
+| 11 | Failure_to_Obey_Traffic_Signs_Traffic_Control... | Break Traffic Laws |
+| 12 | Impaired_Due_to_Previous_Injury | Physical Issues |
+| 13 | Emotional_(e.g._Depression_Angry_Disputed) | Mental Issues |
+| 14 | Inattentive_(talking_Eating_etc) | Distractions |
+| 15 | Failure_to_Keep_in_Proper_Lane | Break Traffic Laws |
+| 16 | Improper_or_Erratic_Lane_Changing | Break Traffic Laws |
+| 17 | Blind | Physical Issues |
+| 18 | Restricted_to_Wheelchair | Physical Issues |
+| 19 | Mother_of_Dead_Fetus | Others |
+| 20 | Interfering_with_Driver | Distractions |
+| 21 | Driving_on_Wrong_Side_of_Road | Break Traffic Laws |
+| 22 | Making_Improper_Turn | Break Traffic Laws |
+| 23 | Getting_Off/Out_of_or_On/In_to_Moving_Transport | Break Traffic Laws |
+| 24 | Operating_without_Required_Equipment | Mechanical Issues |
+| 25 | Walking_With_Cane_or_Crutches | Physical Issues |
+| 26 | Passing_with_Insufficient_Distance_or_Inadequate | Break Traffic Laws |
+| 27 | Getting_Off/Out_of_or_On/In_to_Non-Moving_Transp... | Break Traffic Laws |
+| 28 | Failing_to_Dim_Lights_or_Have_Lights_on_When_Req... | Break Traffic Laws |
+| 29 | Construction/Maintenance/Utility_Worker | Others |
+| 30 | Operating_the_Vehicle_in_Other_Erratic_Reckless... | Break Traffic Laws |
+| 31 | Motorized_Wheelchair_Rider | Physical Issues |
+| 32 | Passed_OutBlackout | Physical Issues |
+| 33 | Illegal_Driving_on_Road_Shoulder_in_Ditch_on_Sidew... | Break Traffic Laws |
+| 34 | Mentally_Challenged | Mental Issues |
+| 35 | Pedestrian_NON-MOTOR_VEHICLE_OPERATOR_RELATED_FACTORS: | Others |
+| 36 | Vision_obscured_by_overcorrecting | Physical Issues |
+| 37 | Operator_Inexperience | Others |
+| 38 | Making_Improper_Entry_to_or_Exit_from_Trafficway | Break Traffic Laws |
+| 39 | Motor_Vehicle_(including_load) | Obstacles |
+| 40 | Following_Improperly | Break Traffic Laws |
+| 41 | Passing_on_Wrong_Side | Break Traffic Laws |
+| 42 | Head_Restraints_AVOIDING_SWERVING_OR_SLIDING_DUE_TO | Mechanical Issues |
+| 43 | Slippery_or_Loose_Surface | Others |
+| 44 | Reflected_Glare_Bright_Sunlight | Physical Issues |
+| 45 | Failure_to_Observe_Warnings_or_Instructions_on_Vehicles... | Break Traffic Laws |
+| 46 | Driving_too_Fast_for_Conditions_or_in_Excess_of_Posted_Speed_Limit | Break Traffic Laws |
+| 47 | Parked_Vehicle | Obstacles |
+| 48 | Trees_Crops_Vegetation | Obstacles |
+| 49 | Vehicle_in_Road | Obstacles |
+| 50 | Rain_Snow_Fog_Smoke_Sand_Dust | Others |
+| 51 | Curve_Hill_Or_Other_Design_Features_(including_Traffic_sign... | Break Traffic Laws |
+| 52 | Animals_in_Road | Obstacles |
+| 53 | Ruts_Holes_Bumps_in_Road | Obstacles |
+| 54 | Building_Billboard_or_Other_Structures | Obstacles |
+
+
+
+```{r factor 1}
+#redimensionamiento de los componentes de la variable
+df$RELATED_FACTOR_.1. = mapvalues(df$RELATED_FACTOR_.1., from = c("NoAp","F01", "F02", "F03","F04","F05", "F06","F07","F08", "F09", "F10", "F11", "F12", "F13","F14","F15","F16","F17","F18","F19","F20","F21", "F22", "F23","F24","F25", "F26","F27","F28","F29","F30","F31", "F32", "F33","F34","F35","F36","F37","F38","F39","F40","F41","F42", "F43"), 
+                                  to = c("NoAp","Break Traffic Laws", "Break Traffic Laws", "Distractions","Physical Issues","Others", "Mechanical Issues","Break Traffic Laws","Mechanical Issues", "Physical Issues", "Break Traffic Laws", "Break Traffic Laws", "Physical Issues", "Mental Issues","Distractions","Break Traffic Laws","Break Traffic Laws","Physical Issues","Physical Issues","Others","Distractions","Break Traffic Laws", "Break Traffic Laws", "Break Traffic Laws","Mechanical Issues","Physical Issues", "Break Traffic Laws","Break Traffic Laws","Break Traffic Laws","Others","Break Traffic Laws","Physical Issues", "Physical Issues", "Break Traffic Laws","Mental Issues","Others","Physical Issues","Others","Break Traffic Laws","Obstacles","Break Traffic Laws","Break Traffic Laws","Mechanical Issues", "Others"),warn_missing=F)
+
+describe(df$RELATED_FACTOR_.1.)
+
+#Histograma con la distribución de los factores sin "NOAp"
+df11 = df %>% 
+  dplyr::select(RELATED_FACTOR_.1.,INJURY_SEVERITY) %>%
+  filter(RELATED_FACTOR_.1.!="NoAp")
+plot(df11$RELATED_FACTOR_.1., las=2, main="Distribución de los factores tipo 1 sin 'NoAp'")
+
+# Reordenación de variables
+df$RELATED_FACTOR_.1. = factor(df$RELATED_FACTOR_.1., levels = (c("NoAp", "Traffic Laws", "Physical Issues", "Distractions", "Others", "Mechanical Issues", "Mental Issues", "Obstacles")))
+
+mylogit262 = glm(INJURY_SEVERITY~RELATED_FACTOR_.1., data = df, family = "binomial")
+summary(mylogit262)
+
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.1.)
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `RELATED_FACTOR_.2.`
+
+```{r 27RELATED_FACTOR_.2.}
+# Obtenemos la información resumen
+summary(df$RELATED_FACTOR_.2.)
+
+#Número de registros que no aplican
+length(which(df$RELATED_FACTOR_.2.=="NoAp2"))
+
+# Histograma para obtener visualizar la distribución de los datos
+plot(df$RELATED_FACTOR_.2., las=2, main="Distribución de los factores tipo 2")
+
+
+#Histograma con la distribución de los factores sin "NOAp"
+df2 = df %>% 
+  dplyr::select(RELATED_FACTOR_.2.,INJURY_SEVERITY) %>%
+  filter(RELATED_FACTOR_.2.!="NoAp2")
+plot(df2$RELATED_FACTOR_.2., las=2, main="Distribución de los factores tipo 2 sin 'NoAp'")
+
+
+#Grafica del número de accidentes por tipo de factor 1 sin "NoAp"
+
+ggplot(data=df2, aes(x=RELATED_FACTOR_.2., fill=INJURY_SEVERITY)) + 
+  geom_bar(stat="count") + 
+  theme(axis.text.x = element_text(size=6,angle = 90, hjust = 1)) + 
+  ggtitle("Número de accidentes \n por tipo de factor 1 sin 'NoAp'")
+
+```
+Vemos que más de 99000 sujetos no tienen asignado ningún factor de tipo 2 y sin tomar en cuenta los valores NA. De los que si tienen asignado una valor de tipo 2, presentan mayores valores los E07 seguido por E02 y E01, lo que corresponde con la cesión del paso `Failure_to_Yield_Right_of_Way` seguido por cruzar la calle por sitios indebidos (`Improper_Crossing_or_Roadway_or_Intersection` - factor destacado también en el tipo 1) y saltar, tropezar o correr en la calle `Darting_Stumbling_or_Running_into_Road`.
+
+
+```{r}
+# Filtramos por NoAp en factor 1
+df3 = df %>% 
+  dplyr::select(RELATED_FACTOR_.2.,RELATED_FACTOR_.1.) %>%
+  filter(RELATED_FACTOR_.1.=="NoAp")
+plot(df3$RELATED_FACTOR_.2., las=2, main="Distribución de los factores tipo 2 \n que son 'NoAp' en el factor 1")
+
+# Filtramos por datos que no son NoAp en factor 1
+df4 = df %>% 
+  dplyr::select(RELATED_FACTOR_.2.,RELATED_FACTOR_.1.) %>%
+  filter(RELATED_FACTOR_.1.!="NoAp")
+plot(df4$RELATED_FACTOR_.2., las=2, main="Distribución de los factores tipo 2 \n que NO son 'NoAp' en el factor 1")
+
+#Grafica del número de accidentes por tipo de factor 1 sin "NoAp"
+ggplot(data=df4, aes(x=RELATED_FACTOR_.2., fill=RELATED_FACTOR_.1.)) + 
+  geom_bar(stat="count") + 
+  theme(axis.text.x = element_text(size=6,angle = 90, hjust = 1)) + 
+  ggtitle("Número de accidentes \n por tipo de factor 2 sin 'NoAp' en factor 1")
+
+```
+
+```{r}
+# Regresión logistica con respecto a grado de afecto
+mylogit27 = glm(INJURY_SEVERITY~RELATED_FACTOR_.2., data = df, family = "binomial")
+summary(mylogit27)
+```
+
+No obstante nos interesa saber si los `Not_Applicable_-_Driver/None_-_All_Other_Persons`del primer factor tienen algún valor asignado en el segundo y al revés. Vemos que no todos "NoAp" del primer factor son "NoAp" a su vez en el segundo aunque sí la gran mayoría son "NoAp" en el segundo también. Por otro lado, del los datos que no son "NoAp" en el primer factor, destaca el E05 en el segundo `Non-Motorist_Pushing_a_Vehicle`, dato que es muy poco relevante en el primer factor.
+
+También hay que mencionar que el factor 1 y el factor 2 comparten la mayor parte de las categorias, 36 aparte de "NoAp" y NA. Aunque el factor 1 tiene 7 categoria que no se repite en factor 2 y este a su vez tiene 10 categorias que no se repiten en factor 1.
+
+
+
+```{r factor 2}
+#redimensionamiento de los componentes de la variable
+df$RELATED_FACTOR_.2. = mapvalues(df$RELATED_FACTOR_.2., from = c("NoAp2","E01", "E02", "E03","E04","E05","E06","E07","E09","E10","E11", "E12", "E13","E14","E15","E16","E17","E18","E19","E20","E21", "E22", "E23","E24","E25","E27","E28","E29","E30","E31", "E32", "E34","E35","E38","E39","E40","E42", "E44","E45", "E46","E47","E48","E49","E50","E51","E52","E53"), 
+                                  to = c("NoAp2","Break Traffic Laws", "Break Traffic Laws", "Distractions","Physical Issues","Others","Mechanical Issues","Break Traffic Laws","Physical Issues","Break Traffic Laws","Break Traffic Laws", "Physical Issues", "Mental Issues","Distractions","Break Traffic Laws","Break Traffic Laws","Physical Issues","Physical Issues","Others","Distractions","Break Traffic Laws", "Break Traffic Laws", "Break Traffic Laws","Mechanical Issues","Physical Issues","Break Traffic Laws","Break Traffic Laws","Others","Break Traffic Laws","Physical Issues", "Physical Issues", "Mental Issues","Others","Break Traffic Laws","Obstacles","Break Traffic Laws","Mechanical Issues", "Physical Issues","Break Traffic Laws", "Break Traffic Laws","Obstacles","Obstacles","Obstacles","Others","Break Traffic Laws","Obstacles","Obstacles"),warn_missing=F)
+
+describe(df$RELATED_FACTOR_.2.)
+
+#Histograma con la distribución de los factores sin "NOAp"
+df21 = df %>% 
+  dplyr::select(RELATED_FACTOR_.2.,INJURY_SEVERITY) %>%
+  filter(RELATED_FACTOR_.2.!="NoAp2")
+plot(df21$RELATED_FACTOR_.2., las=2, main="Distribución de los factores tipo 2 sin 'NoAp'")
+
+# Reordenación de variables
+df$RELATED_FACTOR_.2. = factor(df$RELATED_FACTOR_.2., levels = (c("NoAp2", "Traffic Laws", "Distractions", "Physical Issues", "Mechanical Issues", "Mental Issues", "Obstacles", "Others")))
+
+mylogit272 = glm(INJURY_SEVERITY~RELATED_FACTOR_.2., data = df, family = "binomial")
+summary(mylogit272)
+
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.2.)
+
+```
+
+
+***************************************************************************************************************************************************
+
+### Análisis `RELATED_FACTOR_.3.`
+
+```{r 28RELATED_FACTOR_.3.}
+# Obtenemos la información resumen
+summary(df$RELATED_FACTOR_.3.)
+
+#Número de registros que no aplican
+length(which(df$RELATED_FACTOR_.3.=="NoAp3"))
+
+# Histograma para obtener visualizar la distribución de los datos
+plot(df$RELATED_FACTOR_.3., las=2, main="Distribución de los factores tipo 3")
+
+
+#Histograma con la distribución de los factores sin "NOAp"
+df5 = df %>% 
+  dplyr::select(RELATED_FACTOR_.3.,INJURY_SEVERITY) %>%
+  filter(RELATED_FACTOR_.3.!="NoAp3")
+plot(df5$RELATED_FACTOR_.3., las=2, main="Distribución de los factores tipo 3 sin 'NoAp'")
+
+
+#Grafica del número de accidentes por tipo de factor 3 sin "NoAp"
+
+ggplot(data=df5, aes(x=RELATED_FACTOR_.3., fill=INJURY_SEVERITY)) + geom_bar(stat="count") + theme(axis.text.x = element_text(size=6,angle = 90, hjust = 1))
+
+```
+Al analizar el factor de tipo 3 vemos que la variable `Not_Applicable_-_Driver/None_-_All_Other_Persons` o "NoAp" tiene un valor de 100362 registros lo que representa un 99.4% del total de valores. Aún así, el 0.6% del que restamos 265 de NA's se distribuye en 33 categorias, de las cuales casi todas son comunes con el factor 1, cuatro son comunes unicamente con el factor 2 y una variables es única para el factor 3, `Building_Billboard_or_Other_Structures`. Quitando los "NoAp", la caracteristica más representativa es la G07, o sea `Failure_to_Yield_Right_of_Way` coincidiendo con la caracteristica más representativa en el segundo factor.
+
+
+```{r factor 3_}
+#redimensionamiento de los componentes de la variable
+df$RELATED_FACTOR_.3. = mapvalues(df$RELATED_FACTOR_.3., from = c("NoAp3","G01", "G02","G03","G04","G05","G07","G09","G10","G11", "G12", "G13","G14","G15","G16","G17","G18","G21", "G22", "G23","G24","G25","G27","G32", "G34","G35","G39", "G44", "G46","G47","G50","G54"), 
+                                  to = c("NoAp3","Break Traffic Laws", "Break Traffic Laws", "Distractions","Physical Issues","Others","Break Traffic Laws","Physical Issues","Break Traffic Laws","Break Traffic Laws", "Physical Issues", "Mental Issues","Distractions","Break Traffic Laws","Break Traffic Laws","Physical Issues","Physical Issues","Break Traffic Laws", "Break Traffic Laws", "Break Traffic Laws","Mechanical Issues","Physical Issues","Break Traffic Laws","Physical Issues", "Mental Issues","Others","Obstacles", "Physical Issues", "Break Traffic Laws","Obstacles","Others","Obstacles"),warn_missing=F)
+
+describe(df$RELATED_FACTOR_.3.)
+
+#Histograma con la distribución de los factores sin "NOAp"
+df31 = df %>% 
+  dplyr::select(RELATED_FACTOR_.3.,INJURY_SEVERITY) %>%
+  filter(RELATED_FACTOR_.3.!="NoAp3")
+plot(df31$RELATED_FACTOR_.3., las=2, main="Distribución de los factores tipo 3 sin 'NoAp'")
+
+# Reordenación de variables
+df$RELATED_FACTOR_.3. = factor(df$RELATED_FACTOR_.3., levels = (c("NoAp3", "Traffic Laws", "Physical Issues", "Distractions", "Others", "Obstacles", "Mechanical Issues", "Mental Issues")))
+
+mylogit282 = glm(INJURY_SEVERITY~RELATED_FACTOR_.3., data = df, family = "binomial")
+summary(mylogit282)
+
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.3.)
+
+```
+
+Tratamiento de las tres variables RELATED_FACTOR
+
+Al analizar los datos respecto a la variable respuesta, vemos que las categorias que tienen valores dentro de la variable son "Physiscal Issues" y "Distractions" siendo las demás poco representativas para la variable respuesta o nada representativa como "Traffic Laws" no habiendo ninguna correspondencia con "Survived" or "Died" sino que todo factor de tipo "Traffic Laws" está dentro de los casos desconocidos de "INJURY SEVERITY".
+Por lo tanto vamos a unificar las categorias dentro de cada una de las variables en: Physical Issues, Distractions y Others.
+
+```{r}
+
+#Factor 1
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.1.)
+
+df$RELATED_FACTOR_.1. = mapvalues(df$RELATED_FACTOR_.1., from = c("NoAp", "Traffic Laws", "Physical Issues", "Distractions", "Others", "Obstacles", "Mechanical Issues", "Mental Issues"), 
+                                  to = c("NoAp", "Others", "Physical Issues", "Distractions", "Others", "Others", "Others", "Others"),warn_missing=F)
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.1.)
+
+#reordenamos las categorias
+df$RELATED_FACTOR_.1. = factor(df$RELATED_FACTOR_.1., levels = (c("NoAp", "Physical Issues", "Distractions", "Others")))
+
+mylogit263 = glm(INJURY_SEVERITY~RELATED_FACTOR_.1., data = df, family = "binomial")
+summary(mylogit263)
+```
+
+
+```{r}
+
+#Factor 2
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.2.)
+
+df$RELATED_FACTOR_.2. = mapvalues(df$RELATED_FACTOR_.2., from = c("NoAp2", "Traffic Laws", "Physical Issues", "Distractions", "Others", "Obstacles", "Mechanical Issues", "Mental Issues"), 
+                                  to = c("NoAp2", "Others", "Physical Issues", "Distractions", "Others", "Others", "Others", "Others"),warn_missing=F)
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.2.)
+
+#reordenamos las categorias
+df$RELATED_FACTOR_.2. = factor(df$RELATED_FACTOR_.2., levels = (c("NoAp2", "Distractions", "Physical Issues",  "Others")))
+
+mylogit273 = glm(INJURY_SEVERITY~RELATED_FACTOR_.2., data = df, family = "binomial")
+summary(mylogit273)
+```
+
+
+```{r}
+#Factor 3
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.3.)
+
+df$RELATED_FACTOR_.3. = mapvalues(df$RELATED_FACTOR_.3., from = c("NoAp3", "Traffic Laws", "Physical Issues", "Distractions", "Others", "Obstacles", "Mechanical Issues", "Mental Issues"), 
+                                  to = c("NoAp3", "Others", "Physical Issues", "Distractions", "Others", "Others", "Others", "Others"),warn_missing=F)
+table(df$INJURY_SEVERITY,df$RELATED_FACTOR_.3.)
+
+#reordenamos las categorias
+df$RELATED_FACTOR_.3. = factor(df$RELATED_FACTOR_.3., levels = (c("NoAp3", "Physical Issues", "Distractions",   "Others")))
+
+mylogit283 = glm(INJURY_SEVERITY~RELATED_FACTOR_.3., data = df, family = "binomial")
+summary(mylogit283)
+
+
+```
+
+Al comparar los valores AIC de los tres factores que la relevancia va bajando en orden decreciente. En los primeros dos casos, los factores son representativos mientras que en el tercero unicamente "Others" es representativo dentro de la variable. Vamos a contruir una nueva variable compuesta de los tres factores que en caso de tener presente alguno de los factores relacionados se tome en cuenta y en caso contrario se considera NoAp.
+
+
+```{r}
+df$RELATED_FACTOR_.1. = mapvalues(df$RELATED_FACTOR_.1., from = c("NoAp", "Physical Issues", "Distractions", "Others"), 
+                                  to = c("NoAp", "Factor1", "Factor1", "Factor1"),warn_missing=F)
+
+df$RELATED_FACTOR_.2. = mapvalues(df$RELATED_FACTOR_.2., from = c("NoAp", "Physical Issues", "Distractions", "Others"), 
+                                  to = c("NoAp", "Factor2", "Factor2", "Factor2"),warn_missing=F)
+
+df$RELATED_FACTOR_.3. = mapvalues(df$RELATED_FACTOR_.3., from = c("NoAp3", "Physical Issues", "Distractions", "Others"), 
+                                  to = c("NoAp3", "Factor3", "Factor3", "Factor3"),warn_missing=F)
+
+df$factorC <- with(df, interaction(RELATED_FACTOR_.1.,RELATED_FACTOR_.2.,RELATED_FACTOR_.3.))
+df$factorC = mapvalues(df$factorC, from = c("NoAp.NoAp2.NoAp3", "Factor1.NoAp2.NoAp3", "Factor1.Factor2.NoAp3", "Factor1.Factor2.Factor3", "NoAp.Factor2.NoAp3","NoAp.NoAp2.Factor3", "Factor1.NoAp2.Factor3", "NoAp.Factor2.Factor3"), 
+                                  to = c("NoAp", "RelatedFactor", "RelatedFactor", "RelatedFactor", "RelatedFactor", "RelatedFactor", "RelatedFactor", "RelatedFactor"),warn_missing=F)
+describe(df$factorC)
+table(df$INJURY_SEVERITY,df$factorC)
+
+chisq.test(df$INJURY_SEVERITY,df$factorC)
+```
+En principiola presencia de factores relacionados con el accidente no es representativa para la variable.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `RACE`
+
+Esta variable recoge la raza de la persona a partir de su certificado de defunción. Esta variable puede tomar los siguientes valores.
+
+```{r 29RACE }
+# Valores existentes
+describe(df$RACE)
+summary(df$RACE)
+
+# Reordenación de variables
+df$RACE = factor(df$RACE, levels = (c("NoAp","W", "B","AmI", "Fil", "OAsian","Chi","Viet","AsianInd","Haw", "AsianPac",    "Kor", "Jap", "OInd", "MRace",   "Samoa")))
+
+mylogit29 = glm(INJURY_SEVERITY~RACE , data = df, family = "binomial")
+summary(mylogit29)
+
+table(df$INJURY_SEVERITY,df$RACE)
+
+#unificación de factores
+df$RACE = mapvalues(df$RACE, from = c("NoAp","W", "B","AmI", "Fil", "OAsian","Chi","Viet","AsianInd","Haw", "AsianPac", "Kor", "Jap", "OInd", "MRace",  "Samoa"), 
+                                  to = c("NoAp","W", "B","Other", "Other", "Other","Other","Other","Other","Other", "Other", "Other", "Other", "Other", "Other",  "Other"),warn_missing=F)
+
+table(df$INJURY_SEVERITY,df$RACE)
+
+# Reordenación de variables
+df$RACE = factor(df$RACE, levels = (c("NoAp","W", "B", "Other")))
+
+mylogit292 = glm(INJURY_SEVERITY~RACE , data = df, family = "binomial")
+summary(mylogit292)
+
+#estudio de la correlación
+chisq.test(df$INJURY_SEVERITY, df$RACE)
+
+
+
+summary(df[which(df$RACE =='NoAp'),])
+
+```
+La raza de los implicados en el accidente no es representativa para la supervivencia o no del sujeto.
+
+
+***************************************************************************************************************************************************
+
+### Análisis `INJURY_SEVERITY`: variable respuesta
+
+Siguiendo la informacion contenida en la documentacion asociada al dataset que estamos estudiando, la variable *injury_Severity* indica la severidad del daño sufrido por cada persona involucrada en el accidente (ocupante, peatón y ciclista) según el policía que redacto el informe. Los valores de esta variable se basan en la escala KABCO:
+
+| Código | Significado |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+“K” | Fatal injuries include deaths which occur within thirty days following injury in a motor vehicle crash.|
+“A” | Severe injuries include skull fractures, internal injuries, broken or distorted limbs, unconsciousness, severe lacerations, severe burns, and unable to leave the scene without assistance.|
+“B” |Moderate injuries include visible injuries such as a “lump” on the head, abrasions, and minor lacerations.|
+“C” |Minor injuries include hysteria, nausea, momentary unconsciousness, and complaint of pain without visible signs of injury.|
+“O”| No fatality or injury; property damage only|
+“Unk Severity”| Severity of injury unknown|
+
+No obstante, desde el principio se ha tomado la decisión de convertir esta variable en una binomial.
+
+```{r}
+
+describe(df$INJURY_SEVERITY)
+
+ggplot(df, aes(INJURY_SEVERITY) ) + geom_bar(stat="count") + theme(axis.text.x = element_text(angle = 90,size=6, hjust = 1))
+```
+
+
+# Estudio de valores faltantes
+
+```{r missing_values}
+
+aggr_pe <- aggr(df, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
+            labels=names(df), cex.axis=0.3, gap=0.1,
+            ylab=c("Histogram of missing data","Pattern"))
+
+data1<-df[,c(1:6)]
+aggr_pe <- aggr(data1, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
+            labels=names(data1), cex.axis=0.5, gap=0.1,
+            ylab=c("Histogram of missing data","Pattern"))
+
+data2<-df[,c(7:12)]
+aggr_pe2 <- aggr(data2, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
+            labels=names(data2), cex.axis=0.4, gap=0.1,
+            ylab=c("Histogram of missing data","Pattern"))
+
+data3<-df[,c(13:18)]
+aggr_pe3 <- aggr(data3, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
+            labels=names(data3), cex.axis=0.4, gap=0.1,
+            ylab=c("Histogram of missing data","Pattern"))
+
+data4<-df[,c(19:24)]
+aggr_pe4 <- aggr(data4, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
+            labels=names(data4), cex.axis=0.2, gap=0.1,
+            ylab=c("Histogram of missing data","Pattern"))
+
+data5<-df[,c(25:30)]
+aggr_pe5 <- aggr(data5, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE,
+            labels=names(data5), cex.axis=0.2, gap=0.1,
+            ylab=c("Histogram of missing data","Pattern"))
+```
+
+Por tanto se puede observar que los datos faltantes principalmente se encuentran en las variables: METHOD_ALCOHOL_DETERMINATION, POLICE.REPORTED_DRUG_INVOLVEMENT, DRUG_TEST_TYPE, , HISPANIC_ORIGIN AND RACE
+
+Se observa un patrón repetido entre las variables POLICE.REPORTED_DRUG_INVOLVEMENT , ALCOHOL_TEST_TYPE
+
+
+# Selección del dataframe - variables de interés 
+```{r}
+summary(df)
+
+#Establecemos las variables finales que entrarán en train y test (incluye la columna factorC y excluye las tres RELATED_FACTOR y las variables de drogas y alcohol unificadas)
+
+df2 = df[which(!is.na(df$SEX) & !is.na(df$AGE) & !is.na(df$INJURY_SEVERITY)) ,c("CASE_STATE", "AGE","SEX", "PERSON_TYPE", "SEATING_POSITION", "RESTRAINT_SYSTEM.USE", "AIR_BAG_AVAILABILITY.DEPLOYMENT", "EJECTION","EJECTION_PATH", "EXTRICATION", "NON_MOTORIST_LOCATION", "ALCOHOL_TEST_RESULT1", "DRUG_TEST_RESULTS", "TAKEN_TO_HOSPITAL", "factorC", "HISPANIC_ORIGIN", "RACE", "INJURY_SEVERITY")]
+
+summary(df2)
+```
+
+
+# Train y Test
+
+```{r}
+
+#Se establece una semilla y se divide en 70%-30% train-test
+
+set.seed(12345)
+train.index = sample(1:dim(df2)[1], dim(df2)[1] * 0.7)
+train.data = df2[train.index, ]
+test.data = df2[-train.index, ]
+
+dim(train.data)
+dim(test.data)
+
+```
+
+# Modelos
+
+
+## Modelo de regresión logistica (con las variables representativas)
+```{r}
+#Modelo de regresión logistica a aplicar sobre el grupo train establecido
+summary(train.data)
+
+modelo.logistico.fars = glm(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + PERSON_TYPE + SEATING_POSITION + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EJECTION_PATH + EXTRICATION + NON_MOTORIST_LOCATION + DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL + ALCOHOL_TEST_RESULT1 + factorC , family = "binomial", data = train.data)
+summary(modelo.logistico.fars)
+```
+
+```{r}
+# Se vuelve a aplicar la regresión logistica sólo con las variables que salen representativas después de glm
+modelo.logistico.def.fars = glm(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL, family = "binomial", data = train.data, na.action=na.omit)
+summary(modelo.logistico.def.fars)
+
+# Por tanto, las variables representativas serian: Edad, Estado, Sexo, Sistema de retención, airbag, ejection, extrincation, resultados_drogas, resultado_alcohol, tomo_hospital
+# Creamos un nuevo dataframe con las variables que corresponden
+train.data.reduced = train.data[,c("AGE","SEX", "RESTRAINT_SYSTEM.USE", "AIR_BAG_AVAILABILITY.DEPLOYMENT", "EJECTION", "EXTRICATION", "DRUG_TEST_RESULTS", "TAKEN_TO_HOSPITAL", "INJURY_SEVERITY")]
+
+
+# Para la evaluación del modelo se calcula la probabilidad de INJURY_SEVERITY = True en cada uno de los sujetos, tanto en train como en test
+predicho.modelo.fars.LR = predict(modelo.logistico.def.fars, train.data, type = "response")
+
+a = table(train.data$INJURY_SEVERITY, cut(predicho.modelo.fars.LR, c(-0.1,0.05, 0.1, 0.25, 1)))
+a
+a[2, ]/(a[2, ] + a[1, ])
+
+z=table(predicho.modelo.fars.LR>0.4,train.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.glm <- (2*precision*recall)/(precision+recall)
+f_score.glm
+```
+
+
+Comparativa de resultados con el conjunto de test
+```{r}
+# Comparativa de los resultados de test
+predicho.modelo.fars.test.LR = predict(modelo.logistico.def.fars, test.data, type = "response")
+b = table(test.data$INJURY_SEVERITY, cut(predicho.modelo.fars.test.LR, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.fars.test.LR>0.4,test.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+
+```
+
+### Curva ROC 
+Mediante la curva ROC comprobaremos
+```{r}
+library(ROCR)
+ROCRpred = prediction(predicho.modelo.fars.LR, train.data$INJURY_SEVERITY)
+ROCRperf = performance(ROCRpred, 'tpr', 'fpr')
+#windows()
+ROC.glm = plot(ROCRperf, colorize = TRUE, text.adj = c(-0.2, 1.7))
+ROC.glm
+
+#dev.off()
+```
+
+```{r}
+perf <- performance(ROCRpred,"auc")
+auc <- as.numeric(perf@y.values)
+auc
+
+```
+
+Si comprobamos el área debajo de la curva, podemos ver que es del 0,87.
+
+### Regresión logítica para cada uno de los estados
+```{r}
+GenLm = function(x) {
+  y=df2[which(df2$CASE_STATE ==x),]
+  
+  if (!x %in% c("District_of_Columbia", "Virginia","Wyoming")){
+    print(x)
+    summary(glm(INJURY_SEVERITY ~ AGE  + SEX +   RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL, family = "binomial", data = y))
+    
+  }else{
+    return(FALSE)
+  }
+    }
+
+csList = data.frame( Scase_state = as.character(unique( df2$CASE_STATE ) ) )
+
+
+apply(csList,1, GenLm)
+
+```
+
+## Árbol de decisión
+```{r}
+library(rpart)
+modelo.decision.tree.fars = rpart(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL, data = train.data)
+summary(modelo.decision.tree.fars)
+
+par(mfrow = c(1, 1), xpd = NA)
+plot(modelo.decision.tree.fars, uniform=TRUE,margin=0.1)
+text(modelo.decision.tree.fars, use.n = TRUE, cex=.5)
+
+```
+
+Comprobación de los resultados
+```{r}
+
+# Prueba para train
+predicho.modelo.fars.DT = predict(modelo.decision.tree.fars, train.data)
+c = table(pred = predicho.modelo.fars.DT[,'Survived'], obs = train.data$INJURY_SEVERITY)
+c[, 2]/(c[, 1] + c[, 2])
+```
+```{r}
+
+# Prueba para test
+predicho.modelo.fars.test.DT = predict(modelo.decision.tree.fars, test.data)
+d = table(pred = predicho.modelo.fars.test.DT[,'Survived'], obs = test.data$INJURY_SEVERITY)
+d[, 2]/(d[, 1] + d[, 2])
+```
+
+
+Nuevo dataset con las variables seleccionadas:
+
+```{r}
+train_data_selected = train.data[,c("AGE","CASE_STATE", "SEX","RESTRAINT_SYSTEM.USE","AIR_BAG_AVAILABILITY.DEPLOYMENT","EJECTION","EXTRICATION" ,"DRUG_TEST_RESULTS","TAKEN_TO_HOSPITAL","INJURY_SEVERITY")]
+test_data_selected = test.data[,c("AGE","CASE_STATE", "SEX","RESTRAINT_SYSTEM.USE","AIR_BAG_AVAILABILITY.DEPLOYMENT","EJECTION","EXTRICATION" ,"DRUG_TEST_RESULTS","TAKEN_TO_HOSPITAL","INJURY_SEVERITY")]
+```
+
+
+
+## Random forest
+### Preparación de datos
+```{r}
+#Establecemos una muestra del 10% sobre los datos train y test para calcular los cluster por falta de memoria
+set.seed(123456)
+train.rf.index = sample(1:dim(train_data_selected)[1], dim(train_data_selected)[1] * 0.1)
+train.rf.data = train_data_selected[train.rf.index, ]
+test.rf.data = train_data_selected[-train.rf.index, ]
+
+```
+
+
+```{r}
+library(randomForest)
+# Función de estimación para la variable mtry
+tuning_rf_mtry <- function(df, y, ntree = 500){
+  # Esta función devuelve el out-of-bag clasification error de un modelo RandomForest
+  # en función del número de predictores evaluados (mtry)
+  
+  # Argumentos:
+  #   df = data frame con los predictores y variable respuesta
+  #   y  = nombre de la variable respuesta
+  #   ntree = número de árboles creados en el modelo randomForest
+
+  max_predictores <- ncol(df) - 1
+  n_predictores   <- rep(NA, max_predictores)
+  oob_err_rate    <- rep(NA, max_predictores)
+  for (i in 1:max_predictores) {
+    set.seed(123)
+    f <- formula(paste(y,"~ ."))
+    modelo_rf <- randomForest(formula = f, data = df, mtry = i, ntree = ntree, na.action=na.omit)
+    n_predictores[i] <- i
+    oob_err_rate[i] <- tail(modelo_rf$err.rate[, 1], n = 1)
+  }
+  results <- data_frame(n_predictores, oob_err_rate)
+  return(results)
+}
+
+hiperparametro_mtry <-  tuning_rf_mtry(df = train.rf.data, y = "INJURY_SEVERITY")
+hiperparametro_mtry %>% arrange(oob_err_rate)
+
+```
+
+```{r}
+# Evolución de out-of-bag vs mtry
+
+ggplot(data = hiperparametro_mtry, aes(x = n_predictores, y = oob_err_rate)) +
+  scale_x_continuous(breaks = hiperparametro_mtry$n_predictores) +
+  geom_line() +
+  geom_point() +
+  geom_point(data = hiperparametro_mtry %>% arrange(oob_err_rate) %>% head(1),
+             color = "red") +
+  labs(title = "Evolución del out-of-bag-error vs mtry",
+       x = "nº predictores empleados") +
+  theme_bw()
+
+```
+Out of bag error es es la media de error para cada muestra , usando aquellos arboles  que no tienen esa variable en su ejemplo boostrap.
+
+**Por tanto, identificamos el valor 3 como el número óptimo de predictores a evaluar**
+
+
+```{r}
+# Función de estimación para el parametro nodesize (Número mínimo de observaciones que deben tener los nodos terminales)
+
+tuning_rf_nodesize <- function(df, y, size = NULL, ntree = 500){
+  # Esta función devuelve el out-of-bag clasification error de un modelo RandomForest
+  # en función del tamaño mínimo de los nodos terminales (nodesize).
+
+  # Argumentos:
+  #   df = data frame con los predictores y variable respuesta
+  #   y  = nombre de la variable respuesta
+  #   sizes = tamaños evaluados
+  #   ntree = número de árboles creados en el modelo randomForest
+
+  if (is.null(size)){
+    size <- seq(from = 1, to = nrow(df), by = 5)
+  }
+  oob_err_rate <- rep(NA, length(size))
+  for (i in seq_along(size)) {
+    set.seed(321)
+    f <- formula(paste(y,"~ ."))
+    modelo_rf <- randomForest(formula = f, data = df, mtry = 3, ntree = ntree,
+                              nodesize = i, na.action=na.omit)
+    oob_err_rate[i] <- tail(modelo_rf$err.rate[, 1], n = 1)
+  }
+  results <- data_frame(size, oob_err_rate)
+  return(results)
+}
+
+hiperparametro_nodesize <-  tuning_rf_nodesize(df = train.rf.data, y = "INJURY_SEVERITY",
+                                               size = c(1:20))
+hiperparametro_nodesize %>% arrange(oob_err_rate)
+```
+
+```{r}
+# Representación del resultado
+ggplot(data = hiperparametro_nodesize, aes(x = size, y = oob_err_rate)) +
+  scale_x_continuous(breaks = hiperparametro_nodesize$size) +
+  geom_line() +
+  geom_point() +
+  geom_point(data = hiperparametro_nodesize %>% arrange(oob_err_rate) %>% head(1),
+             color = "red") +
+  labs(title = "Evolución del out-of-bag-error vs nodesize",
+       x = "nº observaciones en nodos terminales") +
+  theme_bw()
+```
+
+Se identifica 17 o 18 el número óptimo de observaciones mínimas que deben contener los nodos terminales.
+
+```{r}
+# Estimación del número de árboles
+
+modelo_randomforest <- randomForest(INJURY_SEVERITY ~ ., data = train.rf.data, mtry = 3, ntree = 500,importance = TRUE, nodesize = 18,na.action=na.omit)
+
+oob_err_rate <- data.frame(oob_err_rate = modelo_randomforest$err.rate[, 1],
+                           arboles = seq_along(modelo_randomforest$err.rate[, 1]))
+ggplot(data = oob_err_rate, aes(x = arboles, y = oob_err_rate )) +
+  geom_line() +
+  labs(title = "Evolución del out-of-bag-error vs número árboles",
+       x = "nº árboles") +
+  theme_bw()
+```
+
+Alcanzados en torno a 320 árboles el error del modelo se estabiliza.
+
+### Ajuste final 
+```{r}
+set.seed(17)
+modelo_randomforest <- randomForest(INJURY_SEVERITY ~ ., data = train.rf.data, mtry = 3, ntree = 320,importance = TRUE, nodesize = 18, norm.votes = TRUE, na.action=na.omit )
+modelo_randomforest
+```
+
+### Curva ROC
+```{r}
+probs_rf <- predict(modelo_randomforest, test.rf.data, type="prob")
+
+pred_rf <- prediction(probs_rf[, "Survived"], test.rf.data$INJURY_SEVERITY)
+perf_rf <- performance(pred_rf, measure='tpr', x.measure='fpr')
+plot(perf_rf,  colorize=TRUE)
+```
+
+### Comparativa de resultados con el conjunto de test
+```{r}
+set.seed(17)
+modelo_randomforest_test <- randomForest(INJURY_SEVERITY ~ ., data = test.rf.data, mtry = 3, ntree = 1000,importance = TRUE, nodesize = 18, norm.votes = TRUE, na.action=na.omit )
+modelo_randomforest_test
+
+```
+
+Obtenemos tanto en el conjunto de train como el de test una media de 17% de error.
+
+```{r}
+p = 15571 /(15571 +5521)
+r = 15571/(15571+2785)
+f_score.random.forest=(2*p*r)/(p+r)
+f_score.random.forest
+```
+
+### Mostramos la fracción de vivos con respecto a los muertos
+```{r}
+head(modelo_randomforest$votes)
+```
+
+### Libreria: caret
+
+Extensión del método para evaluar parametros mtry y ntree de una sola atacada
+```{r}
+# Extend Caret
+customRF <- list(type = "Classification", library = "randomForest", loop = NULL)
+customRF$parameters <- data.frame(parameter = c("mtry", "ntree"), class = rep("numeric", 2), label = c("mtry", "ntree"))
+customRF$grid <- function(x, y, len = NULL, search = "grid") {}
+customRF$fit <- function(x, y, wts, param, lev, last, weights, classProbs, ...) {
+  randomForest(x, y, mtry = param$mtry, ntree=param$ntree, ...)
+}
+customRF$predict <- function(modelFit, newdata, preProc = NULL, submodels = NULL)
+  predict(modelFit, newdata)
+customRF$prob <- function(modelFit, newdata, preProc = NULL, submodels = NULL)
+  predict(modelFit, newdata, type = "prob")
+customRF$sort <- function(x) x[order(x[,1]),]
+customRF$levels <- function(x) x$classes
+
+```
+
+Ejecución del modelo con los parámetros en los rangos anteriormente indicados
+```{r}
+
+control <- trainControl(method="repeatedcv", number=8, repeats=3,classProbs = TRUE, summaryFunction = twoClassSummary)
+seed <- 7
+metric <- "ROC"
+set.seed(seed)
+mtry <- sqrt(ncol(test.rf.data)) # En RF mtry es la raiz del numero de variables
+tunegrid <- expand.grid(.mtry=mtry, .ntree=c(100, 300, 500, 1000))
+rf_default <- caret::train(INJURY_SEVERITY ~ ., data=train.rf.data, method=customRF, metric=metric, tuneGrid=tunegrid, trControl=control, na.action = na.omit)
+print(rf_default)
+```
+El resultado evaluando el área bajo la curva es de: 0.887, un resultado bastante bueno con el valor mtry=3.1622 y ntree=1000, el cual coincide con nuestra predicción anterior.
+
+#### Curva ROC
+```{r}
+test.rf.data.withoutna = na.omit(test.rf.data)
+probsrf <- predict(rf_default, test.rf.data.withoutna, type="prob")
+predrf <- prediction(probsrf[, "Survived"], test.rf.data.withoutna$INJURY_SEVERITY)
+perf.rf <- performance(predrf, measure='tpr', x.measure='fpr')
+plot(perf.rf,  colorize=TRUE)
+```
+
+
+
+
+###  Predictores más influyentes
+```{r, fig.width=15, fig.height=7, fig.align='center'}
+library(tidyverse)
+library(ggpubr)
+importancia_pred <- as.data.frame(importance(modelo_randomforest, scale = TRUE))
+importancia_pred <- rownames_to_column(importancia_pred, var = "variable")
+p1 <- ggplot(data=importancia_pred, aes(x=reorder(variable, MeanDecreaseAccuracy),
+                                        y = MeanDecreaseAccuracy,
+                                        fill = MeanDecreaseAccuracy)) +
+    labs(x = "variable", title = "Reducción de Accuracy") +
+    geom_col() +
+    coord_flip() +
+    theme_bw() +
+    theme(legend.position = "bottom")
+
+p2 <- ggplot(data = importancia_pred, aes(x = reorder(variable, MeanDecreaseGini),
+                                          y = MeanDecreaseGini,
+                                          fill = MeanDecreaseGini)) +
+    labs(x = "variable", title = "Reducción de pureza (Gini)") +
+    geom_col() +
+    coord_flip() +
+    theme_bw() +
+    theme(legend.position = "bottom")
+ggarrange(p1, p2)
+```
+
+El modelo obtenido tiene un OOB estimado de 16.51%. Por tanto, todos los predictores seleccionados son influyentes.
+
+<!-- ## Extra Tree (Muy costoso computacionalmente. Preparad el cuerpo para ejecutar este trozo) -->
+
+<!-- Para definir este modelos necesitamos dos parametros: -->
+<!-- - mtry, que funciona de igual manera que en RF -->
+<!-- - numRandomCuts, el cual determina el número de aleatorias eleciones para dividir mtry predictores en cada selección. -->
+
+<!-- ```{r} -->
+<!-- # Importación de librerias -->
+<!-- options(java.parameters = "-Xmx4g") -->
+<!-- library(extraTrees) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- library(caret) -->
+
+<!-- # Para definir el grid de valores usamos los valores seleccionados de mtry y un valor pequeño de numRandomCuts para matener un tiempo de procesamiento comprensible. -->
+<!-- cv_5 = trainControl(method = "cv", number = 5) # Usamos cross validation -->
+<!-- et_grid =  expand.grid(mtry = 2:4, numRandomCuts = 1:10) -->
+<!-- ``` -->
+
+<!-- ### Entrenamiento correspondiente  -->
+<!-- ``` {r} -->
+<!-- # Le indicamos a R que use los 4 cores de la JVM (lo que acelerará el tiempo de procesamiento) -->
+<!-- set.seed(42) -->
+<!-- et_fit = train(INJURY_SEVERITY ~ ., data = train_data_selected, -->
+<!--                method = "extraTrees", -->
+<!--                trControl = cv_5, -->
+<!--                tuneGrid = et_grid, -->
+<!--                numThreads = 4, na.action = na.omit) -->
+<!-- ``` -->
+
+<!-- ### Resultados obtenidos -->
+<!-- ```{r} -->
+<!-- #et_fit -->
+<!-- et_fit$bestTune -->
+
+<!-- plot(et_fit) -->
+<!-- ``` -->
+
+## Gradient Boosting estocástico
+
+```{r}
+#Establecemos una muestra del 10% sobre los datos train y test para calcular los cluster por falta de memoria
+set.seed(123456)
+train.gbm.index = sample(1:dim(train_data_selected)[1], dim(train_data_selected)[1] * 0.1)
+train.gbm.data = train_data_selected[train.gbm.index, ]
+test.gbm.data = train_data_selected[-train.gbm.index, ]
+
+train.gbm.data$SURVIVED[which(train.gbm.data$INJURY_SEVERITY == 'Died')] <-0
+train.gbm.data$SURVIVED[which(train.gbm.data$INJURY_SEVERITY == 'Survived')] <-1
+train.gbm.data$INJURY_SEVERITY <- NULL
+
+test.gbm.data$SURVIVED[which(test.gbm.data$INJURY_SEVERITY == 'Survived')] <-1
+test.gbm.data$SURVIVED[which(test.gbm.data$INJURY_SEVERITY == 'Died')] <-0
+test.gbm.data$INJURY_SEVERITY <- NULL
+```
+
+
+```{r}
+# Importación de librerias
+library(gbm)
+```
+
+### Estimación del parametro learning rate (shrinkage)
+```{r}
+set.seed(1)
+
+cv_error  <- vector("numeric")
+n_arboles <- vector("numeric")
+shrinkage <- vector("numeric")
+
+for (i in c(0.001, 0.01, 0.1)) {
+  set.seed(123)
+  arbol_boosting <- gbm(SURVIVED ~ ., data = train.gbm.data,
+                      distribution = "gaussian",
+                      n.trees = 20000,
+                      interaction.depth = 1,
+                      shrinkage = i,
+                      n.minobsinnode = 10,
+                      bag.fraction = 0.5,
+                      cv.folds = 5)
+  cv_error  <- c(cv_error, arbol_boosting$cv.error)
+  n_arboles <- c(n_arboles, seq_along(arbol_boosting$cv.error))
+  shrinkage <- c(shrinkage, rep(i, length(arbol_boosting$cv.error)))
+}
+error <- data.frame(cv_error, n_arboles, shrinkage)
+
+ggplot(data = error, aes(x = n_arboles, y = cv_error,
+                         color = as.factor(shrinkage))) +
+  geom_smooth() +
+  labs(title = "Evolución del cv-error", color = "shrinkage") + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+``` 
+
+### Estimación del parametro de profundidad del árbol
+```{r}
+cv_error  <- vector("numeric")
+n_arboles <- vector("numeric")
+interaction.depth <- vector("numeric")
+for (i in c(1, 3, 5, 10)) {
+  set.seed(123)
+  arbol_boosting <- gbm(SURVIVED ~ ., data = train.gbm.data,
+                      distribution = "gaussian",
+                      n.trees = 5000,
+                      interaction.depth = i,
+                      shrinkage = 0.01,
+                      n.minobsinnode = 10,
+                      bag.fraction = 0.5,
+                      cv.folds = 5)
+  cv_error  <- c(cv_error, arbol_boosting$cv.error)
+  n_arboles <- c(n_arboles, seq_along(arbol_boosting$cv.error))
+  interaction.depth <- c(interaction.depth,
+                         rep(i, length(arbol_boosting$cv.error)))
+}
+error <- data.frame(cv_error, n_arboles, interaction.depth)
+
+ggplot(data = error, aes(x = n_arboles, y = cv_error,
+                         color = as.factor(interaction.depth))) +
+  geom_smooth() +
+  labs(title = "Evolución del cv-error", color = "interaction.depth") + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+### Estimación del número minimo de observaciones por nodo
+```{r}
+cv_error  <- vector("numeric")
+n_arboles <- vector("numeric")
+n.minobsinnode <- vector("numeric")
+for (i in c(1, 5, 10, 20)) {
+  arbol_boosting <- gbm(SURVIVED ~ ., data = train.gbm.data,
+                      distribution = "gaussian",
+                      n.trees = 5000,
+                      interaction.depth = 10,
+                      shrinkage = 0.01,
+                      n.minobsinnode = i,
+                      bag.fraction = 0.5,
+                      cv.folds = 5)
+  cv_error  <- c(cv_error, arbol_boosting$cv.error)
+  n_arboles <- c(n_arboles, seq_along(arbol_boosting$cv.error))
+  n.minobsinnode <- c(n.minobsinnode,
+                    rep(i, length(arbol_boosting$cv.error)))
+}
+error <- data.frame(cv_error, n_arboles, n.minobsinnode)
+
+ggplot(data = error, aes(x = n_arboles, y = cv_error,
+                         color = as.factor(n.minobsinnode))) +
+  geom_smooth() +
+  labs(title = "Evolución del cv-error", color = "n.minobsinnode") + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+
+
+```
+
+### Estimación del número de árbol que debe tener el conjunto
+```{r}
+set.seed(123)
+arbol_boosting <- gbm(SURVIVED ~ ., data = train.gbm.data,
+                      distribution = "gaussian",
+                      n.trees = 10000,
+                      interaction.depth = 10,
+                      shrinkage = 0.01,
+                      n.minobsinnode = 10,
+                      bag.fraction = 0.5,
+                      cv.folds = 5)
+error <- data.frame(cv_error = arbol_boosting$cv.error,
+                    n_arboles = seq_along(arbol_boosting$cv.error))
+ggplot(data = error, aes(x = n_arboles, y = cv_error)) +
+  geom_line(color = "black") +
+  geom_point(data = error[which.min(error$cv_error),], color = "red") +
+  labs(title = "Evolución del cv-error") + 
+  theme_bw() 
+
+error[which.min(error$cv_error),]
+```
+
+Un conjunto formado por 1005 arboles conseigue el menor error de validación
+
+### Módelo final con los hiperparámetros optimos
+
+
+```{r}
+set.seed(123)
+arbol_boosting <- gbm(SURVIVED ~ ., data = train.gbm.data,
+                      distribution = "gaussian",
+                      n.trees = 1005,
+                      interaction.depth = 10,
+                      shrinkage = 0.01,
+                      n.minobsinnode = 20,
+                      bag.fraction = 0.5)
+```
+
+### Comparación con el conjunto de test
+```{r}
+predicciones <- predict(object = arbol_boosting, newdata = test.gbm.data,
+                        n.trees = 1005)
+
+test_mse <- mean((predicciones - test.gbm.data$SURVIVED)^2)
+paste("Error de test (mse) del modelo:", round(test_mse, 6))
+```
+
+### Curva ROC
+```{r}
+gbm.probs <- predict(arbol_boosting,test.gbm.data,type="response", n.trees = 1005)
+gbm.pred <- prediction(gbm.probs, test.gbm.data$SURVIVED )
+perf_gbm <- performance(gbm.pred, measure='tpr', x.measure='fpr')
+plot(perf_gbm,  colorize=TRUE)
+```
+
+
+
+### Busqueda de hiperparametros con Caret
+```{r}
+fitControl <- trainControl(## 10-fold CV
+                           method = "repeatedcv",
+                           number = 10,
+                           ## repeated ten times
+                           repeats = 10)
+
+gbmGrid <-  expand.grid(interaction.depth = c(1, 5, 9),
+                        n.trees = (1:30)*50,
+                        shrinkage = 0.1,
+                        n.minobsinnode = 20)
+
+nrow(gbmGrid)
+
+set.seed(825)
+gbmFit2 <- train(SURVIVED ~ ., data = train.gbm.data,
+                 method = "gbm",
+                 trControl = fitControl,
+                 verbose = FALSE,
+                 tuneGrid = gbmGrid, na.action = na.omit)
+gbmFit2$bestTune
+
+
+```
+
+### Módelo final con los hiperparámetros optimos según CARET
+
+
+```{r}
+set.seed(123)
+arbol_boosting_caret <- gbm(SURVIVED ~ ., data = train.gbm.data,
+                      distribution = "gaussian",
+                      n.trees = 200,
+                      interaction.depth = 9,
+                      shrinkage = 0.1,
+                      n.minobsinnode = 20,
+                      bag.fraction = 0.5)
+```
+
+### Comparación con el conjunto de test según CARET
+```{r}
+predicciones <- predict(object = arbol_boosting_caret, newdata = test.gbm.data,
+                        n.trees = 200)
+
+test_mse <- mean((predicciones - test.gbm.data$SURVIVED)^2)
+paste("Error de test (mse) del modelo:", round(test_mse, 6))
+```
+
+Obtenemos errores practicamentes similares
+
+### Curva ROC
+```{r}
+#gbm.probs <- predict(arbol_boosting_caret,test.gbm.data.withoutna,type="response", n.trees = 1005)
+gbm.pred <- prediction(gbm.probs, test.gbm.data$SURVIVED)
+perf_gbm <- performance(gbm.pred, measure='tpr', x.measure='fpr')
+plot(perf_gbm,  colorize=TRUE)
+```
+
+### Evaluación del modelo
+```{r}
+test.gbm.data.withoutna = na.omit(test.gbm.data)
+gbm.probs <- predict(arbol_boosting_caret,test.gbm.data.withoutna, type="response", n.trees=1000)
+z<- table(round(gbm.probs),test.gbm.data.withoutna$SURVIVED)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.gbm <- (2*precision*recall)/(precision+recall)
+f_score.gbm
+```
+
+### Obtención de variables más significativas
+```{r}
+importancia_pred <- summary(arbol_boosting, plotit = FALSE)
+ggplot(data = importancia_pred, aes(x = reorder(var, rel.inf), y = rel.inf,
+                                    fill = rel.inf)) +
+  labs(x = "variable", title = "Reducción de MSE") +
+  geom_col() +
+  coord_flip() +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+
+
+## Análisis cluster
+```{r}
+
+#Establecemos una muestra del 10% sobre los datos train y test para calcular los cluster por falta de memoria
+set.seed(123456)
+train.cl.index = sample(1:dim(train.data)[1], dim(train.data)[1] * 0.1)
+train.cl.data = df2[train.cl.index, ]
+test.cl.data = df2[-train.cl.index, ]
+
+
+train.cl.tr.data = train.cl.data %>% dplyr::select(-INJURY_SEVERITY)
+cl1 = hclust(dist(train.cl.tr.data))
+plot(cl1)
+
+test.cl.tr.data = test.cl.data %>% dplyr::select(-INJURY_SEVERITY)
+
+ntrain=dim(train.cl.data)[1]
+ntest=dim(test.cl.data)[1]
+```
+```{r}
+dim(train.cl.data)
+dim(test.cl.data)
+```
+
+
+```{r}
+z1 = cutree(cl1, 4)
+a = table(train.cl.data$INJURY_SEVERITY, z1)
+a
+
+a[2, ]/(a[1, ] + a[2, ])
+```
+
+
+Pasamos a analizar los clusters de forma individual
+```{r}
+#sobre los datos de muestra
+datos1 = train.cl.data[z1 == 1, ]
+datos2 = train.cl.data[z1 == 2, ]
+datos3 = train.cl.data[z1 == 3, ]
+datos4 = train.cl.data[z1 == 4, ]
+```
+
+
+### Análisis cluster 1
+Ajustamos modelos logísticos sobre los datos clusterizados
+```{r}
+#datos 1
+modelo.logistico1 = glm(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL + ALCOHOL_TEST_RESULT1 , family = "binomial", data = datos1)
+summary(modelo.logistico1)
+```
+Volvemos a reorganizar las variables predictoras con los datos más representativos según la regresión logística anterior:
+
+```{r}
+modelo.logistico1 = glm(INJURY_SEVERITY ~ DRUG_TEST_RESULTS + RESTRAINT_SYSTEM.USE , family = "binomial", data = datos1)
+summary(modelo.logistico1)
+```
+
+Creamos el conjunto de datos de train y test para comprobar la precisión de nuestro modelo:
+```{r}
+train.cluster1.index = sample(1:nrow(datos1), dim(datos1)*0.7)
+train.cluster1.data = datos1[train.cluster1.index, ]
+test.cluster1.data = datos1[-train.cluster1.index, ]
+```
+
+Ahora calcularemos la precisión del modelo para el cluster1 con los datos de train:
+```{r}
+# Comparativa de los resultados de test
+predicho.modelo.cluster1.train = predict(modelo.logistico1, train.cluster1.data, type = "response")
+b = table(train.cluster1.data$INJURY_SEVERITY, cut(predicho.modelo.cluster1.train, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.cluster1.train>0.4,train.cluster1.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+
+```
+
+
+
+
+Y con el conjunto de test:
+```{r}
+predicho.modelo.cluster1.test = predict(modelo.logistico1, test.cluster1.data, type = "response")
+b = table(test.cluster1.data$INJURY_SEVERITY, cut(predicho.modelo.cluster1.test, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.cluster1.test>0.4,test.cluster1.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+### Análisis cluster 2
+```{r}
+#datos 2
+modelo.logistico2 = glm(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL + ALCOHOL_TEST_RESULT1 , family = "binomial", data = datos2)
+summary(modelo.logistico2)
+```
+
+Volvemos a reorganizar las variables predictoras con los datos más representativos según la regresión logística anterior:
+```{r}
+modelo.logistico2 = glm(INJURY_SEVERITY ~ RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION + DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL + ALCOHOL_TEST_RESULT1 + SEX + CASE_STATE, family = "binomial", data = datos2)
+summary(modelo.logistico2)
+```
+
+
+
+Creamos el conjunto de datos de train y test para comprobar la precisión de nuestro modelo:
+```{r}
+train.cluster2.index = sample(1:nrow(datos2), dim(datos2)*0.7)
+train.cluster2.data = datos2[train.cluster2.index, ]
+test.cluster2.data = datos2[-train.cluster2.index, ]
+```
+
+
+
+
+Ahora calcularemos la precisión del modelo para el cluster2 con los datos de train:
+```{r}
+# Comparativa de los resultados de test
+predicho.modelo.cluster2.train = predict(modelo.logistico2, train.cluster2.data, type = "response")
+b = table(train.cluster2.data$INJURY_SEVERITY, cut(predicho.modelo.cluster2.train, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.cluster2.train>0.4,train.cluster2.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+
+Y con el conjunto de test:
+```{r}
+predicho.modelo.cluster2.test = predict(modelo.logistico2, test.cluster2.data, type = "response")
+b = table(test.cluster2.data$INJURY_SEVERITY, cut(predicho.modelo.cluster2.test, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.cluster2.test>0.4,test.cluster2.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+### Analisis cluster 3
+```{r}
+#datos 3
+modelo.logistico3 = glm(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL + ALCOHOL_TEST_RESULT1 , family = "binomial", data = datos3)
+summary(modelo.logistico3)
+```
+Volvemos a reorganizar las variables predictoras con los datos más representativos según la regresión logística anterior:
+```{r}
+modelo.logistico3_optimized = glm(INJURY_SEVERITY ~ SEX + RESTRAINT_SYSTEM.USE + EXTRICATION + DRUG_TEST_RESULTS + ALCOHOL_TEST_RESULT1 + EJECTION + CASE_STATE + AIR_BAG_AVAILABILITY.DEPLOYMENT  + TAKEN_TO_HOSPITAL, family = "binomial", data = datos3)
+summary(modelo.logistico3_optimized)
+```
+
+
+Creamos el conjunto de datos de train y test para comprobar la precisión de nuestro modelo:
+```{r}
+set.seed(14)
+train.cluster3.index = sample(1:nrow(datos3), dim(datos3)*0.7)
+train.cluster3.data = datos3[train.cluster3.index, ]
+test.cluster3.data = datos3[-train.cluster3.index, ]
+train.cluster3.data$CASE_STATE[which(train.cluster3.data$CASE_STATE == 'District_of_Columbia')] <- NA
+test.cluster3.data$CASE_STATE[which(test.cluster3.data$CASE_STATE == 'District_of_Columbia')] <- NA
+
+train.cluster3.data$AIR_BAG_AVAILABILITY.DEPLOYMENT[which(train.cluster3.data$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'DA_MD')] <- NA
+test.cluster3.data$AIR_BAG_AVAILABILITY.DEPLOYMENT[which(test.cluster3.data$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'DA_MD')] <- NA
+```
+
+
+Ahora calcularemos la precisión del modelo para el cluster3 con los datos de train:
+```{r}
+# Comparativa de los resultados de test
+predicho.modelo.cluster3.train = predict(modelo.logistico3_optimized, train.cluster3.data, type = "response")
+b = table(train.cluster3.data$INJURY_SEVERITY, cut(predicho.modelo.cluster3.train, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.cluster3.train>0.4,train.cluster3.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+Y con el conjunto de test:
+```{r}
+predicho.modelo.cluster3.test = predict(modelo.logistico3, test.cluster3.data, type = "response")
+b = table(test.cluster3.data$INJURY_SEVERITY, cut(predicho.modelo.cluster3.test, c(-0.1,0.05, 0.1, 0.25, 1)))
+b
+b[2, ]/(b[2, ] + b[1, ])
+
+z=table(predicho.modelo.cluster3.test>0.4,test.cluster3.data$INJURY_SEVERITY)
+z
+
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+### Analisis cluster 4
+```{r}
+#datos 4
+modelo.logistico4 = glm(INJURY_SEVERITY ~ AGE + CASE_STATE + SEX + RESTRAINT_SYSTEM.USE + AIR_BAG_AVAILABILITY.DEPLOYMENT + EJECTION + EXTRICATION +  DRUG_TEST_RESULTS + TAKEN_TO_HOSPITAL + ALCOHOL_TEST_RESULT1 , family = "binomial", data = datos4)
+summary(modelo.logistico4)
+```
+
+
+
+```{r}
+dim(datos4)
+dim(na.omit(datos4))
+```
+Este último cluster lo podriamos considerar como el cajón desastre.
+
+### Transformación a problema binario para calculo de kmeans
+```{r}
+summary(train.data.reduced)
+
+# Tratamiento AGE
+train.data.reduced$AGE1 <- train.data.reduced$AGE
+
+# Tratamiento SEX
+train.data.reduced$MALE[which(train.data.reduced$SEX == 'Male')] <-1
+train.data.reduced$MALE[which(train.data.reduced$SEX != 'Male')] <-0
+
+train.data.reduced$FEMALE[which(train.data.reduced$SEX != 'Female')] <-0
+train.data.reduced$FEMALE[which(train.data.reduced$SEX == 'Female')] <-1
+
+# Tratamiento RESTRAINT_SYSTEM.USE
+train.data.reduced$RESTRAINT_SYSTEM1[which(train.data.reduced$RESTRAINT_SYSTEM.USE == 'Yes')] <-1
+train.data.reduced$RESTRAINT_SYSTEM1[which(train.data.reduced$RESTRAINT_SYSTEM.USE != 'Yes')] <-0
+train.data.reduced$RESTRAINT_SYSTEM1[which(is.na(train.data.reduced$RESTRAINT_SYSTEM.USE))] <-NA
+
+
+# Tratamiento AIR_BAG_AVAILABILITY.DEPLOYMENT 
+
+train.data.reduced$AIRBAG1[which(train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'NAv' |
+                                                               train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'Av_nD' |
+                                                               train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'NM' | 
+                                                               train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT == '(Other)')] <-0
+train.data.reduced$AIRBAG1[which(train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'D_F' |
+                                                               train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT == 'A_U')] <-1
+train.data.reduced$AIRBAG1[which(is.na(train.data.reduced$AIR_BAG_AVAILABILITY.DEPLOYMENT ))] <-NA
+
+
+# Tratamiento EJECTION
+train.data.reduced$EJECTION1[which(train.data.reduced$EJECTION != 'Totally_Ejected')] <-0
+train.data.reduced$EJECTION1[which(train.data.reduced$EJECTION == 'Totally_Ejected')] <-1
+train.data.reduced$EJECTION1[which(is.na(train.data.reduced$EJECTION))] <-NA
+
+# Tratamiento EXTRINCATION
+train.data.reduced$EXTRINCATION1[which(train.data.reduced$EXTRICATION == 'Not_Extricated')] <-0
+train.data.reduced$EXTRINCATION1[which(train.data.reduced$EXTRICATION == 'Extricated')] <-1
+train.data.reduced$EXTRINCATION1[which(is.na(train.data.reduced$EXTRICATION))] <-NA
+
+
+#Tratamiento DRUG_TEST_RESULTS
+train.data.reduced$DRUG_TEST_RESULTS1[which(train.data.reduced$DRUG_TEST_RESULTS == 'Negd')] <-0
+train.data.reduced$DRUG_TEST_RESULTS1[which(train.data.reduced$DRUG_TEST_RESULTS == 'Posd')] <-1
+train.data.reduced$DRUG_TEST_RESULTS1[which(is.na(train.data.reduced$DRUG_TEST_RESULTS))] <-NA
+
+#Tratamiento TAKEN_TO_HOSPITAL
+train.data.reduced$TAKEN_TO_HOSPITAL1[which(train.data.reduced$TAKEN_TO_HOSPITAL == 'No')] <-0
+train.data.reduced$TAKEN_TO_HOSPITAL1[which(train.data.reduced$TAKEN_TO_HOSPITAL == 'Yes')] <-1
+train.data.reduced$TAKEN_TO_HOSPITAL1[which(is.na(train.data.reduced$TAKEN_TO_HOSPITAL))] <-NA
+
+#Tratamiento SURVIVED
+train.data.reduced$SURVIVED[which(train.data.reduced$INJURY_SEVERITY == 'Survived')] <-1
+train.data.reduced$SURVIVED[which(train.data.reduced$INJURY_SEVERITY == 'Died')] <-0
+train.data.reduced.numeric = train.data.reduced[,c("AGE","MALE","FEMALE", "RESTRAINT_SYSTEM1", "AIRBAG1", "EJECTION1", "EXTRINCATION1",   "DRUG_TEST_RESULTS1", "TAKEN_TO_HOSPITAL1", "SURVIVED")]
+
+summary(train.data.reduced.numeric)
+
+```
+
+
+Ahora vamos a hacer el cáculo de kmeans
+
+```{r}
+train.data.reduced.numeric.withoutna = na.omit(train.data.reduced.numeric)
+
+summary(train.data.reduced.numeric.withoutna)
+
+head(train.data.reduced.numeric.withoutna)
+
+# Definir el número de cluster sobre los que debemos de trabajar
+
+mydata <- train.data.reduced.numeric.withoutna
+wss <- (nrow(mydata)-1)*sum(apply(mydata,2,var))
+  for (i in 2:15) wss[i] <- sum(kmeans(mydata,
+                                       centers=i)$withinss)
+plot(1:15, wss, type="b", xlab="Number of Clusters",
+     ylab="Within groups sum of squares",
+     main="Assessing the Optimal Number of Clusters with the Elbow Method",
+     pch=20, cex=2)
+
+```
+
+
+```{r}
+# Seleccionamos 4 clusters
+
+km = kmeans(train.data.reduced.numeric.withoutna,4)
+
+# Plot results
+plot(train.data.reduced.numeric.withoutna, col =(km$cluster +1) , main="K-Means result with 4 clusters", pch=20, cex=2)
+```
+
+
+
+
+
+
+## NAIVE-BAYES
+
+A continuación analizaremos los datos desde la perspectiva del algoritmo de Naive-Bayes.Es decir, mediante Naive-Bayes analizaremos el modelo que mejor clasifique los datos según la variable respuesta en "Died" o "Survived"
+
+
+### Ejecución del modelo
+
+```{r}
+library(e1071)
+#tomamos los predictores significativos para nuestro análisis (fueron obtenidos mediante regresión logística, en pasos previos)
+train.data.reduced = train.data.reduced[,c("AGE","SEX", "RESTRAINT_SYSTEM1", "AIRBAG1", "EJECTION1", "EXTRINCATION1",   "DRUG_TEST_RESULTS1", "TAKEN_TO_HOSPITAL1","INJURY_SEVERITY")]
+
+# Para la evaluación del modelo se calcula la probabilidad de INJURY_SEVERITY = True, tanto en train como en test
+nb.fars.train=naiveBayes(INJURY_SEVERITY ~., data=train.data.reduced)
+nb.predict.train=predict(nb.fars.train,train.data.reduced)
+
+z<-table(nb.predict.train,train.data.reduced$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.nb <- (2*precision*recall)/(precision+recall)
+f_score.nb
+```
+
+
+
+
+```{r}
+nb.fars.train=naiveBayes(INJURY_SEVERITY ~., data=train.data.reduced)
+nb.predict.train=predict(nb.fars.train,train.data.reduced)
+table(nb.predict.train,train.data.reduced$INJURY_SEVERITY )
+```
+### Evaluación del modelo
+```{r}
+library(ggplot2)
+probs <- predict(nb.fars.train, train.data.reduced, type="raw")
+pred <- prediction(probs[, "Survived"], train.data.reduced$INJURY_SEVERITY)
+perf_nb <- performance(pred, measure='tpr', x.measure='fpr')
+plot(perf_nb,  colorize=TRUE)
+```
+
+
+Como se puede ver, la precisión es del 72%, que es  inferior a los análisis mediante los algoritmos anteriormente mostrados.
+A continuación, evaluaremos el modelo para el conjunto de test:
+
+```{r}
+# Para la evaluación del modelo se calcula la probabilidad de INJURY_SEVERITY = True, tanto en train como en test
+nb.fars.test=naiveBayes(INJURY_SEVERITY ~., data=test.data)
+nb.predict.test=predict(nb.fars.test,test.data)
+
+z<-table(nb.predict.test,test.data$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+
+Vamos a analizar qué ocurriría con nuestro modelo en el caso de que eliminásemos filas con datos NA:
+```{r}
+train.data.reduced.no.na <- na.omit(train.data.reduced)
+```
+
+Probamos el algoritmo con los datos de train:
+```{r}
+nb.fars.train.no.na=naiveBayes(INJURY_SEVERITY ~., data=train.data.reduced.no.na)
+nb.predict.train.no.na=predict(nb.fars.train.no.na,train.data.reduced.no.na)
+
+z<- table(nb.predict.train.no.na,train.data.reduced.no.na$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+
+```
+Si bien se mejora algo la precisión, la mejora no es muy significativa.
+
+
+## SVM Lineal
+
+Es un método de clasificación que separa datos usando hiperplanos. Si etiquetamos los datos, podemos usar SVM para generar múltiples hiperplanos  de forma que cada uno de los espacios delimitados por los hiperplanos, contengan un tipo de dato. En nuestro caso, los hiperplanos separarían los datos de los supervivientes de los de fallecidos.
+
+```{r}
+# Vamos a crear un pequeño dataset, para probar el modelo, para la agilizar la ejecución (problemas de memoria)
+set.seed(123456)
+data.reduced.svm <- na.omit(train.data.reduced)
+reduce.svm.index = sample(1:nrow(data.reduced.svm), dim(data.reduced.svm)*0.1)
+data.reduced.svm <- data.reduced.svm[reduce.svm.index, ]
+```
+
+El conjunto que usaremos para nuestras pruebas de SVM constará de las siguientes filas:
+```{r}
+dim(data.reduced.svm)
+```
+
+A continuación, sobre ese conjunto anteriormente creado, haremos dos particiones, una para train y otra para test
+```{r}
+train.svm.index = sample(1:nrow(data.reduced.svm), dim(data.reduced.svm)*0.7)
+train.svm.data = data.reduced.svm[train.svm.index, ]
+test.svm.data = data.reduced.svm[-train.svm.index, ]
+```
+
+
+```{r}
+dim (train.svm.data)
+dim(test.svm.data)
+```
+
+```{r}
+library(e1071)
+model_svm = svm(INJURY_SEVERITY ~ ., data = train.svm.data, kernel = "linear",cost = 10, type = "C-classification", scale = FALSE, probability = TRUE)
+pred.svm <- predict(model_svm, train.svm.data)
+z<- table( pred.svm,  train.svm.data$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.svm.lineal <- (2*precision*recall)/(precision+recall)
+f_score.svm.lineal
+```
+
+Para poder representar nuestras predicciones con el paquete ROCR, necesitamos que sean continuas. Sin embargo, al ejecutar predict con nuestro model de svm devuelve la clase a la que pertenece cada observación (no es un resultado continuo). Por ello, necesitaremosd crear una función, que contendrá como parámetros el número de aciertos para cada observación, pred, y un vector que contiene la clase a la que pertenece cada observación ("Died","Survived"), truth 
+
+### Evaluación del modelo
+```{r}
+rocplot =function (pred , truth ,color,  ...){
+ predob = prediction (pred , truth )
+ perf = performance (predob , "tpr", "fpr")
+ if (is.na(color)) {
+    plot(perf , colorize=TRUE ,   ...)
+ }else{
+    plot(perf , add=TRUE, col=color,...)
+ }
+}
+```
+
+```{r}
+svm.pred<-predict(model_svm, test.svm.data, decision.values = TRUE,
+probability = TRUE)
+table(svm.pred, test.svm.data$INJURY_SEVERITY)
+fitted_svm_lineal =attributes(predict(model_svm ,test.svm.data , decision.values =TRUE))$decision.values
+
+par(mfrow =c(1,2))
+rocplot (fitted_svm_lineal,test.svm.data$INJURY_SEVERITY, NA,  main="Training Data")
+```
+
+Precisión del modelo en el conjunto de test:
+```{r}
+model_svm = svm(INJURY_SEVERITY ~ ., data = test.svm.data, kernel = "linear",cost = 10, type = "C-classification", scale = FALSE)
+pred <- predict(model_svm, test.svm.data)
+z<- table( pred,  test.svm.data$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+
+A continuación, analizaremos los datos intentado crear un modelo mediante la función "tune", que elegirá los mejores parámetros para nuestro modelo
+
+Para el conjunto de train:
+
+El siguiente modelo, es muy demandante computacionalmente. Por problemas de memoria, reduciremos aún más el conjunto de datos de train y test.
+
+```{r}
+train.svm.tuned.index = sample(1:nrow(train.svm.data), dim(train.svm.data)*0.1)
+train.svm.data.tuned = train.svm.data[train.svm.tuned.index, ]
+test.svm.tuned.index = sample(1:nrow(test.svm.data), dim(test.svm.data)*0.2)
+test.svm.data.tuned = test.svm.data[test.svm.tuned.index, ]
+```
+
+```{r}
+dim(train.svm.data.tuned)
+dim(test.svm.data.tuned)
+```
+
+
+### Modelo svm tuneado
+
+
+```{r}
+tuned_train <- tune.svm(INJURY_SEVERITY ~ ., data = train.svm.data.tuned, gamma = 10^(-10:2),
+cost = 10^(-1:1),  probability = TRUE)
+svm.best.model_train <-tuned_train$best.model
+```
+
+
+#### Evaluación del modelo
+```{r}
+svm.pred.tuned<-predict(svm.best.model_train, test.svm.data.tuned, decision.values = TRUE,
+probability = TRUE)
+table(svm.pred.tuned, test.svm.data.tuned$INJURY_SEVERITY)
+fitted_svm_tune  =attributes(predict(svm.best.model_train ,test.svm.data.tuned , decision.values =TRUE))$decision.values
+par(mfrow =c(1,2))
+rocplot (fitted_svm_tune,test.svm.data.tuned$INJURY_SEVERITY, NA, main="Training Data")
+```
+```{r}
+tuned_train$best.model
+dim(train.svm.data)
+```
+```{r}
+z<- table(predict = svm.pred.tuned,truth = test.svm.data.tuned$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.svm.tuned <- (2*precision*recall)/(precision+recall)
+f_score.svm.tuned
+```
+Para el conjunto de test:
+
+```{r}
+# tomaremos el conjunto de test creado anteriormente como nuestro conjunto de datos padre. A partir de él, creamos dos particiones, una de train y una de test:
+train.svm.tuned.index.test = sample(1:nrow(test.svm.data), dim(test.svm.data)*0.7)
+train.svm.data.tuned.test = test.svm.data[train.svm.tuned.index.test, ]
+test.svm.data.tuned.test = test.svm.data[-train.svm.tuned.index.test, ]
+dim(train.svm.data.tuned.test)
+dim(test.svm.data.tuned.test)
+```
+
+
+```{r}
+library(e1071)
+
+tuned_test <- tune.svm(INJURY_SEVERITY ~ ., data = train.svm.data.tuned.test, gamma = 10^(-10:2),
+cost = 10^(-1:1))
+svm.best.model_test <-tuned_test$best.model
+svm.best.model_test <-tuned_test$best.model
+pred_test <- predict(svm.best.model_test, test.svm.data.tuned.test)
+z<-  table(predict = pred_test,truth = test.svm.data.tuned.test$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score <- (2*precision*recall)/(precision+recall)
+f_score
+```
+```{r}
+train.svm.no.lineal =train.svm.data.tuned.test
+test.svm.no.lineal = test.svm.data.tuned.test
+```
+ 
+ 
+## SVM NO Lineal 
+
+### Libreria empleada: Caret
+
+```{r , message=FALSE, warning=FALSE}
+library(caret)
+set.seed(825)
+
+fitControl <- trainControl(method = "repeatedcv",
+                           number = 10,
+                           repeats = 10,
+                           classProbs = TRUE,
+                           summaryFunction = twoClassSummary)
+
+svmFit <- train(INJURY_SEVERITY ~ ., data = train.svm.data, 
+                 method = "svmRadial", 
+                 trControl = fitControl, 
+                 preProc = c("center", "scale"),
+                 tuneLength = 8,
+                 metric = "ROC")
+svmFit                 
+```
+
+### Libreria empleada: kernlab
+```{r}
+library(kernlab)
+svm_model_ksvm <- ksvm(INJURY_SEVERITY ~ ., data = train.svm.no.lineal, type = "C-svc",kernel='rbf',
+kpar = list(sigma = 1), C = 1, probability =TRUE)
+```
+
+```{r}
+pred_test.svm.non_linear <- predict(svm_model_ksvm, test.svm.no.lineal)
+z<-   table(predict = pred_test.svm.non_linear,truth = test.svm.no.lineal$INJURY_SEVERITY)
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.no.lineal <- (2*precision*recall)/(precision+recall)
+f_score.no.lineal
+```
+
+El kernel RBF proporciona un error de 0.15, muy cercano al proporcionado por SVM.
+
+#### Evaluación del modelo
+
+```{r}
+ypredscore = predict(svm_model_ksvm,test.svm.no.lineal,type="decision")
+pred <- prediction(ypredscore,test.svm.no.lineal$INJURY_SEVERITY)
+perf.svm.non.linear <- performance(pred, measure = "tpr", x.measure = "fpr")
+plot(perf.svm.non.linear,colorize=TRUE)
+abline(a=0,b=1)
+auc <- performance(pred,measure="auc")@y.values
+auc
+```
+
+
+## Redes Neuronales
+
+A continuación evaluaremos la capacidad de clasificación de un modelo generado mediante redes neuronales.
+
+Las redes neuronales sólo trabajaran con datos cuantitativos, por lo que usaremos variables dummy.
+
+
+Tememos 8 predictores por lo que usaremos dos capas con la siguiente configuración: 10:5:3:1. 
+La capa de entrada tendrá 10 entradas (correspondientes a cada uno de los predictores). Las dos capas ocultas tendrán 5 y 3 neuronas, respectivamente, y optimizarán los pesos de las neuronas de la capa previa para mejorar la calidad predictiva del modelo. Por otro lado, la salida tendrá una única neurona 
+
+### Preparación del modelo
+```{r}
+# Por eficiencia y escasez de memoria, escogeremos una muestra de nuestro conjunto de datos para entrenar el modelo
+set.seed(123456)
+data.reduced.numeric.nn.index <- sample(1:nrow(train.data.reduced.numeric.withoutna), dim(train.data.reduced.numeric.withoutna)*0.025)
+data.reduced.numeric.nn = train.data.reduced.numeric.withoutna[data.reduced.numeric.nn.index, ]
+
+dim(data.reduced.numeric.nn)
+```
+
+```{r}
+
+
+#TRAIN
+set.seed(123456)
+train.data.reduced.numeric.nn.index <- sample(1:nrow(data.reduced.numeric.nn), dim(data.reduced.numeric.nn)*0.7)
+train.data.reduced.numeric.nn = data.reduced.numeric.nn[train.data.reduced.numeric.nn.index, ]
+
+#TEST
+test.data.reduced.numeric.nn = data.reduced.numeric.nn[-train.data.reduced.numeric.nn.index,]
+dim(train.data.reduced.numeric.nn)
+dim(test.data.reduced.numeric.nn)
+```
+
+### Ejecución del modelo
+```{r}
+library(neuralnet)
+n <- names(train.data.reduced.numeric.nn)
+f <- as.formula(paste("SURVIVED ~", paste(n[!n %in% "SURVIVED"], collapse = " + ")))
+# en el argumento "hidden" ponemos el número de neuronas que debe tener cada una de las dos capas intermedias y "linear.output=FALSE" porque queremos analizar la capacidad de clasificación de nuestro modelo
+# el stepmax es grande para que le dé tiempo al modelo a converger
+nn <- neuralnet(f,data=train.data.reduced.numeric.nn,hidden=c(5,3),linear.output=FALSE, stepmax=1e7)
+plot(nn)
+```
+En esta imagen podemos ver la representación del modelo junto con el peso de cada conexión.
+Las líneas negras representan la conexión entre las capas y las conexiones con las redes neuronales.
+Se podría decir que una red neuronal es una "caja negra", por lo que no podríamos evaluar el modelo, únicamente podríamos determinar que el modelo converge
+
+Ahora evaluaremos la capacidad predictiva del modelo.
+```{r}
+nn$result.matrix
+```
+
+```{r}
+str(test.data.reduced.numeric.nn)
+```
+
+### Evaluación del modelo
+```{r}
+# creamos las predicciones de nuestro modelo (eliminamos la última columna, que es la correspondiente a la variable dependiente)
+nn.results <- neuralnet::compute(nn, test.data.reduced.numeric.nn[,1:9])
+
+#Evaluaremos la precisión de nuestro modelo 
+results <- data.frame(actual = test.data.reduced.numeric.nn$SURVIVED, prediction = nn.results$net.result)
+results
+roundedresults<-sapply(results,round,digits=0)
+roundedresultsdf=data.frame(roundedresults)
+attach(roundedresultsdf)
+prediction.table.nn =table(actual,prediction)
+prediction.table.nn
+precision <- prediction.table.nn[2,2]/(prediction.table.nn[2,1]+prediction.table.nn[2,2])
+recall <-  prediction.table.nn[2,2]/(prediction.table.nn[1,2]+prediction.table.nn[2,2])
+f_score.nn <- (2*precision*recall)/(precision+recall)
+f_score.nn
+```
+
+```{r}
+prob.result <- nn.results$net.result
+detach(package:neuralnet,unload = T)
+
+nn.pred = prediction(prob.result,test.data.reduced.numeric.nn$SURVIVED)
+perf_nn <- performance(nn.pred, "tpr", "fpr")
+plot(perf_nn, colorize = TRUE)
+```
+
+## Deep Learning 
+
+### Preparación de datos
+```{r}
+#Establecemos una muestra del 10% sobre los datos train y test para calcular los cluster por falta de memoria
+set.seed(123456)
+train.dl.index = sample(1:dim(train.data.reduced.numeric.withoutna)[1], dim(train.data.reduced.numeric.withoutna)[1] * 0.7)
+train.dl.data = train.data.reduced.numeric.withoutna[train.dl.index, ]
+test.dl.data = train.data.reduced.numeric.withoutna[-train.dl.index, ]
+```
+
+### Preparación de la red profunda
+```{r}
+library(keras)
+library(tensorflow)
+library(kerasR)
+
+library(reticulate)
+keras_init()
+keras_available()
+
+mod = Sequential()
+mod$add(Dense(4, input_shape =10, activation='relu'))
+mod$add(Dense(4, activation='relu'))
+mod$add(Dense(1, activation='sigmoid'))
+
+keras_compile(mod,  loss = 'binary_crossentropy', optimizer='adam')
+
+```
+
+
+
+### Escalamos datos
+```{r}
+train.data.reduced.numeric.nn.scaled = scale(train.dl.data)
+test.data.reduced.numeric.nn.scaled = scale(test.dl.data)
+```
+
+### Ajustamos el modelo construidos a nuestros datos
+```{r}
+keras_fit(mod, train.data.reduced.numeric.nn.scaled, train.dl.data$SURVIVED,
+          batch_size = 32, epochs = 200,
+          verbose = 0, validation_split = 0.1)
+```
+
+### Evaluación del modelo
+Sobre train:
+```{r}
+pred = keras_predict(mod, normalize(train.data.reduced.numeric.nn.scaled))
+sd(as.numeric(pred) -  train.dl.data$SURVIVED) / sd(train.dl.data$SURVIVED)
+
+z<-table(predict = round(as.numeric(pred)),truth = train.dl.data$SURVIVED)
+z
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.ddl <- (2*precision*recall)/(precision+recall)
+f_score.ddl
+
+```
+
+
+Sobre el conjunto de test:
+```{r}
+pred = keras_predict(mod, normalize(test.data.reduced.numeric.nn.scaled))
+sd(as.numeric(pred) -  test.dl.data$SURVIVED) / sd( test.dl.data$SURVIVED)
+
+z<-table(predict = round(as.numeric(pred)),truth = test.dl.data$SURVIVED)
+z
+precision <- z[2,2]/(z[2,1]+z[2,2])
+recall <-  z[2,2]/(z[1,2]+z[2,2])
+f_score.ddl_test <- (2*precision*recall)/(precision+recall)
+f_score.ddl_test
+```
+
+#### Curva RO
+```{r}
+ypredscore = predict(mod,test.data.reduced.numeric.nn.scaled,type="decision")
+pred <- prediction(ypredscore,test.dl.data$SURVIVED)
+perf.dl <- performance(pred, measure = "tpr", x.measure = "fpr")
+plot(perf.dl,colorize=TRUE)
+abline(a=0,b=1)
+auc <- performance(pred,measure="auc")@y.values
+auc
+```
+
+## Evaluacion conjunta de todos los modelos 
+¿Cual metodo parece ser mejor? Segun la curva de ROC, los mejores son Random Forest y Metodos de Poteciacion. seguidos de redes Neuronales y Maquinas de soporte vectorial y ultimo Arboles de decision
+
+### Curvas RO
+```{r}
+library(ROCR)
+ROCRpred = prediction(predicho.modelo.fars.LR, train.data$INJURY_SEVERITY)
+ROCRperf.glm = performance(ROCRpred, 'tpr', 'fpr')
+
+#GLM
+ROC.comparison = plot(ROCRperf.glm, col=2, main="Curvas ROC comparando los modelos analizados")
+
+# NAIVE-BAYES
+plot(perf_nb, col=3, add=TRUE)
+
+# SVM KERNEL LINEAL
+rocplot(fitted_svm_lineal,test.svm.data$INJURY_SEVERITY, 4 )
+
+# SVM KERNEL LINEAL CON TUNE
+rocplot (fitted_svm_tune,test.svm.data.tuned$INJURY_SEVERITY,5)
+
+# SVM CON KERNEL NO LINEAL
+plot(perf.svm.non.linear, col=6, add=TRUE)
+
+# REDES NEURONALES
+plot(perf_nn, col=7, add=TRUE)
+
+# Deep Learning
+plot(perf.dl, col=8, add=TRUE)
+
+# RANDOM FOREST
+plot(perf_rf,  col=9, add=TRUE)
+
+# GBM
+plot(perf_gbm,  col=10, add=TRUE)
+
+# Draw a legend.
+legend(0.7, 0.7, c('Glm', 'Naive-Bayes', 'SVM líneal','SVM tune','SVM no lineal', 'Redes neuronales',"Deep Learning", "RF", "GBM"), 2:9)
+ROC.comparison
+```
+
+### Resultados F-SCORE
+```{r}
+Area <- data.frame(metodos = c("GLM", "Random Forest","GBM","SVM Líneal","SVM no lineal","SVM - Tuned", "Naive-Bayes", "Neuronal Network", "Deep Learning"), 
+              precision =  c(f_score.glm,
+                f_score.random.forest,f_score.gbm,f_score.svm.lineal,
+                f_score.no.lineal,f_score.svm.tuned,f_score.nb,f_score.nn, f_score.ddl))
+# Ordenamos el dataframe por precision
+Area <- Area[order(-Area$precision),]
+Area
+```
+
+# Debates y anotaciones
+
+Durante este análisis se han intentado probar diferentes modelos contra los datos. Si que debemos de indicar, que por cuestiones de costes computacionales, algunos modelos se han aplicado sobre una muestra bastante pequeña de los datos, y que por tanto, la comparación entre todos los modelos no es fiel. De todas formas, nos hemos guiado porque el objetivo no era únicamente encontrar cual es el mejor modelo sino aprendez a utilizarlo, conociendo parámetros y ventajas e inconvenientes de cada uno de ellos.
+
+Por otro lado, tenemos duda sobre el modelo de deep learning, el cual aplicamos por espicificación de un profesor, pero como no hemos podido adentrarnos en él desconocemos el motivo por el que su f-score = 1. Por ello, no lo consideramos como un modelo elegible para la solución de nuestro problema.
+
+# Conclusiones
+
+Si tuvieramos en cuenta la relación coste de procesamiento - resultados el mejor modelo sería la regresión logistica, pero dado el conjunto de datos que estamos utilizando para ejecutar el resto de modelos, permitiendo un máximo de 20% falsos positivos el modelo que mejores resultados nos ofrence nos lo da **GBM (Gradient Boosting)**, con un F-Score superior a 0.85 .
